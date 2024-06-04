@@ -1,4 +1,4 @@
-FLAGS = -Wall -Wextra -Werror
+# FLAGS = -Wall -Wextra -Werror
 
 NAME = minishell
 
@@ -15,7 +15,7 @@ all: $(NAME)
 	@cc $(FLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ)
-	@cc $(FLAGS) $(OBJ) -o $(NAME)
+	@cc $(FLAGS) $(OBJ) -lreadline -o $(NAME)
 
 clean:
 	@rm -f $(OBJ)

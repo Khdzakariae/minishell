@@ -7,6 +7,16 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+
+typdef struct s_tree
+{
+    int data;
+    struct s_tree *left;
+    struct s_tree *right;
+}              t_tree;
 
 #define COLOR_BOLD  "\e[1m"
 #define KNRM  "\x1B[0m"

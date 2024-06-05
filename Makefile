@@ -2,27 +2,35 @@
 
 NAME = minishell
 
+LIBFT = lib/libft/libft.a
+
 INCLUDES = -I "includes/"
 
 SRC_1_2 = sources/minishell.c
 
 OBJ = $(SRC_1_2:.c=.o)
 
-all: $(NAME)
+all: $(LIBFT) $(NAME) 
 	@echo "minishell done by success [ ✅ ]"
+
+$(LIBFT) :
+	@make -C lib/libft --silent
+	@echo "libft done [ ✅ ]"
 
 %.o : %.c
 	@cc $(FLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ)
-	@cc $(FLAGS) $(OBJ) -lreadline -o $(NAME)
+	@cc $(FLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 
 clean:
 	@rm -f $(OBJ)
+	@make clean -C lib/libft --silent
 	@echo "clean [ ✅ ]"
 
 fclean: clean
 	@rm -f $(NAME)
+	@make fclean -C lib/libft --silent
 	@echo "fclean [ ✅ ]"
 
 re: fclean all

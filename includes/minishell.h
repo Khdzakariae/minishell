@@ -9,9 +9,10 @@
 #include <readline/history.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <stdbool.h>
 
 
-typdef struct s_tree
+typedef struct s_tree
 {
     int data;
     struct s_tree *left;

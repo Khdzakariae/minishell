@@ -89,14 +89,12 @@ void printInorder(t_tree *node)
     if (node == NULL)
         return;
 
-    // First recur on left child
-    printInorder(node->left);
+    printf("data ids : %d\n", node->data);
 
-    // Then print the data of node
-    printf("%d \n ", node->data);
+        printInorder(node->left);
 
-    // Now recur on right child
-    printInorder(node->right);
+        printInorder(node->right);
+
 }
 
 int main ()
@@ -110,8 +108,8 @@ int main ()
     root = insert(root, 8);
     root = insert(root, 20);
     root = insert(root, 12);
+    root = insert(root, 2);
     printInorder(root);
-
 
 }
 

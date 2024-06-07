@@ -19,6 +19,20 @@ typedef struct s_tree
     struct s_tree *right;
 }              t_tree;
 
+typedef struct s_type
+{
+    #define REDIR
+    #define PIPE
+}               t_type;
+
+
+typedef struct s_token
+{
+    t_type type;
+    
+    
+}               t_token;
+
 #define COLOR_BOLD  "\e[1m"
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"

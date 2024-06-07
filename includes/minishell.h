@@ -21,15 +21,26 @@ typedef struct s_tree
 
 typedef struct s_type
 {
-    #define REDIR
-    #define PIPE
+    # define LEFT_PARENTHESES // (
+    # define RIGHT_PARENTHESES // )
+    # define BACKSLASH // \
+    # define DOUBLE_QUOTATION
+    # define SINGLE_QUOTATION //
+    # define DOLLAR_SIGN // $
+    # define AMPERSAND // &
+    # define SORTIE // >
+    # define ENTREE // <
+    # define PIPE // |
 }               t_type;
 
 
 typedef struct s_token
 {
     t_type type;
-    
+    int     id;
+    int start;
+    int end;
+    struct s_token *next;
     
 }               t_token;
 
@@ -51,5 +62,7 @@ typedef struct s_token
 #define CYN   "\x1B[36m"
 #define WHT   "\x1B[37m"
 #define RESET "\x1B[0m"
+
+void	add_node(t_token **head, t_type type);
 
 # endif

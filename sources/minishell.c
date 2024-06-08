@@ -53,7 +53,7 @@ void printList(t_token* head)
 
     while (current != NULL) 
     {
-        printf("%c \n", current->type);
+        printf("%s \n", current->type);
         current = current->next;
     }
     printf("\n");
@@ -70,7 +70,7 @@ void minishell()
         line = readline(COLOR_BOLD GRN "➜ minishell__v1 ✗ ");
         chech_Quoting(line);
         token = gettoken(line);
-        printList(token);
+        // printList(token);
         freeList(token);
         usleep(50);
 

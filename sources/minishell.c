@@ -1,14 +1,7 @@
 #include <minishell.h>
  
- void _free(t_token *token)
- {
-    while (token->next)
-    {
-        free(token);
-        token = token->next;
-    }
-    
- }
+
+
 t_token *gettoken(char *line)
 {
     t_token *token;
@@ -54,13 +47,18 @@ t_token *gettoken(char *line)
     return(token);
 }
 
-void print_(t_token *token)
+void printList(t_token* head) 
 {
-    if (!token)
-        return;
-    printf("token is -> %c\n", token->type);
-    print_(token->next);
+    t_token* current = head;
+
+    while (current != NULL) 
+    {
+        printf("%c \n", current->type);
+        current = current->next;
+    }
+    printf("\n");
 }
+
 void minishell()
 {
     int id ;
@@ -70,9 +68,11 @@ void minishell()
     while (1)
     {
         line = readline(COLOR_BOLD GRN "➜ minishell__v1 ✗ ");
+        chech_Quoting(line);
         token = gettoken(line);
-        print_(token);
-        free(token);
+        printList(token);
+        freeList(token);
+        usleep(50);
 
 
         // char *argvrc[] = {cmd, NULL , NULL};
@@ -89,11 +89,7 @@ void minishell()
 }
 
 
-int main ()
-{
-    minishell();
-    
-}
+
 
 
 

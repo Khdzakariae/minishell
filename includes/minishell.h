@@ -74,6 +74,10 @@ typedef struct s_token
 #define WHT   "\x1B[37m"
 #define RESET "\x1B[0m"
 
+
+void minishell();
+void freeList(t_token* head);
+bool chech_Quoting(char *line);
 void	add_node(t_token **head, char symbol);
 
 

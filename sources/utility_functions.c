@@ -1,5 +1,17 @@
 #include <minishell.h>
 
+ void freeList(t_token* head) 
+ {
+    t_token* current = head;
+    t_token* next;
+
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+	free(current);
+}
 
 void	add_node(t_token **head, char symbol)
 {

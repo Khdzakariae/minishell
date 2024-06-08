@@ -6,7 +6,7 @@ LIBFT = lib/libft/libft.a
 
 INCLUDES = -I "includes/"
 
-SRC_1_2 = sources/minishell.c sources/utility_functions.c
+SRC_1_2 = sources/main.c sources/minishell.c sources/utility_functions.c sources/parssse_Quoting.c
 
 OBJ = $(SRC_1_2:.c=.o)
 

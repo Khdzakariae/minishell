@@ -1,13 +1,13 @@
 #include <minishell.h>
 
 
-void	add_node(t_token **head, t_type type)
+void	add_node(t_token **head, char symbol)
 {
 	t_token	*tmp;
 	t_token	*temp1;
 
 	tmp = malloc(sizeof(t_token));
-	tmp->type = type;
+	tmp->type = symbol;
 	tmp->next = NULL;
 	if (*head == NULL)
 		*head = tmp;

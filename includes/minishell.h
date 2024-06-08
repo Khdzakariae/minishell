@@ -12,6 +12,17 @@
 #include <stdbool.h>
 
 
+#define LEFT_PARENTHESES '('
+#define RIGHT_PARENTHESES ')'
+#define BACKSLASH '\\'
+#define DOUBLE_QUOTATION '\"'
+#define SINGLE_QUOTATION '\''
+#define DOLLAR_SIGN '$'
+#define AMPERSAND '&'
+#define SORTIE '>'
+#define ENTREE '<'
+#define PIPE '|'
+
 typedef struct s_tree
 {
     int data;
@@ -19,24 +30,24 @@ typedef struct s_tree
     struct s_tree *right;
 }              t_tree;
 
-typedef struct s_type
-{
-    # define LEFT_PARENTHESES // (
-    # define RIGHT_PARENTHESES // )
-    # define BACKSLASH // \
-    # define DOUBLE_QUOTATION
-    # define SINGLE_QUOTATION //
-    # define DOLLAR_SIGN // $
-    # define AMPERSAND // &
-    # define SORTIE // >
-    # define ENTREE // <
-    # define PIPE // |
-}               t_type;
+// typedef struct s_type
+// {
+//     # define LEFT_PARENTHESES // (
+//     # define RIGHT_PARENTHESES  // )
+//     # define BACKSLASH //
+//     # define DOUBLE_QUOTATION
+//     # define SINGLE_QUOTATION //
+//     # define DOLLAR_SIGN // $
+//     # define AMPERSAND // &
+//     # define SORTIE // >
+//     # define ENTREE // <
+//     # define PIPE // |
+// }               t_type;
 
 
 typedef struct s_token
 {
-    t_type type;
+    char type;
     int     id;
     int start;
     int end;
@@ -63,6 +74,7 @@ typedef struct s_token
 #define WHT   "\x1B[37m"
 #define RESET "\x1B[0m"
 
-void	add_node(t_token **head, t_type type);
+void	add_node(t_token **head, char symbol);
+
 
 # endif

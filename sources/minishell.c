@@ -1,10 +1,17 @@
 #include <minishell.h>
-
+ 
+ void _free(t_token *token)
+ {
+    while (token->next)
+    {
+        free(token);
+        token = token->next;
+    }
+    
+ }
 t_token *gettoken(char *line)
 {
     t_token *token;
-
-    token = malloc(sizeof(t_token));
 
     int i ;
     
@@ -65,7 +72,7 @@ void minishell()
         line = readline(COLOR_BOLD GRN "➜ minishell__v1 ✗ ");
         token = gettoken(line);
         print_(token);
-
+        free(token);
 
 
         // char *argvrc[] = {cmd, NULL , NULL};

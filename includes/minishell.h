@@ -12,16 +12,16 @@
 #include <stdbool.h>
 
 
-#define LEFT_PARENTHESES '('
-#define RIGHT_PARENTHESES ')'
-#define BACKSLASH '\\'
-#define DOUBLE_QUOTATION '\"'
-#define SINGLE_QUOTATION '\''
-#define DOLLAR_SIGN '$'
-#define AMPERSAND '&'
-#define SORTIE '>'
-#define ENTREE '<'
-#define PIPE '|'
+#define LEFT_PARENTHESES "("
+#define RIGHT_PARENTHESES ")"
+#define BACKSLASH "\"
+#define DOUBLE_QUOTATION "\""
+#define SINGLE_QUOTATION "\'"
+#define DOLLAR_SIGN "$"
+#define AMPERSAND "&"
+#define SORTIE ">"
+#define ENTREE "<"
+#define PIPE "|"
 
 typedef struct s_tree
 {
@@ -47,7 +47,7 @@ typedef struct s_tree
 
 typedef struct s_token
 {
-    char type;
+    char *type;
     int     id;
     int start;
     int end;
@@ -78,7 +78,7 @@ typedef struct s_token
 void minishell();
 void freeList(t_token* head);
 bool chech_Quoting(char *line);
-void	add_node(t_token **head, char symbol);
+void	add_node(t_token **head, char *symbol);
 
 
 # endif

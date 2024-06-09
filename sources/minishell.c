@@ -70,7 +70,7 @@ t_token *gettoken(char *line)
     
     while (line[i])
     {
-        if (!ft_strchr(symbols, line[i]))
+        if (!ft_strchr(symbols, line[i]) && !ft_strchr(whitespace, line[i]))
             i = extract_word(&token, line, i) - 1;
         else
             parse_symbol(&token, line[i], line, &i);        

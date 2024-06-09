@@ -60,4 +60,6 @@ void add_node(t_token **head, const char *value, int type)
         }
         current->next = tmp;
     }
+        printf("-----> type %d\n", tmp->type);
+        printf("-----> value %s\n", tmp->value);
 }

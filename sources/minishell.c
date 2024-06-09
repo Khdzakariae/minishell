@@ -2,18 +2,21 @@
 
 int get_word(t_token **token, char *str, int i)
 {
-    int start = 0;
+    int start = i;
     char *whitespace = " \t\r\n\v";
     char *symbols = "<|>&()'\"";
     
-    start = i;
     while (str[i] && !ft_strchr(whitespace, str[i]) && !ft_strchr(symbols, str[i]))
         i++;
+    
     add_node(token, ft_substr(str, start, (size_t)(i - start)), WORD);
-    while (str[i] && (ft_strchr(whitespace, str[i])))
+    
+    while (str[i] && ft_strchr(whitespace, str[i]))
         i++;
+    
     return i;
 }
+
 
 t_token *gettoken(char *line)
 {
@@ -94,7 +97,7 @@ void minishell()
         line = readline(COLOR_BOLD GRN "➜ minishell__v1 ✗ ");
         chech_Quoting(line);
         token = gettoken(line);
-        printList(token);
+        // printList(token);
         freeList(token);
         usleep(50);
 

@@ -16,12 +16,17 @@
             flag--;
         printf("flag is =========>|%d|\n", flag);
         i++;
-    }
-        if (flag > 0 || flag > 0)
+        if (flag < 0)
         {
             printf(RED"ERROR PARANTES");
             return(false);
         }
+    }
+    if (flag != 0)
+    {
+        printf(RED"ERROR PARANTES");
+        return(false);
+    }
     return(true);
  }
 

@@ -1,33 +1,69 @@
 #include <minishell.h>
 
-int get_word(t_token **token, char *str, int i)
+
+void parse_symbol(t_token **token, char symbol, char *line, int *i)
+{
+    if (symbol == '(')
+        add_node(token, NULL, LEFT_PARENTHESES);
+    else if (symbol == ')')
+        add_node(token, NULL, RIGHT_PARENTHESES);
+    else if (symbol == '\\')
+        add_node(token, NULL, BACKSLASH);
+    else if (symbol == '"')
+        add_node(token, NULL, DOUBLE_QUOTATION);
+    else if (symbol == '\'')
+        add_node(token, NULL, SINGLE_QUOTATION);
+    else if (symbol == '$')
+        add_node(token, NULL, DOLLAR_SIGN);
+    else if (symbol == '&')
+    {
+        if (line[*i + 1] == '&')
+        {
+            add_node(token, NULL, AND);
+            (*i)++;
+        }
+        else
+            add_node(token, NULL, AMPERSAND);
+    }
+    else if (symbol == '>')
+        add_node(token, NULL, SORTIE);
+    else if (symbol == '<')
+        add_node(token, NULL, ENTREE);
+    else if (symbol == '|')
+    {
+        if (line[*i + 1] == '|')
+        {
+            add_node(token, NULL, OR);
+            (*i)++;
+        }
+        else
+            add_node(token, NULL, PIPE);
+    }
+}
+
+int extract_word(t_token **token, char *line, int i)
 {
     int start = i;
     char *whitespace = " \t\r\n\v";
-    char *symbols = "<|>&()'\"";
+    char *symbols = " <|>&()'\"";
     
-    while (str[i] && !ft_strchr(whitespace, str[i]) && !ft_strchr(symbols, str[i]))
+    while (line[i] && !ft_strchr(whitespace, line[i]) && !ft_strchr(symbols, line[i]))
         i++;
     
-    add_node(token, ft_substr(str, start, (size_t)(i - start)), WORD);
+    add_node(token, ft_substr(line, start, (size_t)(i - start)), WORD);
     
-    while (str[i] && ft_strchr(whitespace, str[i]))
+    while (line[i] && ft_strchr(whitespace, line[i]))
         i++;
     
     return i;
 }
 
-
 t_token *gettoken(char *line)
 {
     t_token *token = NULL;
-
-    int i = 0; 
-    char *whitespace;
-    char *symbols;
-
-    whitespace = " \t\r\n\v";
-    symbols = " <|>&()'\"";
+    int i = 0;
+    char *whitespace = " \t\r\n\v";
+    char *symbols = " <|>&()'\"";
 
     while (line[i] && ft_strchr(whitespace, line[i]))
         i++;
@@ -35,45 +71,14 @@ t_token *gettoken(char *line)
     while (line[i])
     {
         if (!ft_strchr(symbols, line[i]))
-            i = get_word(&token, line, i) - 1;
-
-        if (ft_strchr(symbols, line[i]))
-        {
-            if (line[i] == '(')
-                add_node(&token, NULL, LEFT_PARENTHESES);
-            else if (line[i] == ')')
-                add_node(&token, NULL, RIGHT_PARENTHESES);
-            else if (line[i] == '\\')
-                add_node(&token, NULL, BACKSLASH);
-            else if (line[i] == '"')
-                add_node(&token,NULL, DOUBLE_QUOTATION);
-            else if (line[i] == '\'')
-                add_node(&token, NULL, SINGLE_QUOTATION);
-            else if (line[i] == '$')
-                add_node(&token, NULL, DOLLAR_SIGN);
-            else if (line[i] == '&' && line[i + 1] == '&')
-            {
-                add_node(&token, NULL, AND);
-                i++;
-            }
-            else if (line[i] == '&')
-                add_node(&token, NULL, AMPERSAND);
-            else if (line[i] == '>')
-                add_node(&token, NULL, SORTIE);
-            else if (line[i] == '<')
-                add_node(&token, NULL, ENTREE);
-            else if (line[i] == '|' && line[i + 1] == '|')
-            {
-                add_node(&token, NULL, OR);
-                i++;
-            }
-            else if (line[i] == '|')
-                add_node(&token, NULL, PIPE);
-        }
+            i = extract_word(&token, line, i) - 1;
+        else
+            parse_symbol(&token, line[i], line, &i);        
         i++;
     }
     return token;
 }
+
 
 void printList(t_token* head) {
     t_token* current = head;

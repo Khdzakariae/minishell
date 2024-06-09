@@ -4,7 +4,7 @@
 
 t_token *gettoken(char *line)
 {
-    t_token *token;
+    t_token *token = NULL;
 
     int i ;
     
@@ -22,38 +22,46 @@ t_token *gettoken(char *line)
         if (ft_strchr(symbols, line[i]))
         {
             if (line[i] == '(')
-                add_node(&token, LEFT_PARENTHESES);
+                add_node(&token, "(");
             else if (line[i] == ')')
-                add_node(&token, RIGHT_PARENTHESES);
+                add_node(&token, ")");
             else if (line[i] == '\\')
-                add_node(&token, BACKSLASH);
+                add_node(&token, "\\");
             else if (line[i] == '"')
-                add_node(&token, DOUBLE_QUOTATION);
+                add_node(&token, "\"");
             else if (line[i] == '\'')
-                add_node(&token, SINGLE_QUOTATION);
+                add_node(&token, "'");
             else if (line[i] == '$')
-                add_node(&token, DOLLAR_SIGN);
+                add_node(&token, "$");
+            else if (line[i] == '&' && line[i + 1] == '&')
+            {
+                add_node(&token, "&&");
+                i++;
+            }
             else if (line[i] == '&')
-                add_node(&token, AMPERSAND);
+                add_node(&token, "&");
             else if (line[i] == '>')
-                add_node(&token, SORTIE);
+                add_node(&token, ">");
             else if (line[i] == '<')
-                add_node(&token, ENTREE);
+                add_node(&token, "<");
+            else if (line[i] == '|' && line[i + 1] == '|')
+            {
+                add_node(&token, "||");
+                i++;
+            }
             else if (line[i] == '|')
-                add_node(&token, PIPE);
+                add_node(&token, "|");
         }
         i++;
     }
     return(token);
 }
 
-void printList(t_token* head) 
-{
+void printList(t_token* head) {
     t_token* current = head;
 
-    while (current != NULL) 
-    {
-        printf("%s \n", current->type);
+    while (current != NULL) {
+        printf("%s\n", current->type);
         current = current->next;
     }
     printf("\n");
@@ -70,7 +78,7 @@ void minishell()
         line = readline(COLOR_BOLD GRN "➜ minishell__v1 ✗ ");
         chech_Quoting(line);
         token = gettoken(line);
-        // printList(token);
+        printList(token);
         freeList(token);
         usleep(50);
 

@@ -1,18 +1,16 @@
 #include <minishell.h>
 
-
 int get_word(t_token **token, char *str, int i)
 {
     int start = 0;
     char *whitespace = " \t\r\n\v";
     char *symbols = "<|>&()'\"";
     
-    printf("la valeur de i is : %d\n", i);
     start = i;
     while (str[i] && !ft_strchr(whitespace, str[i]) && !ft_strchr(symbols, str[i]))
         i++;
     add_node(token, ft_substr(str, start, (size_t)(i - start)), WORD);
-    while (str[i] && (ft_strchr(whitespace, str[i]) || ft_strchr(symbols, str[i])))
+    while (str[i] && (ft_strchr(whitespace, str[i])))
         i++;
     return i;
 }
@@ -78,7 +76,8 @@ void printList(t_token* head) {
     t_token* current = head;
 
     while (current != NULL) {
-        printf("%d\n", current->type);
+        printf("-----> type %d\n", current->type);
+        printf("-----> value %s\n", current->value);
         current = current->next;
     }
     printf("\n");

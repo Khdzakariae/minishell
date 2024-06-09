@@ -36,7 +36,6 @@ void freeList(t_token *head)
 
 void add_node(t_token **head, const char *value, int type) 
 {
-    puts("hama==");
     t_token *tmp = malloc(sizeof(t_token));
     if (tmp == NULL) 
     {

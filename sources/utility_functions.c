@@ -1,7 +1,8 @@
 #include <minishell.h>
-
+#include <stdio.h>
 char *ft_strcpy(char **dst, const char *src) 
 {
+    puts("hello");
     size_t i = 0;
 
     if (src == NULL) 
@@ -16,21 +17,22 @@ char *ft_strcpy(char **dst, const char *src)
         i++;
     }
     (*dst)[i] = '\0';
+    printf("dst is --> |%s|\n", *dst);
     return *dst;
 }
 
-// void freeList(t_token *head) 
-// {
-//     t_token *current = head;
-//     t_token *next;
+void freeList(t_token *head) 
+{
+    t_token *current = head;
+    t_token *next;
 
-//     while (current != NULL) {
-//         next = current->next;
-//         free(current->type); 
-//         free(current);
-//         current = next;
-//     }
-// }
+    while (current != NULL) {
+        next = current->next;
+        free(current->value); 
+        free(current);
+        current = next;
+    }
+}
 
 
 void add_node(t_token **head, const char *value, int type) 

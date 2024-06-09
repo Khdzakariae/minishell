@@ -14,13 +14,14 @@
             flag++;
         else if (line[i] == ')')
             flag--;
-        if (flag < 0)
+        printf("flag is =========>|%d|\n", flag);
+        i++;
+    }
+        if (flag > 0 || flag > 0)
         {
             printf(RED"ERROR PARANTES");
             return(false);
         }
-        i++;
-    }
     return(true);
  }
 

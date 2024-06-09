@@ -11,47 +11,6 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define LEFT_PARENTHESES "("
-# define RIGHT_PARENTHESES ")"
-# define BACKSLASH "\\"
-# define DOUBLE_QUOTATION "\""
-# define SINGLE_QUOTATION "\'"
-# define DOLLAR_SIGN "$"
-# define AMPERSAND "&"
-# define SORTIE ">"
-# define ENTREE "<"
-# define PIPE "|"
-
-typedef struct s_tree
-{
-	int				data;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}					t_tree;
-
-// typedef struct s_type
-// {
-//     # define LEFT_PARENTHESES // (
-//     # define RIGHT_PARENTHESES  // )
-//     # define BACKSLASH //
-//     # define DOUBLE_QUOTATION
-//     # define SINGLE_QUOTATION //
-//     # define DOLLAR_SIGN // $
-//     # define AMPERSAND // &
-//     # define SORTIE // >
-//     # define ENTREE // <
-//     # define PIPE // |
-// }               t_type;
-
-typedef struct s_token
-{
-	char			*type;
-	int				id;
-	int				start;
-	int				end;
-	struct s_token	*next;
-
-}					t_token;
 
 # define COLOR_BOLD "\e[1m"
 # define KNRM "\x1B[0m"
@@ -72,9 +31,40 @@ typedef struct s_token
 # define WHT "\x1B[37m"
 # define RESET "\x1B[0m"
 
-void				minishell(void);
+
+typedef struct s_tree
+{
+	int				data;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}					t_tree;
+enum types
+{
+    WORD = 1,
+    LEFT_PARENTHESES = 2,
+    RIGHT_PARENTHESES = 3,
+    BACKSLASH = 4,
+    DOUBLE_QUOTATION = 5,
+    SINGLE_QUOTATION = 6,
+    DOLLAR_SIGN = 7,
+    AND = 8,
+    AMPERSAND = 9,
+    SORTIE = 10,
+    ENTREE = 11,
+    OR = 12,
+    PIPE = 13
+};
+
+typedef struct s_token
+{
+    int type;
+    char *value;
+    struct s_token *next;
+}               t_token;
+
 void				freeList(t_token *head);
 bool				chech_Quoting(char *line);
-void add_node(t_token **head, const char *symbol);
+void                add_node(t_token **head, const char *value, int type);
+void minishell();
 
 #endif

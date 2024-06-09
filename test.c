@@ -113,108 +113,57 @@
 
 
 // }
-
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-typedef struct s_token {
-    char *type;
-    struct s_token *next;
-} t_token;
+#define ALPHABET 1000
+#define LESS_THAN 60
+#define GREATER_THAN 62
+#define AMPERSAND 38
+#define PIPE 124
+#define WHITESPACE 32
+#define NEWLINE 10
+#define MYCOPOUT 9999
 
-size_t ft_strlen(const char *str) {
-    size_t len = 0;
-    while (str[len] != '\0') {
-        len++;
+#define CAPITALS(i) ((i >= 65) && (i <= 90))
+#define LOWERS(i) ((i >= 97) && (i <= 122))
+#define BACKSLASH(i) i == 47
+
+
+
+void get_token(char *str, int *i)
+{
+    int start = 0;
+    int end = 0;
+
+    printf("%s\n", str);
+    while (str[*i] != ' ')
+    {
+        if ((str[*i] >= 97) && (str[*i] <= 122))
+            end++;
+        (*i)++;
     }
-    return len;
+    printf("start is : %d\n end is : %d\n", start, end);
+
 }
 
-char *ft_strcpy(char **dst, const char *src) {
-    if (src == NULL) {
-        return NULL;
+void get(char *str)
+{
+    int i = 0;
+    while (str[i])
+    {
+        if (str[i] == ' ')
+            i++;
+        else if ((str[i] >= 97) && (str[i] <= 122))
+            get_token(str, &i);
+        else
+            i++;
     }
+    
 
-    *dst = malloc(ft_strlen(src) + 1);
-    if (*dst == NULL) {
-        return NULL;
-    }
-
-    size_t i = 0;
-    while (src[i]) {
-        (*dst)[i] = src[i];
-        i++;
-    }
-    (*dst)[i] = '\0';
-    return *dst;
 }
-
-void add_node(t_token **head, const char *symbol) {
-    t_token *tmp = malloc(sizeof(t_token));
-    if (tmp == NULL) {
-        // Handle malloc failure
-        fprintf(stderr, "Memory allocation failed for new node.\n");
-        return;
-    }
-
-    if (ft_strcpy(&tmp->type, symbol) == NULL) {
-        // Handle strdup failure
-        fprintf(stderr, "Memory allocation failed for symbol copy.\n");
-        free(tmp);
-        return;
-    }
-
-    tmp->next = NULL;
-
-    if (*head == NULL) {
-        *head = tmp;
-    } else {
-        t_token *current = *head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = tmp;
-    }
-
-    puts("Node added successfully.");
-}
-
-void freeList(t_token *head) {
-    t_token *current = head;
-    t_token *next;
-
-    while (current != NULL) {
-        next = current->next;
-        free(current->type);
-        free(current);
-        current = next;
-    }
-}
-
-void printList(t_token* head) {
-    t_token* current = head;
-
-    while (current != NULL) {
-        printf("%s\n", current->type);
-        current = current->next;
-    }
-    printf("\n");
-}
-
-int main() {
-    t_token *token_list = NULL;
-
-    add_node(&token_list, "(");
-    add_node(&token_list, ")");
-    add_node(&token_list, "\\");
-    add_node(&token_list, "\"");
-
-    // Print the list
-    printList(token_list);
-
-    // Free the list
-    freeList(token_list);
-
-    return 0;
+int main ()
+{
+    char *str = "ls -l | wc -l";
+    get(str);
 }

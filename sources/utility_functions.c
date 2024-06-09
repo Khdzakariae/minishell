@@ -2,7 +2,6 @@
 #include <stdio.h>
 char *ft_strcpy(char **dst, const char *src) 
 {
-    puts("hello");
     size_t i = 0;
 
     if (src == NULL) 
@@ -17,7 +16,7 @@ char *ft_strcpy(char **dst, const char *src)
         i++;
     }
     (*dst)[i] = '\0';
-    printf("dst is --> |%s|\n", *dst);
+
     return *dst;
 }
 
@@ -37,6 +36,7 @@ void freeList(t_token *head)
 
 void add_node(t_token **head, const char *value, int type) 
 {
+    puts("hama==");
     t_token *tmp = malloc(sizeof(t_token));
     if (tmp == NULL) 
     {

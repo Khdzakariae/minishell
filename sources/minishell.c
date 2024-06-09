@@ -1,27 +1,41 @@
 #include <minishell.h>
 
+
+int get_word(t_token **token, char *str, int i)
+{
+    int start = 0;
+    char *whitespace = " \t\r\n\v";
+    char *symbols = "<|>&()'\"";
+    
+    printf("la valeur de i is : %d\n", i);
+    start = i;
+    while (str[i] && !ft_strchr(whitespace, str[i]) && !ft_strchr(symbols, str[i]))
+        i++;
+    add_node(token, ft_substr(str, start, (size_t)(i - start)), WORD);
+    while (str[i] && (ft_strchr(whitespace, str[i]) || ft_strchr(symbols, str[i])))
+        i++;
+    return i;
+}
+
 t_token *gettoken(char *line)
 {
     t_token *token = NULL;
 
-    int i ;
-    int start = 0;
-    int end = 0 ;    
+    int i = 0; 
     char *whitespace;
     char *symbols;
 
-    i = 0;
     whitespace = " \t\r\n\v";
     symbols = "<|>&()'\"";
 
-    while(line[i] && ft_strchr(whitespace, line[i]))
+    while (line[i] && ft_strchr(whitespace, line[i]))
         i++;
+    
     while (line[i])
     {
-        if (line[i] != ' ')
-            start++;
-        else if ((line[i] >= 97) && (line[i] <= 122))
-            end++;
+        if (!ft_strchr(symbols, line[i]))
+            i = get_word(&token, line, i) - 1;
+
         if (ft_strchr(symbols, line[i]))
         {
             if (line[i] == '(')
@@ -57,7 +71,7 @@ t_token *gettoken(char *line)
         }
         i++;
     }
-    return(token);
+    return token;
 }
 
 void printList(t_token* head) {
@@ -82,7 +96,7 @@ void minishell()
         chech_Quoting(line);
         token = gettoken(line);
         printList(token);
-        // freeList(token);
+        freeList(token);
         usleep(50);
 
 

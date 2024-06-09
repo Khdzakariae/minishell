@@ -27,7 +27,7 @@ t_token *gettoken(char *line)
     char *symbols;
 
     whitespace = " \t\r\n\v";
-    symbols = "<|>&()'\"";
+    symbols = " <|>&()'\"";
 
     while (line[i] && ft_strchr(whitespace, line[i]))
         i++;

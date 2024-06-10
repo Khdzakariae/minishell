@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utility_functions.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 10:32:04 by zel-khad          #+#    #+#             */
+/*   Updated: 2024/06/10 10:37:29 by zel-khad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
-#include <stdio.h>
 
 char	*ft_strcpy(char **dst, const char *src)
 {
@@ -20,7 +31,7 @@ char	*ft_strcpy(char **dst, const char *src)
 	return (*dst);
 }
 
-void	freeList(t_token *head)
+void	freelist(t_token *head)
 {
 	t_token	*current;
 	t_token	*next;
@@ -37,7 +48,10 @@ void	freeList(t_token *head)
 
 void	add_node(t_token **head, const char *value, int type)
 {
-	t_token *tmp = malloc(sizeof(t_token));
+	t_token	*tmp;
+	t_token	*current;
+
+	tmp = malloc(sizeof(t_token));
 	if (tmp == NULL)
 	{
 		fprintf(stderr, "Memory allocation failed for new node.\n");
@@ -49,16 +63,13 @@ void	add_node(t_token **head, const char *value, int type)
 		ft_strcpy(&tmp->value, value);
 	tmp->type = type;
 	tmp->next = NULL;
-
 	if (*head == NULL)
 		*head = tmp;
 	else
 	{
-		t_token *current = *head;
+		current = *head;
 		while (current->next != NULL)
-		{
 			current = current->next;
-		}
 		current->next = tmp;
 	}
 }

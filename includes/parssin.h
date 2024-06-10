@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 19:16:25 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/10 19:23:32 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 # include <../lib/libft/libft.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdbool.h>
+# include <stdio.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-#include <stdio.h> 
-#include <signal.h> 
 
 # define COLOR_BOLD "\e[1m"
 # define KNRM "\x1B[0m"
@@ -50,7 +50,8 @@ typedef struct s_tree
 	struct s_tree	*left;
 	struct s_tree	*right;
 }					t_tree;
-enum				types
+
+enum				e_types
 {
 	WORD = 1,
 	LEFT_PARENTHESES = 2,
@@ -76,11 +77,12 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-void signels_handler();
-t_token	            *gettoken(char *line);
+void				signels_handler(void);
+t_token				*gettoken(char *line);
 void				freelist(t_token *head);
 bool				chech_quoting(char *line);
 void				add_node(t_token **head, const char *value, int type);
-void	parse_symbol(t_token **token, char symbol, char *line, int *i);
+void				parse_symbol(t_token **token, char symbol, char *line,
+						int *i);
 
 #endif

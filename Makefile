@@ -21,7 +21,7 @@ $(LIBFT) :
 	@cc $(FLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ)
-	@cc -fsanitize=address -g3 $(FLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+	@cc  $(FLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 
 clean:
 	@rm -f $(OBJ)

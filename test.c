@@ -127,33 +127,30 @@
 
 
         #include <stdio.h>
-#include <signal.h>
-
-void ctrap(int sig)
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <signal.h> 
+void handle_sigint(int sig)
 {
-    (void) signal(SIGINT,SIG_DFL);
-}
-
-    void sigHandler(int sig)
-{
-    signal(SIGINT, sigHandler);
-    printf("CTRL C does not work\n");
+    rl_on_new_line();
+    rl_redisplay();
 }
 
 
 void signels_handler()
 {
-    // signal(SIGINT, handle_sigint);
-    signal(SIGINT, sigHandler);
+    signal(SIGINT, handle_sigint);
+    signal(SIGQUIT, SIG_IGN);
 
 }
-int main()
-{
 
+int main ()
+{
     signels_handler();
-    while(1)
+    while (1)
     {
-        
+        /* code */
     }
-    return(0);
+    
 }

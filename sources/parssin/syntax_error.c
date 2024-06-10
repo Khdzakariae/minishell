@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax_error.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 10:24:59 by zel-khad          #+#    #+#             */
+/*   Updated: 2024/06/10 10:26:49 by zel-khad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
-bool	check_PARENTHESES(char *line)
+bool	check_parantheses(char *line)
 {
 	int	flag;
 	int	i;
@@ -28,7 +40,7 @@ bool	check_PARENTHESES(char *line)
 	return (true);
 }
 
-bool	check_DOUBLE_QUOTATION(char *line)
+bool	check_double_quotation(char *line)
 {
 	int	count;
 	int	i;
@@ -49,7 +61,7 @@ bool	check_DOUBLE_QUOTATION(char *line)
 	return (true);
 }
 
-bool	check_SINGLE_QUOTATION(char *line)
+bool	check_single_quotation(char *line)
 {
 	int	count;
 	int	i;
@@ -69,11 +81,12 @@ bool	check_SINGLE_QUOTATION(char *line)
 	}
 	return (true);
 }
-bool	chech_Quoting(char *line)
+
+bool	chech_quoting(char *line)
 {
-	if (check_PARENTHESES(line) == false)
+	if (check_parantheses(line) == false)
 		return (false);
-	if (check_DOUBLE_QUOTATION(line) == false || check_SINGLE_QUOTATION(line))
+	if (check_double_quotation(line) == false || check_single_quotation(line))
 		return (false);
 	return (true);
 }

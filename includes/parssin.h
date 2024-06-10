@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 16:01:15 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/10 19:10:07 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ enum				types
 	AMPERSAND = 9,
 	SORTIE = 10,
 	ENTREE = 11,
-	OR = 12,
-	PIPE = 13
+	LEFT_GUILLEMET = 13,
+	RIGHT_GUILLEMET = 14,
+	OR = 15,
+	PIPE = 16
 };
 
 typedef struct s_token

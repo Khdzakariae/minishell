@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parssin.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
+/*   Updated: 2024/06/10 10:39:08 by zel-khad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSSIN_H
 # define PARSSIN_H
 
@@ -61,8 +73,8 @@ typedef struct s_token
 }					t_token;
 
 t_token	*gettoken(char *line);
-void				freeList(t_token *head);
-bool				chech_Quoting(char *line);
+void				freelist(t_token *head);
+bool				chech_quoting(char *line);
 void				add_node(t_token **head, const char *value, int type);
 
 #endif

@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-void handle_sigint(int sig)
+void handle_sigint()
 {
     write(1, "\n", 1);
     rl_on_new_line();

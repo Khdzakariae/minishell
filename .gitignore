@@ -4,6 +4,11 @@
 
 *.a
 
+.nfs*
+
 .vscode
+
+test.c
+
 
 minishell

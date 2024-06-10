@@ -113,60 +113,6 @@
 
 
 // }
-#include <stdio.h>
-#include <string.h>
-
-#define ALPHABET 1000
-#define LESS_THAN 60
-#define GREATER_THAN 62
-#define AMPERSAND 38
-#define PIPE 124
-#define WHITESPACE 32
-#define NEWLINE 10
-#define MYCOPOUT 9999
-
-#define CAPITALS(i) ((i >= 65) && (i <= 90))
-#define LOWERS(i) ((i >= 97) && (i <= 122))
-#define BACKSLASH(i) i == 47
-
-
-
-void get_token(char *str, int *i)
-{
-    int start = 0;
-    int end = 0;
-
-    printf("%s\n", str);
-    while (str[*i] != ' ')
-    {
-        if ((str[*i] >= 97) && (str[*i] <= 122))
-            end++;
-        (*i)++;
-    }
-    printf("start is : %d\n end is : %d\n", start, end);
-
-}
-
-void get(char *str)
-{
-    int i = 0;
-    while (str[i])
-    {
-        if (str[i] == ' ')
-            i++;
-        else if ((str[i] >= 97) && (str[i] <= 122))
-            get_token(str, &i);
-        else
-            i++;
-    }
-    
-
-}
-int main ()
-{
-    char *str = "ls -l | wc -l";
-    get(str);
-}
 
 		// char *argvrc[] = {cmd, NULL , NULL};
 		// char *envVec[] = {NULL};
@@ -178,3 +124,36 @@ int main ()
 		// }
 		// else
 		//     wait(NULL);
+
+
+        #include <stdio.h>
+#include <signal.h>
+
+void ctrap(int sig)
+{
+    (void) signal(SIGINT,SIG_DFL);
+}
+
+    void sigHandler(int sig)
+{
+    signal(SIGINT, sigHandler);
+    printf("CTRL C does not work\n");
+}
+
+
+void signels_handler()
+{
+    // signal(SIGINT, handle_sigint);
+    signal(SIGINT, sigHandler);
+
+}
+int main()
+{
+
+    signels_handler();
+    while(1)
+    {
+        
+    }
+    return(0);
+}

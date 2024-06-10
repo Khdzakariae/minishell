@@ -30,11 +30,10 @@ void	minishell(void)
 {
 	t_token	*token;
 	char	*line;
-	
+
 	while (1)
 	{
-		line = readline(COLOR_BOLD  "➜ minishell__v1 ✗ ");
-		
+		line = readline(COLOR_BOLD "➜ minishell__v1 ✗ ");
 		if (line == NULL)
 		{
 			printf("exit\n");

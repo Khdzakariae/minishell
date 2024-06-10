@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 10:33:53 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/10 16:16:50 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,16 @@ void	minishell(void)
 	int		id;
 	t_token	*token;
 	char	*line;
-
+	
 	while (1)
 	{
-		line = readline(COLOR_BOLD GRN "➜ minishell__v1 ✗ ");
+		line = readline(COLOR_BOLD  "➜ minishell__v1 ✗ ");
+		
+		if (line == NULL)
+		{
+			printf("exit\n");
+			exit(0);
+		}
 		chech_quoting(line);
 		token = gettoken(line);
 		printlist(token);

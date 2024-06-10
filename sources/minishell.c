@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 16:16:50 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/10 19:00:32 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	printlist(t_token *head)
 
 void	minishell(void)
 {
-	int		id;
 	t_token	*token;
 	char	*line;
 	

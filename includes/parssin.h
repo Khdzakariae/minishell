@@ -1,5 +1,5 @@
 #ifndef PARSSIN_H
-#define PARSSIN_H
+# define PARSSIN_H
 
 # include <../lib/libft/libft.h>
 # include <readline/history.h>
@@ -10,7 +10,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
 
 # define COLOR_BOLD "\e[1m"
 # define KNRM "\x1B[0m"
@@ -31,40 +30,38 @@
 # define WHT "\x1B[37m"
 # define RESET "\x1B[0m"
 
-
 typedef struct s_tree
 {
 	int				data;
 	struct s_tree	*left;
 	struct s_tree	*right;
 }					t_tree;
-enum types
+enum				types
 {
-    WORD = 1,
-    LEFT_PARENTHESES = 2,
-    RIGHT_PARENTHESES = 3,
-    BACKSLASH = 4,
-    DOUBLE_QUOTATION = 5,
-    SINGLE_QUOTATION = 6,
-    DOLLAR_SIGN = 7,
-    AND = 8,
-    AMPERSAND = 9,
-    SORTIE = 10,
-    ENTREE = 11,
-    OR = 12,
-    PIPE = 13
+	WORD = 1,
+	LEFT_PARENTHESES = 2,
+	RIGHT_PARENTHESES = 3,
+	BACKSLASH = 4,
+	DOUBLE_QUOTATION = 5,
+	SINGLE_QUOTATION = 6,
+	DOLLAR_SIGN = 7,
+	AND = 8,
+	AMPERSAND = 9,
+	SORTIE = 10,
+	ENTREE = 11,
+	OR = 12,
+	PIPE = 13
 };
 
 typedef struct s_token
 {
-    int type;
-    char *value;
-    struct s_token *next;
-}               t_token;
+	int				type;
+	char			*value;
+	struct s_token	*next;
+}					t_token;
 
 void				freeList(t_token *head);
 bool				chech_Quoting(char *line);
-void add_node(t_token **head, const char *value, int type);
-  
+void				add_node(t_token **head, const char *value, int type);
 
 #endif

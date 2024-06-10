@@ -10,7 +10,8 @@ void parse_ampersand(t_token **token, char *line, int *i)
         add_node(token, NULL, AMPERSAND);
 }
 
-void parse_pipe(t_token **token, char *line, int *i) {
+void parse_pipe(t_token **token, char *line, int *i) 
+{
     if (line[*i + 1] == '|')
 	{
         add_node(token, NULL, OR);
@@ -22,12 +23,10 @@ void parse_pipe(t_token **token, char *line, int *i) {
 
 void parse_symbol(t_token **token, char symbol, char *line, int *i) 
 {
-
 	if (symbol == '(')
-
-
-    if (symbol == '(' || symbol == ')')
-        add_node(token, NULL, (symbol == '(') ? LEFT_PARENTHESES : RIGHT_PARENTHESES);
+		add_node(token, NULL, LEFT_PARENTHESES);
+	else if (symbol == ')')
+		add_node(token, NULL, RIGHT_PARENTHESES);
     else if (symbol == '\\') 
         add_node(token, NULL, BACKSLASH);
     else if (symbol == '"') 
@@ -44,7 +43,6 @@ void parse_symbol(t_token **token, char symbol, char *line, int *i)
         add_node(token, NULL, ENTREE);
     else if (symbol == '|') 
         parse_pipe(token, line, i);
-
 }
 
 

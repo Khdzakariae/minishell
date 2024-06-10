@@ -167,3 +167,14 @@ int main ()
     char *str = "ls -l | wc -l";
     get(str);
 }
+
+		// char *argvrc[] = {cmd, NULL , NULL};
+		// char *envVec[] = {NULL};
+		// id = fork();
+		// if (id == 0)
+		// {
+		//     if(execve(cmd, argvrc, NULL) == -1)
+		//         perror("not fount");
+		// }
+		// else
+		//     wait(NULL);

@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 10:39:08 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/10 16:01:15 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+#include <stdio.h> 
+#include <signal.h> 
 
 # define COLOR_BOLD "\e[1m"
 # define KNRM "\x1B[0m"
@@ -72,7 +74,8 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-t_token	*gettoken(char *line);
+void signels_handler();
+t_token	            *gettoken(char *line);
 void				freelist(t_token *head);
 bool				chech_quoting(char *line);
 void				add_node(t_token **head, const char *value, int type);

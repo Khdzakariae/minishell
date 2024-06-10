@@ -14,9 +14,8 @@
             flag++;
         else if (line[i] == ')')
             flag--;
-        printf("flag is =========>|%d|\n", flag);
         i++;
-        if (flag < 0)
+        if (flag != 0)
         {
             printf(RED"ERROR PARANTES");
             return(false);

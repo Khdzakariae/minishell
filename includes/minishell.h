@@ -1,9 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <parssin.h>
 
-#include <parssin.h>
-
-void minishell();
+void	minishell(void);
 
 #endif

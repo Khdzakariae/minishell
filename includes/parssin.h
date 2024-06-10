@@ -60,6 +60,7 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+t_token	*gettoken(char *line);
 void				freeList(t_token *head);
 bool				chech_Quoting(char *line);
 void				add_node(t_token **head, const char *value, int type);

@@ -14,7 +14,7 @@ bool	check_PARENTHESES(char *line)
 		else if (line[i] == ')')
 			flag--;
 		i++;
-		if (flag != 0)
+		if (flag < 0)
 		{
 			printf(RED "ERROR PARANTES");
 			return (false);

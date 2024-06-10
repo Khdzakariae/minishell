@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-int main ()
+int	main(void)
 {
-    minishell();
+	minishell();
 }

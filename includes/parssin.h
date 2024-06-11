@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 19:23:32 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/11 09:06:39 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_tree
 
 enum				e_types
 {
+	CMD = 0,
 	WORD = 1,
 	LEFT_PARENTHESES = 2,
 	RIGHT_PARENTHESES = 3,

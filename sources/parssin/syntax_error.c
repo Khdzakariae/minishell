@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:24:59 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 10:26:49 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/11 10:38:43 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool	check_double_quotation(char *line)
 	}
 	if (count % 2 != 0)
 	{
-		printf(RED "ERROR DOUBLE_QUOTATION");
+		printf(RED "ERROR DOUBLE_QUOTATION" RESET);
 		return (false);
 	}
 	return (true);

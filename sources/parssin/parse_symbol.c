@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:17:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 19:21:02 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/11 10:30:33 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	parse_pipe(t_token **token, char *line, int *i)
 		add_node(token, NULL, PIPE);
 }
 
+
+
 void	parse_symbol(t_token **token, char symbol, char *line, int *i)
 {
 	if (symbol == '(')
@@ -64,8 +66,7 @@ void	parse_symbol(t_token **token, char symbol, char *line, int *i)
 		add_node(token, NULL, RIGHT_PARENTHESES);
 	else if (symbol == '\\')
 		add_node(token, NULL, BACKSLASH);
-	else if (symbol == '"')
-		add_node(token, NULL, DOUBLE_QUOTATION);
+
 	else if (symbol == '\'')
 		add_node(token, NULL, SINGLE_QUOTATION);
 	else if (symbol == '$')

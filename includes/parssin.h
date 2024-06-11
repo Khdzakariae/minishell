@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/11 09:06:39 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/11 15:49:56 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,7 @@ bool				chech_quoting(char *line);
 void				add_node(t_token **head, const char *value, int type);
 void				parse_symbol(t_token **token, char symbol, char *line,
 						int *i);
+
+
 
 #endif

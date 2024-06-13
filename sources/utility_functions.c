@@ -6,11 +6,22 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:32:04 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 10:37:29 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/11 22:10:19 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
+		i++;
+	return (s1[i] - s2[i]);
+}
 
 char	*ft_strcpy(char **dst, const char *src)
 {

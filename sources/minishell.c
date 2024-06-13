@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/13 19:37:39 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/13 22:03:35 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	minishell(void)
 			printf("exit\n");
 			exit(0);
 		}
+		add_history(line);
 		chech_quoting(line);
 		token = gettoken(line);
 		// builtins(token);
@@ -46,4 +47,5 @@ void	minishell(void)
 		freelist(token);
 		usleep(50);
 	}
+	clear_history();
 }

@@ -6,14 +6,17 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:45 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 16:18:56 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/13 19:34:04 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	main(void)
+
+int main(void) 
 {
 	signels_handler();
 	minishell();
+    return 0;
 }
+

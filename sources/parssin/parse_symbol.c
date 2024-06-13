@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:17:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/11 10:30:33 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/13 23:28:17 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,17 @@ void	parse_pipe(t_token **token, char *line, int *i)
 		add_node(token, NULL, PIPE);
 }
 
-
+void parse_space(t_token **token, char *line, int *i)
+{
+		char *whitespace = " \t\r\n\v";
+		if (ft_strchr(whitespace, line[*i]))
+		{
+			while(line[*i] && !ft_strchr(whitespace, line[*i]))
+				(*i)++;
+			if (!ft_strchr(whitespace, line[*i + 1]))
+				add_node(token, NULL, SPACE);
+		}
+}
 
 void	parse_symbol(t_token **token, char symbol, char *line, int *i)
 {
@@ -66,7 +76,8 @@ void	parse_symbol(t_token **token, char symbol, char *line, int *i)
 		add_node(token, NULL, RIGHT_PARENTHESES);
 	else if (symbol == '\\')
 		add_node(token, NULL, BACKSLASH);
-
+	else if(symbol == ' ')
+		parse_space(token, line, i);
 	else if (symbol == '\'')
 		add_node(token, NULL, SINGLE_QUOTATION);
 	else if (symbol == '$')

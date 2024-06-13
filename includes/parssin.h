@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/11 09:06:39 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/13 21:55:35 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ enum				e_types
 	LEFT_GUILLEMET = 13,
 	RIGHT_GUILLEMET = 14,
 	OR = 15,
-	PIPE = 16
+	PIPE = 16,
+	SPACE = 17
 };
 
 typedef struct s_token

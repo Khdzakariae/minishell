@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:25:15 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/11 16:23:52 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/13 22:23:59 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	extract_word(t_token **token, char *line, int i)
 			line[i]))
 		i++;
 	add_node(token, ft_substr(line, start, (size_t)(i - start)), WORD);
-	while (line[i] && ft_strchr(whitespace, line[i]))
-		i++;
+	// while (line[i] && ft_strchr(whitespace, line[i]))
+	// 	i++;
 	return (i);
 }
 

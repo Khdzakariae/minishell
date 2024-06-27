@@ -28,13 +28,13 @@ bool	check_parantheses(char *line)
 		i++;
 		if (flag < 0)
 		{
-			printf(RED "ERROR PARANTES");
+			printf(RED "ERROR PARANTES" RESET);
 			return (false);
 		}
 	}
 	if (flag != 0)
 	{
-		printf(RED "ERROR PARANTES");
+		printf(RED "ERROR PARANTES" RESET);
 		return (false);
 	}
 	return (true);
@@ -76,7 +76,7 @@ bool	check_single_quotation(char *line)
 	}
 	if (count % 2 != 0)
 	{
-		printf(RED "ERROR single_QUOTATION");
+		printf(RED "ERROR single_QUOTATION" RESET);
 		return (false);
 	}
 	return (true);

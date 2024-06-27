@@ -20,9 +20,9 @@ char *expandEnvironmentVariable(char *input)
 }
 int main(void) 
 {
-	printf("%s\n",expandEnvironmentVariable("HOME"));
-	// signels_handler();
-	// minishell();
+	// printf("%s\n",expandEnvironmentVariable("HOME"));
+	signels_handler();
+	minishell();
     return 0;
 }
 

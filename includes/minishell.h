@@ -1,0 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 10:39:00 by zel-khad          #+#    #+#             */
+/*   Updated: 2024/06/13 19:42:32 by zel-khad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+# include <parssin.h>
+#include <execution.h>
+
+char	*ft_strcpy(char **dst, const char *src);
+
+int	ft_strcmp(char *s1, char *s2);
+void builtins(t_token *token);
+void	minishell(void);
+
+#endif

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parssin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/13 21:55:35 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/28 21:58:03 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSSIN_H
 # define PARSSIN_H
 
-# include <../lib/libft/libft.h>
+
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>

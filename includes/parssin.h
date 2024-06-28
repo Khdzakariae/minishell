@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/28 21:58:03 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/06/28 22:12:34 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ enum				e_types
 	RIGHT_GUILLEMET = 14,
 	OR = 15,
 	PIPE = 16,
-	SPACE = 17
+	SPACE_ = 17
 };
 
 typedef struct s_token

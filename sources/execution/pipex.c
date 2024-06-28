@@ -6,13 +6,11 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/06/28 21:59:02 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/06/28 22:12:08 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include "../../includes/execution.h"
+#include <minishell.h>
 
 char **make_array(char *str)
 {

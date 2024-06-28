@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:00 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/13 19:42:32 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/06/28 21:57:04 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <parssin.h>
 #include <execution.h>
+# include <../lib/libft/libft.h>
 
 char	*ft_strcpy(char **dst, const char *src);
 

@@ -57,6 +57,26 @@ void	freelist(t_token *head)
 	}
 }
 
+void	add_node_(t_cmd **head)
+{
+	t_cmd	*tmp;
+	t_cmd	*temp1;
+
+	tmp = malloc(sizeof(t_cmd));
+	tmp->value = NULL;
+	tmp->type = 0;
+	tmp->next = NULL;
+	if (*head == NULL)
+		*head = tmp;
+	else
+	{
+		temp1 = *head;
+		while (temp1->next != NULL)
+			temp1 = temp1->next;
+		temp1->next = tmp;
+	}
+}
+
 void	add_node(t_token **head, const char *value, int type)
 {
 	t_token	*tmp;

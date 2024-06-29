@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/06/29 03:17:17 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/06/29 19:41:44 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,26 +44,31 @@ char	*cmd_path(char *cmd, char **path)
     return (NULL);
 }
 
-int execute_command(char **cmd, char **path, int in_fd, int out_fd, char **env)
+int	execute_command(char **cmd, char **path, int in_fd, int out_fd, char **env)
 {
-    pid_t pid;
+	pid_t pid;
 	char *cmd_name;
-	
+
 	pid = fork();
-    if (pid == 0)
+	if (pid == 0)
 	{
-        if (out_fd != STDOUT_FILENO)
-            dup2(out_fd, STDOUT_FILENO);
 		if (in_fd != STDIN_FILENO)
-		    dup2(in_fd, STDIN_FILENO);
+			dup2(in_fd, STDIN_FILENO);
+		if (out_fd != STDOUT_FILENO)
+			dup2(out_fd, STDOUT_FILENO);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
 			execve(cmd_name, cmd, env);
-        exit(EXIT_FAILURE);
-    }
+		exit(EXIT_FAILURE);
+	}
 	else
-		waitpid(pid, NULL, 0);
-    return pid;
+	{
+		if (in_fd != STDIN_FILENO)
+			close(in_fd);
+		if (out_fd != STDOUT_FILENO)
+			close(out_fd);
+	}
+	return pid;
 }
 
 void	pipex(t_list *list, int size, char **env, int in_fd, int out_fd)
@@ -73,18 +78,18 @@ void	pipex(t_list *list, int size, char **env, int in_fd, int out_fd)
 	pid_t pid;
 
 	path = ft_split(find_path_from_env(env), ':');
-	pipe(fd);
 	while (list->next)
 	{
+		pipe(fd);
 		pid = execute_command(list->content, path, in_fd, fd[1], env);
 		in_fd = fd[0];
 		list = list->next;
 	}
-	pid = execute_command(list->content, path, fd[0], out_fd, env);
-	close(fd[0]);
+	pipe(fd);
 	close(fd[1]);
+	dup2(STDOUT_FILENO, STDOUT_FILENO);
+	execute_command(list->content, path, fd[0], out_fd, env);
 }
-
 int main(int argc, char *argv[], char *env[])
 {
 	t_list    *list;
@@ -99,5 +104,6 @@ int main(int argc, char *argv[], char *env[])
 		i++;
 	}
     pipex(list, argc - 1, env, STDIN_FILENO, STDOUT_FILENO);
+	wait(&i);
     return 0;
 }

@@ -66,52 +66,17 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 }
 
 
-int count_word(t_token **tmp)
-{
-    
-    int count_word = 0;
-    while ((*tmp))
-    {
-        if ((*tmp)->type == WORD)
-            count_word++;
-        else if ((*tmp)->type != SPACE_)
-            break;
-        *tmp = (*tmp)->next;
-    }
-    return count_word;
-}
 
 
-
-t_cmd *generet_cmd(t_token *token, t_cmd *cmd_)
-{
-	t_token *tmp ;
-	t_token	*tmp1;
-	int count = 0;
-	tmp = token;
-	tmp1 = token;
-	while(tmp)
-	{
-		if (tmp1->type == WORD)
-			count = count_word(&tmp);
-		printf("la valeur de word is |%d|\n", count);
-		if (tmp == NULL)
-			break;
-		tmp = tmp->next;
-	}
-	
-	return(cmd_);
-}
 
 t_token	*gettoken(char *line)
 {
 	t_token	*token;
-	t_cmd	*cmd_;
+
 	char	*whitespace;
 	char	*symbols;
 	int		i;
 
-	cmd_ = NULL;
 	token = NULL;
 	i = 0;
 	whitespace = " \t\r\n\v";
@@ -129,6 +94,6 @@ t_token	*gettoken(char *line)
 		i++;
 	}
 	// token = 
-	cmd_ = generet_cmd(token, cmd_);
+
 	return (token);
 }

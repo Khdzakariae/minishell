@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/06/29 02:53:02 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/06/29 03:17:17 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int execute_command(char **cmd, char **path, int in_fd, int out_fd, char **env)
 	char *cmd_name;
 	
 	pid = fork();
-    if (pid == 0) {
+    if (pid == 0)
+	{
         if (out_fd != STDOUT_FILENO)
             dup2(out_fd, STDOUT_FILENO);
 		if (in_fd != STDIN_FILENO)

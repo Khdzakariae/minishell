@@ -97,8 +97,9 @@ typedef struct s_cmd
 	
 }				t_cmd;
 
+void	freelist_(t_cmd *head);
 void	printlist(t_token *head);
-void	add_node_(t_cmd **head);
+void	add_node_(t_cmd **head, int type);
 void				signels_handler(void);
 t_token				*gettoken(char *line);
 void				freelist(t_token *head);

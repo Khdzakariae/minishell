@@ -89,13 +89,13 @@ void freelist_(t_cmd *head)
 }
 
 
-void	add_node_(t_cmd **head, int type)
+void	add_node_(t_cmd **head,char **tab, int type)
 {
 	t_cmd	*tmp;
 	t_cmd	*temp1;
 
 	tmp = malloc(sizeof(t_cmd));
-	tmp->value = NULL;
+	tmp->value = tab;
 	tmp->type = type;
 	tmp->next = NULL;
 	if (*head == NULL)

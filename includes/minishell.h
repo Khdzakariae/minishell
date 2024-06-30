@@ -13,13 +13,13 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <execution.h>
 # include <parssin.h>
-#include <execution.h>
 
 char	*ft_strcpy(char **dst, const char *src);
 
-int	ft_strcmp(char *s1, char *s2);
-void builtins(t_token *token);
+int		ft_strcmp(char *s1, char *s2);
+void	builtins(t_token *token);
 void	minishell(void);
 
 #endif

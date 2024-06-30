@@ -73,6 +73,7 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
 
         if (token->type == WORD)
         {
+            printf("hahowa -- >%s\n",token->value);
             cmd_[i] = ft_strcpy(&cmd_[i], token->value);
             i++;
         }
@@ -111,6 +112,17 @@ void print_tab(char **tab)
     }
 }
 
+void free_(char **tab)
+{
+    int i = 0;
+    while(tab[i])
+    {
+        free(tab[i]);
+        i++;
+    }
+
+}
+
 void generet_cmd(t_token *token, t_cmd **cmd_)
 {
     t_token *tmp;
@@ -121,26 +133,19 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
     tmp1 = token;
     while (tmp)
     {
-        // puts("============================== debag ==================================");
-        // printf("the token type is |%d|\n", token->type);
-        // printf("the tmp type is |%d|\n", token->type);
-        // puts("========================================================================");
+        // printf("tmp ==  %s\n", (tmp)->value);
         if (tmp->type == WORD)
         {
             count = count_word(&tmp);
             tab = malloc((count + 1) * sizeof(char *));
-            tab = generate_tab_cmd(tab, token, count);
+            tab = generate_tab_cmd(tab, tmp1, count);
             add_node_(cmd_ ,tab,  0);
-            // generate_tab_cmd(&cmd_, tmp1, count);
+            tmp1 = tmp;
+            // free(tab);
         }
-		// else if (tmp != NULL && tmp->type != SPACE_)
-		// {
-        //     puts("=====================");
-        //     add_node_(&cmd_, tmp->type);
-        //     if (tmp->next != NULL)
-        //         tmp = tmp->next;
-		// }
-        if (tmp == NULL || tmp == NULL)
+		else  if (tmp != NULL && tmp->type != SPACE_)
+            add_node_(cmd_, NULL,tmp->type);
+        if (tmp == NULL)
             break;
 		tmp = tmp->next;
     }
@@ -173,7 +178,7 @@ void	minishell(void)
 
 		// builtins(token);
 	    // freelist_(cmd_);
-	freelist(token);
+	    freelist(token);
 		usleep(50);
 	}
 	clear_history();

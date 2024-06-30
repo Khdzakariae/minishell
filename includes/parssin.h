@@ -99,7 +99,7 @@ typedef struct s_cmd
 
 void	freelist_(t_cmd *head);
 void	printlist(t_token *head);
-void	add_node_(t_cmd **head, int type);
+void	add_node_(t_cmd **head,char **tab, int type);
 void				signels_handler(void);
 t_token				*gettoken(char *line);
 void				freelist(t_token *head);

@@ -51,12 +51,10 @@ void printlist_(t_cmd *head)
 int count_word(t_token **tmp)
 {
     int count_word = 0;
-    while ((*tmp))
+    while ((*tmp) && ((*tmp)->type == WORD || (*tmp)->type == SPACE))
     {
         if ((*tmp)->type == WORD)
             count_word++;
-        else if ((*tmp)->type != SPACE_)
-            break;
         *tmp = (*tmp)->next;
     }
 	puts("=======================================================");
@@ -133,7 +131,7 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
     tmp1 = token;
     while (tmp)
     {
-        // printf("tmp ==  %s\n", (tmp)->value);
+        printf("message obo ==  %d\n", (tmp)->type);
         if (tmp->type == WORD)
         {
             count = count_word(&tmp);
@@ -144,7 +142,10 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
             // free(tab);
         }
 		else  if (tmp != NULL && tmp->type != SPACE_)
+        {
+            printf("heloo");
             add_node_(cmd_, NULL,tmp->type);
+        }
         if (tmp == NULL)
             break;
 		tmp = tmp->next;
@@ -165,6 +166,7 @@ void	minishell(void)
 		line = readline(COLOR_BOLD "➜ minishell__v1 ✗ ");
 		if (line == NULL)
 		{
+            // free(cmd_);
 			printf("exit\n");
 			exit(0);
 		}
@@ -173,13 +175,15 @@ void	minishell(void)
 		token = gettoken(line);
 		printlist(token);
 		puts("===========================");
+        cmd_ = malloc(sizeof(t_cmd));
+        cmd_ = NULL;
 		generet_cmd(token, &cmd_);
 		printlist_(cmd_);
 
 		// builtins(token);
-	    // freelist_(cmd_);
+        freelist_(cmd_);
 	    freelist(token);
-		usleep(50);
+
 	}
 	clear_history();
 }

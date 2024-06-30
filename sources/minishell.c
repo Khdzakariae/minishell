@@ -79,24 +79,6 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
     return(cmd_);
 }
 
-// void  generate_tab_cmd(t_cmd **cmd_, t_token *token, int count)
-// {
-//     int i = 0;
-//     (*cmd_)->type = WORD;
-//     while (i < count)
-//     {
-
-//         if (token->type == WORD)
-//         {
-//             (*cmd_)->value[i] = ft_strcpy(&(*cmd_)->value[i], token->value);
-//             i++;
-//         }
-// 		// (*cmd_) = (*cmd_)->next;
-//         token = token->next;
-//     }
-//     (*cmd_)->value[i] = NULL;
-// }
-
 void print_tab(char **tab)
 {
     int i = 0;
@@ -105,17 +87,6 @@ void print_tab(char **tab)
         printf("tabde[%d] is |%s|\n", i, tab[i]);
         i++;
     }
-}
-
-void free_(char **tab)
-{
-    int i = 0;
-    while(tab[i])
-    {
-        free(tab[i]);
-        i++;
-    }
-
 }
 
 void generet_cmd(t_token *token, t_cmd **cmd_)
@@ -128,7 +99,6 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
     tmp1 = token;
     while (tmp)
     {
-        printf("message obo ==  %d\n", (tmp)->type);
         if (tmp->type == WORD)
         {
             count = count_word(&tmp);
@@ -136,18 +106,13 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
             tab = generate_tab_cmd(tab, tmp1, count);
             add_node_(cmd_ ,tab,  0);
             tmp1 = tmp;
-            // free(tab);
         }
 		else  if (tmp != NULL && tmp->type != SPACE_)
-        {
-            printf("heloo");
             add_node_(cmd_, NULL,tmp->type);
-        }
         if (tmp == NULL)
             break;
 		tmp = tmp->next;
     }
-    print_tab(tab);
 }
 
 
@@ -163,17 +128,18 @@ void	minishell(void)
 		line = readline(COLOR_BOLD "➜ minishell__v1 ✗ ");
 		if (line == NULL)
 		{
-            // free(cmd_);
 			printf("exit\n");
 			exit(0);
 		}
 		add_history(line);
 		chech_quoting(line);
 		token = gettoken(line);
+        puts("=================== stract token ======================");
 		printlist(token);
         cmd_ = malloc(sizeof(t_cmd));
         cmd_ = NULL;
 		generet_cmd(token, &cmd_);
+        puts("=================== stract cmd ======================");
 		printlist_(cmd_);
         freelist_(cmd_);
 	    freelist(token);

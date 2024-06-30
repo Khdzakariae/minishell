@@ -52,20 +52,21 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 	int start;
 	char *tmp;
 	start = *i;
+	int j = *i;
 	
-	while (line[*i] != '"')
-		(*i)++;
-	if (line[*i] == '"')
+    while (line[*i] != '\0' && line[(*i) + 1] != '"')
+        (*i)++;
+	if (line[j] == '"')
 	{
-		tmp = ft_substr(line, start, (size_t)(i - start));
+		(*i)++;
+		int length = *i - start;
+		tmp = ft_substr(line, start, length + 1);
+		printf("the word_____ is |%s|\n", tmp);
 		add_node(token, tmp, WORD);
-		*i = *i + ft_strlen(tmp);
 	}
 	else
 		printf("ERROR");
 }
-
-
 
 
 

@@ -6,14 +6,14 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/29 00:11:46 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/01 00:39:57 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTION_H
 #define EXECUTION_H
 
-
+#include <fcntl.h>
 
 
 #endif

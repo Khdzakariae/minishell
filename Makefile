@@ -1,4 +1,4 @@
-FLAGS = -Wall -Wextra -Werror 
+FLAGS = -fsanitize=address -g3
 
 NAME = minishell
 

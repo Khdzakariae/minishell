@@ -130,8 +130,8 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
             count = count_word(&tmp);
             tab = malloc((count + 1) * sizeof(char *));
             tab = generate_tab_cmd(tab, token, count);
+            add_node_(cmd_ ,tab,  0);
             // generate_tab_cmd(&cmd_, tmp1, count);
-            // add_node_(cmd_ , 0);
         }
 		// else if (tmp != NULL && tmp->type != SPACE_)
 		// {
@@ -173,8 +173,8 @@ void	minishell(void)
 
 		// builtins(token);
 	    // freelist_(cmd_);
+	freelist(token);
 		usleep(50);
 	}
-		freelist(token);
 	clear_history();
 }

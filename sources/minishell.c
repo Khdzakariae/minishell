@@ -51,15 +51,14 @@ void printlist_(t_cmd *head)
 int count_word(t_token **tmp)
 {
     int count_word = 0;
-    while ((*tmp) && ((*tmp)->type == WORD || (*tmp)->type == SPACE))
+    while ((*tmp) && ((*tmp)->type == WORD || (*tmp)->type == SPACE_))
     {
         if ((*tmp)->type == WORD)
             count_word++;
+        if ((*tmp)->next && ((*tmp)->next->type != WORD && (*tmp)->next->type != SPACE_))
+            break;
         *tmp = (*tmp)->next;
     }
-	puts("=======================================================");
-    printf("the cant value is -----> |%d|\n", count_word);
-	puts("=======================================================");
     return count_word;
 }
 
@@ -71,11 +70,9 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
 
         if (token->type == WORD)
         {
-            printf("hahowa -- >%s\n",token->value);
             cmd_[i] = ft_strcpy(&cmd_[i], token->value);
             i++;
         }
-		// (*cmd_) = (*cmd_)->next;
         token = token->next;
     }
     cmd_[i] = NULL;
@@ -174,13 +171,10 @@ void	minishell(void)
 		chech_quoting(line);
 		token = gettoken(line);
 		printlist(token);
-		puts("===========================");
         cmd_ = malloc(sizeof(t_cmd));
         cmd_ = NULL;
 		generet_cmd(token, &cmd_);
 		printlist_(cmd_);
-
-		// builtins(token);
         freelist_(cmd_);
 	    freelist(token);
 

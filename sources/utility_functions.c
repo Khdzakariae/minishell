@@ -62,13 +62,7 @@ void freelist_(t_cmd *head)
     t_cmd *next;
 
 	current = head;
-	// while (current != NULL)
-	// {
-	// 	next = current->next;
-	// 	free(current->value);
-	// 	free(current);
-	// 	current = next;
-	// }    
+
     while (current != NULL)
     {
         next = current->next;

@@ -56,15 +56,47 @@ void	freelist(t_token *head)
 		current = next;
 	}
 }
+void freelist_(t_cmd *head)
+{
+    t_cmd *current;
+    t_cmd *next;
 
-void	add_node_(t_cmd **head)
+	current = head;
+	// while (current != NULL)
+	// {
+	// 	next = current->next;
+	// 	free(current->value);
+	// 	free(current);
+	// 	current = next;
+	// }    
+    while (current != NULL)
+    {
+        next = current->next;
+        if (current->value != NULL)
+        {
+            int i = 0;
+            while (current->value[i] != NULL)
+            {
+                free(current->value[i]);
+                i++;
+            }
+            free(current->value);
+        }
+
+        free(current);
+        current = next;
+    }
+}
+
+
+void	add_node_(t_cmd **head, int type)
 {
 	t_cmd	*tmp;
 	t_cmd	*temp1;
 
 	tmp = malloc(sizeof(t_cmd));
 	tmp->value = NULL;
-	tmp->type = 0;
+	tmp->type = type;
 	tmp->next = NULL;
 	if (*head == NULL)
 		*head = tmp;

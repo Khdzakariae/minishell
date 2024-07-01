@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/01 00:39:57 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/01 02:47:20 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 #define EXECUTION_H
 
 #include <fcntl.h>
-
+#include <errno.h>
 
 #endif

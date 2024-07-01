@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/30 15:49:23 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 09:35:11 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ int count_word(t_token **tmp)
     int count_word = 0;
     while ((*tmp) && ((*tmp)->type == WORD || (*tmp)->type == SPACE_))
     {
+        // printf("-->%d\n",(*tmp)->type);
         if ((*tmp)->type == WORD)
             count_word++;
-        if ((*tmp)->next && ((*tmp)->next->type != WORD && (*tmp)->next->type != SPACE_))
-            break;
+        // if ((*tmp)->next && ((*tmp)->next->type != WORD && (*tmp)->next->type != SPACE_))
+        //     break;
         *tmp = (*tmp)->next;
     }
     return count_word;
@@ -60,6 +61,7 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
             tab = generate_tab_cmd(tab, tmp1, count);
             add_node_(cmd_ ,tab,  0);
             tmp1 = tmp;
+            continue;
         }
 		else  if (tmp != NULL && tmp->type != SPACE_)
             add_node_(cmd_, NULL,tmp->type);

@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/30 15:49:32 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:15:58 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	minishell(void)
 		printlist_(cmd_);
         freelist_(cmd_);
 	    freelist(token);
-
 	}
 	clear_history();
 }

@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parssin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/28 22:12:34 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/01 21:08:38 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSSIN_H
 # define PARSSIN_H
 
-
+# include <../lib/libft/libft.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
@@ -51,27 +50,6 @@ typedef struct s_tree
 	struct s_tree	*right;
 }					t_tree;
 
-enum				e_types
-{
-	CMD = 0,
-	WORD = 1,
-	LEFT_PARENTHESES = 2,
-	RIGHT_PARENTHESES = 3,
-	BACKSLASH = 4,
-	DOUBLE_QUOTATION = 5,
-	SINGLE_QUOTATION = 6,
-	DOLLAR_SIGN = 7,
-	AND = 8,
-	AMPERSAND = 9,
-	SORTIE = 10,
-	ENTREE = 11,
-	LEFT_GUILLEMET = 13,
-	RIGHT_GUILLEMET = 14,
-	OR = 15,
-	PIPE = 16,
-	SPACE_ = 17
-};
-
 typedef struct s_token
 {
 	int				type;
@@ -79,6 +57,49 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+typedef struct s_cmd
+{
+	int				type;
+	char			**value;
+	struct s_cmd	*next;
+
+}					t_cmd;
+
+enum				e_types
+{
+	WORD = 0,
+	SORTIE = 1, // >
+	ENTREE = 2, // <
+	PIPE = 3,   // |
+	SPACE_ = 4,
+	AMPERSAND = 5,
+	APPAND = 6,           // >>
+	HEREDOC = 7,          // <<
+	SINGLE_QUOTATION = 8, // '
+	AND = 9,              // &&
+	DOLLAR_SIGN = 10      // $
+};
+
+// char **tab;
+// ls -la |
+// 	-- 1er node --
+//  tab[1] = "ls"
+//  tab[2] = "-la"
+
+// 	-- 2eme node--
+// type = PIPE;
+// NULL;
+
+// 	-- 3eme --
+// 	if > fille
+
+void				printlist_(t_cmd *head);
+int					count_word(t_token **tmp, t_cmd **cmd_);
+char				**generate_tab_cmd(char **cmd_, t_token *token, int count);
+void				generet_cmd(t_token *token, t_cmd **cmd_);
+void				freelist_(t_cmd *head);
+void				printlist(t_token *head);
+void				add_node_(t_cmd **head, char **tab, int type);
 void				signels_handler(void);
 t_token				*gettoken(char *line);
 void				freelist(t_token *head);

@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/01 14:06:10 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 21:08:24 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void geberete_autput_input(t_token **token,t_cmd **cmd_)
     add_node_(cmd_, tab, type);
 }
 
-int count_word(t_token **tmp, t_cmd **cmd_, char **tab)
+int count_word(t_token **tmp, t_cmd **cmd_)
 {
     int count_word = 0;
     while ((*tmp) && ((*tmp)->type == WORD || (*tmp)->type == SPACE_ || (*tmp)->type == ENTREE || (*tmp)->type == SORTIE))
@@ -76,7 +76,7 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
     {
         if (tmp->type == WORD)
         {
-            count = count_word(&tmp, cmd_, tab);
+            count = count_word(&tmp, cmd_);
             tab = malloc((count + 1) * sizeof(char *));
             tab = generate_tab_cmd(tab, tmp1, count);
             add_node_(cmd_ ,tab,  0);

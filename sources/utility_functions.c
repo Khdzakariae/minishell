@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utility_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:32:04 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/11 22:10:19 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 22:43:36 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-char	*ft_strcpy(char **dst, const char *src)
+char	*ft_strcpy_1(char **dst, const char *src)
 {
 	size_t	i;
 
@@ -117,7 +117,7 @@ void	add_node(t_token **head, const char *value, int type)
 	if (value == NULL)
 		tmp->value = NULL;
 	else
-		ft_strcpy(&tmp->value, value);
+		ft_strcpy_1(&tmp->value, value);
 	tmp->type = type;
 	tmp->next = NULL;
 	if (*head == NULL)

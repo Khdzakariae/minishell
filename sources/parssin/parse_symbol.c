@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:17:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/13 23:28:17 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 21:05:04 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,6 @@ void	parse_ampersand(t_token **token, char *line, int *i)
 	else
 		add_node(token, NULL, AMPERSAND);
 }
-
-// void	parse_pipe(t_token **token, char *line, int *i)
-// {
-// 	if (line[*i + 1] == '|')
-// 	{
-// 		add_node(token, NULL, OR);
-// 		(*i)++;
-// 	}
-// 	else
-// 		add_node(token, NULL, PIPE);
-// }
 
 void parse_space(t_token **token, char *line, int *i)
 {

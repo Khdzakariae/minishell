@@ -3,92 +3,105 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/05 16:16:42 by zel-khad          #+#    #+#             */
-/*   Updated: 2023/11/15 13:29:14 by zel-khad         ###   ########.fr       */
+/*   Created: 2023/11/03 18:23:33 by aogbi             #+#    #+#             */
+/*   Updated: 2023/11/24 08:47:24 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	ft_clear(char **ptr, int current)
+static unsigned int	numofstr(char const *s, char c)
+{
+	int	n;
+	int	x;
+	int	i;
+
+	n = 0;
+	i = 0;
+	x = 1;
+	while (s[i])
+	{
+		if (s[i] == c)
+		{
+			i++;
+			x = 1;
+		}
+		else if (s[i++] != c && x)
+		{
+			x = 0;
+			n++;
+		}
+	}
+	return (n);
+}
+
+static int	count_char(char *str, char c)
 {
 	int	i;
 
 	i = 0;
-	while (i < current)
+	if (str[i] != c)
 	{
-		free(ptr[i]);
-		i++;
+		while (str[i] != c && str[i])
+		{
+			i++;
+		}
+		return (i);
+	}
+	else
+		return (0);
+}
+
+static void	free_it(char **ptr, int j)
+{
+	while (j-- > 0)
+	{
+		free(ptr[j]);
 	}
 	free(ptr);
 }
 
-static int	checkwords(char const *s, char c)
-{
-	size_t	i;
-	int		words;
-
-	i = 0;
-	words = 0;
-	while (s[i])
-	{
-		if (s[i] != c)
-		{
-			while (s[i] && s[i] != c)
-			{
-				i++;
-			}
-			words++;
-			continue ;
-		}
-		i++;
-	}
-	return (words);
-}
-
-static int	fill_arrays(char const *s, char c, char **ptr, int end)
+static char	**help_split(char const *s, char c, char **ptr)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	while (s[i])
+	while (*s)
 	{
-		if (s[i] == c)
+		while (*s == c)
+			s++;
+		i = count_char((char *)s, c);
+		if (i != 0)
 		{
-			i++;
-			continue ;
-		}
-		else
-		{
-			end = i;
-			while (s[end] && s[end] != c)
-				end++;
-			ptr[j] = ft_substr(s, i, end - i);
-			if (ptr[j] == NULL)
-				return (ft_clear(ptr, j), 1);
+			ptr[j] = ft_substr(s, 0, i);
+			if (!ptr[j])
+			{
+				free_it(ptr, j);
+				return (NULL);
+			}
 			j++;
-			i = end;
 		}
+		s += i;
 	}
-	return (ptr[j] = NULL, 0);
+	return (ptr);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	int		words;
-	char	**ptr;
+	char			**str;
+	unsigned int	num;
 
 	if (!s)
 		return (NULL);
-	words = checkwords(s, c) + 1;
-	ptr = malloc(words * sizeof(char *));
-	if (!ptr)
+	num = numofstr(s, c);
+	str = (char **)malloc(sizeof(char *) * (num + 1));
+	if (!str)
 		return (NULL);
-	if (fill_arrays(s, c, ptr, 0))
-		return (NULL);
-	return (ptr);
+	str[num] = 0;
+	str = help_split((char *)s, c, str);
+	return (str);
 }

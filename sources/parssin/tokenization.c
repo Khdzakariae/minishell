@@ -6,28 +6,11 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:25:15 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/13 22:23:59 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 21:07:45 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-// t_token *generet_cmd(t_token *token)
-// {
-// 	t_token *tmp = token;
-	
-// 	if (tmp == NULL)
-// 		return NULL;
-// 	tmp->type = CMD;
-// 	while (tmp->next)
-// 	{
-// 		if (tmp->type != 1 && tmp->type != 0 )
-// 			tmp->next->type = CMD;
-// 		tmp = tmp->next;
-// 	}
-// 	tmp = token;
-// 	return (token);
-// }
 
 int	extract_word(t_token **token, char *line, int i)
 {
@@ -38,12 +21,9 @@ int	extract_word(t_token **token, char *line, int i)
 	start = i;
 	whitespace = " \t\r\n\v";
 	symbols = " <|>&()'\"";
-	while (line[i] && !ft_strchr(whitespace, line[i]) && !ft_strchr(symbols,
-			line[i]))
+	while (line[i] && !ft_strchr(whitespace, line[i]) && !ft_strchr(symbols,line[i]))
 		i++;
 	add_node(token, ft_substr(line, start, (size_t)(i - start)), WORD);
-	// while (line[i] && ft_strchr(whitespace, line[i]))
-	// 	i++;
 	return (i);
 }
 
@@ -52,66 +32,34 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 	int start;
 	char *tmp;
 	start = *i;
+	int j = *i;
 	
-	while (line[*i] != '"')
-		(*i)++;
-	if (line[*i] == '"')
+    while (line[*i] != '\0' && line[(*i) + 1] != '"')
 	{
-		tmp = ft_substr(line, start, (size_t)(i - start));
+        (*i)++;
+	}
+	if (line[j] == '"')
+	{
+		(*i)++;
+		int length = *i - start;
+		tmp = ft_substr(line, start, length + 1);
+		printf("the word_____ is |%s|\n", tmp);
 		add_node(token, tmp, WORD);
-		*i = *i + ft_strlen(tmp);
 	}
 	else
 		printf("ERROR");
 }
 
 
-int count_word(t_token **tmp)
-{
-    
-    int count_word = 0;
-    while ((*tmp))
-    {
-        if ((*tmp)->type == WORD)
-            count_word++;
-        else if ((*tmp)->type != SPACE_)
-            break;
-        *tmp = (*tmp)->next;
-    }
-    return count_word;
-}
-
-
-
-t_cmd *generet_cmd(t_token *token, t_cmd *cmd_)
-{
-	t_token *tmp ;
-	t_token	*tmp1;
-	int count = 0;
-	tmp = token;
-	tmp1 = token;
-	while(tmp)
-	{
-		if (tmp1->type == WORD)
-			count = count_word(&tmp);
-		printf("la valeur de word is |%d|\n", count);
-		if (tmp == NULL)
-			break;
-		tmp = tmp->next;
-	}
-	
-	return(cmd_);
-}
 
 t_token	*gettoken(char *line)
 {
 	t_token	*token;
-	t_cmd	*cmd_;
+
 	char	*whitespace;
 	char	*symbols;
 	int		i;
 
-	cmd_ = NULL;
 	token = NULL;
 	i = 0;
 	whitespace = " \t\r\n\v";
@@ -128,7 +76,5 @@ t_token	*gettoken(char *line)
 			parse_symbol(&token, line[i], line, &i);
 		i++;
 	}
-	// token = 
-	cmd_ = generet_cmd(token, cmd_);
 	return (token);
 }

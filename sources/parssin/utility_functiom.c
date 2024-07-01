@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/01 13:44:38 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:53:11 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
         {
             cmd_[i] = ft_strcpy(&cmd_[i], token->value);
             i++;
+        }
+        if (token && (token->type == SORTIE || token->type == ENTREE))
+        {
+            if (token->type == SPACE_)
+                token = token->next;
+            token = token->next;
+            token = token->next;
+                
         }
         token = token->next;
     }

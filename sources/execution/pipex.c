@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/01 00:41:54 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/01 04:02:58 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	execute_command(char **cmd, char **path, int in_fd, int out_fd, char **env)
 	pid_t pid;
 	char *cmd_name;
 
-    pid = fork();
+	pid = fork();
 	if (pid == -1)
     {
         perror("fork");
@@ -116,24 +116,88 @@ void	pipex(t_list *list, int size, char **env, int in_fd, int out_fd)
 	del(path);
 	while(wait(NULL) > 0);
 }
+int input_file(t_list *files)
+{
+	int fd;
+	t_list    *list;
+
+	list = files;
+	while(list)
+	{
+		if (list != files)
+			close(fd);
+		fd = open((char *)list->content, O_RDONLY);
+		if (fd == -1)
+		{
+		   	printf("%s: %s\n", strerror(errno), (char *)list->content);
+		    exit(EXIT_FAILURE);
+		}
+		list = list->next;
+	}
+    return (fd);
+}
+
+int output_file(t_list *files)
+{
+	int fd;
+	t_list    *list;
+
+	list = files;
+	while(list)
+	{
+		if (list != files)
+			close(fd);
+		if(access((char *)list->content, F_OK) < 0);
+		else if (access((char *)list->content, W_OK) < 0)
+		{
+    	    printf("%s: %s\n", strerror(errno), (char *)list->content);
+    	    exit(EXIT_FAILURE);
+    	}
+    	fd = open((char *)list->content, O_WRONLY | O_CREAT, 0666);
+    	if (fd == -1)
+    	{
+    	    printf("%s: %s\n", strerror(errno), (char *)list->content);
+    	    exit(EXIT_FAILURE);
+    	}
+		else
+		{
+			unlink((char *)list->content);
+			fd = open((char *)list->content, O_WRONLY | O_CREAT, 0666);
+    		if (fd == -1)
+    		{
+    		    printf("%s: %s\n", strerror(errno), (char *)list->content);
+    		    exit(EXIT_FAILURE);
+    		}
+		}
+		list = list->next;
+	}
+    return (fd);
+}
 
 int main(int argc, char *argv[], char *env[])
 {
 	t_list	*list;
 	t_list	*save;
+	t_list    *files = NULL;
 	int i = 1;
 
 	list = NULL;
 	if (argc < 2)
 		return 0;
+	char *a = "a";
+	char *b = "b";
+	char *c = "c";
+	ft_lstadd_back(&files, ft_lstnew((void *)(char *)a));
+	ft_lstadd_back(&files, ft_lstnew((void *)(char *)b));
+	ft_lstadd_back(&files, ft_lstnew((void *)(char *)c));
+	int fd_in = output_file(files);
 	while(argc - i)
 	{
 		ft_lstadd_back(&list, ft_lstnew((void *)((char **)ft_split(argv[i], ' '))));
 		i++;
 	}
-	int fd = open("test.txt", O_WRONLY); 
 	save = list;
-    pipex(list, argc - 1, env, STDIN_FILENO, fd);
+    pipex(list, argc - 1, env, STDIN_FILENO, fd_in);
     ft_lstclear(&save, del);
     return 0;
 }

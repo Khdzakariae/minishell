@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:32:04 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/28 22:26:55 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/01 22:43:36 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,52 @@ void	freelist(t_token *head)
 		free(current->value);
 		free(current);
 		current = next;
+	}
+}
+void freelist_(t_cmd *head)
+{
+    t_cmd *current;
+    t_cmd *next;
+
+	current = head;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        if (current->value != NULL)
+        {
+            int i = 0;
+            while (current->value[i] != NULL)
+            {
+                free(current->value[i]);
+                i++;
+            }
+            free(current->value);
+        }
+
+        free(current);
+        current = next;
+    }
+}
+
+
+void	add_node_(t_cmd **head,char **tab, int type)
+{
+	t_cmd	*tmp;
+	t_cmd	*temp1;
+
+	tmp = malloc(sizeof(t_cmd));
+	tmp->value = tab;
+	tmp->type = type;
+	tmp->next = NULL;
+	if (*head == NULL)
+		*head = tmp;
+	else
+	{
+		temp1 = *head;
+		while (temp1->next != NULL)
+			temp1 = temp1->next;
+		temp1->next = tmp;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/30 15:53:34 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 11:19:40 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ enum				e_types
 // 	-- 3eme --
 // 	if > fille
 
-int					count_word(t_token **tmp);
+void printlist_(t_cmd *head);
+int count_word(t_token **tmp, t_cmd **cmd_, char **tab);
 char				**generate_tab_cmd(char **cmd_, t_token *token, int count);
 void				generet_cmd(t_token *token, t_cmd **cmd_);
 void				freelist_(t_cmd *head);

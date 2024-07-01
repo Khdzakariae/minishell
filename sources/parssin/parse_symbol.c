@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_symbol.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:17:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/28 22:15:14 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/01 21:05:04 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	parse_redirect_input(t_token **token, char *line, int *i)
 {
 	if (line[*i + 1] == '<')
 	{
-		add_node(token, NULL, LEFT_GUILLEMET);
+		add_node(token, NULL, HEREDOC);
 		(*i)++;
 	}
 	else
@@ -27,7 +27,7 @@ void	parse_redirect_output(t_token **token, char *line, int *i)
 {
 	if (line[*i + 1] == '>')
 	{
-		add_node(token, NULL, RIGHT_GUILLEMET);
+		add_node(token, NULL, APPAND);
 		(*i)++;
 	}
 	else
@@ -45,17 +45,6 @@ void	parse_ampersand(t_token **token, char *line, int *i)
 		add_node(token, NULL, AMPERSAND);
 }
 
-void	parse_pipe(t_token **token, char *line, int *i)
-{
-	if (line[*i + 1] == '|')
-	{
-		add_node(token, NULL, OR);
-		(*i)++;
-	}
-	else
-		add_node(token, NULL, PIPE);
-}
-
 void parse_space(t_token **token, char *line, int *i)
 {
 		char *whitespace = " \t\r\n\v";
@@ -64,19 +53,14 @@ void parse_space(t_token **token, char *line, int *i)
 			while(line[*i] && !ft_strchr(whitespace, line[*i]))
 				(*i)++;
 			if (!ft_strchr(whitespace, line[*i + 1]))
-				add_node(token, NULL, SPACE);
+				add_node(token, NULL, SPACE_);
 		}
 }
 
 void	parse_symbol(t_token **token, char symbol, char *line, int *i)
 {
-	if (symbol == '(')
-		add_node(token, NULL, LEFT_PARENTHESES);
-	else if (symbol == ')')
-		add_node(token, NULL, RIGHT_PARENTHESES);
-	else if (symbol == '\\')
-		add_node(token, NULL, BACKSLASH);
-	else if(symbol == ' ')
+
+	if(symbol == ' ')
 		parse_space(token, line, i);
 	else if (symbol == '\'')
 		add_node(token, NULL, SINGLE_QUOTATION);
@@ -89,5 +73,5 @@ void	parse_symbol(t_token **token, char symbol, char *line, int *i)
 	else if (symbol == '>')
 		parse_redirect_output(token, line, i);
 	else if (symbol == '|')
-		parse_pipe(token, line, i);
+		add_node(token, NULL, PIPE);
 }

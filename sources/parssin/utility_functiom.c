@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/01 13:53:11 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:06:10 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,10 @@ void geberete_autput_input(t_token **token,t_cmd **cmd_)
     if ((*token))
         (*token) = (*token)->next;
     while ((*token) && ((*token)->type == SPACE_))
-    {
-        puts("hey im here");
         (*token) = (*token)->next;
-    }  
     tab[0] = ft_strcpy(&tab[0], (*token)->value);
     tab[1] = NULL;
-    printf("hahowa ------> |%s|\n", tab[0]);
     add_node_(cmd_, tab, type);
-    printlist_(*cmd_);
-    printf("token is  ------> |%d|\n", (*token)->type);
-    // (*token) = (*token)->next;
-    // exit(22);
 }
 
 int count_word(t_token **tmp, t_cmd **cmd_, char **tab)
@@ -42,12 +34,9 @@ int count_word(t_token **tmp, t_cmd **cmd_, char **tab)
         if ((*tmp)->type == WORD)
             count_word++;
         if ((*tmp) && ((*tmp)->type == SORTIE || (*tmp)->type == ENTREE))
-        {
             geberete_autput_input(tmp ,cmd_);
-        }
         *tmp = (*tmp)->next;
     }
-    printf("the count is |%d|", count_word);
     return count_word;
 }
 
@@ -67,8 +56,7 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
             if (token->type == SPACE_)
                 token = token->next;
             token = token->next;
-            token = token->next;
-                
+            token = token->next;    
         }
         token = token->next;
     }

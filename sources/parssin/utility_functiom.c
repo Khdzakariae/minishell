@@ -6,22 +6,32 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/01 09:35:11 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 10:12:41 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int count_word(t_token **tmp)
+void geberete_autput_input(t_token **token,t_cmd **cmd_, char **tab)
+{
+    tab = malloc(2 * sizeof(char *));
+    tab[0] = ft_strcpy(&tab[0], (*token)->next->value);
+    add_node_(cmd_, tab, (*token)->type);
+    
+    
+}
+
+int count_word(t_token **tmp, t_cmd **cmd_, char **tab)
 {
     int count_word = 0;
-    while ((*tmp) && ((*tmp)->type == WORD || (*tmp)->type == SPACE_))
+    while ((*tmp) && ((*tmp)->type == WORD || (*tmp)->type == SPACE_) || ((*tmp)->type == ENTREE) || (*tmp)->type == SORTIE))
     {
-        // printf("-->%d\n",(*tmp)->type);
         if ((*tmp)->type == WORD)
             count_word++;
-        // if ((*tmp)->next && ((*tmp)->next->type != WORD && (*tmp)->next->type != SPACE_))
-        //     break;
+        if ((*tmp) && ((*tmp)->type == SORTIE && (*tmp)->type == ENTREE))
+        {
+            geberete_autput_input(tmp ,cmd_, tab);
+        }
         *tmp = (*tmp)->next;
     }
     return count_word;
@@ -56,7 +66,7 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
     {
         if (tmp->type == WORD)
         {
-            count = count_word(&tmp);
+            count = count_word(&tmp, &cmd_, tab);
             tab = malloc((count + 1) * sizeof(char *));
             tab = generate_tab_cmd(tab, tmp1, count);
             add_node_(cmd_ ,tab,  0);

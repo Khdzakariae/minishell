@@ -6,28 +6,11 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:25:15 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/13 22:23:59 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/01 21:07:45 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-// t_token *generet_cmd(t_token *token)
-// {
-// 	t_token *tmp = token;
-	
-// 	if (tmp == NULL)
-// 		return NULL;
-// 	tmp->type = CMD;
-// 	while (tmp->next)
-// 	{
-// 		if (tmp->type != 1 && tmp->type != 0 )
-// 			tmp->next->type = CMD;
-// 		tmp = tmp->next;
-// 	}
-// 	tmp = token;
-// 	return (token);
-// }
 
 int	extract_word(t_token **token, char *line, int i)
 {
@@ -38,12 +21,9 @@ int	extract_word(t_token **token, char *line, int i)
 	start = i;
 	whitespace = " \t\r\n\v";
 	symbols = " <|>&()'\"";
-	while (line[i] && !ft_strchr(whitespace, line[i]) && !ft_strchr(symbols,
-			line[i]))
+	while (line[i] && !ft_strchr(whitespace, line[i]) && !ft_strchr(symbols,line[i]))
 		i++;
 	add_node(token, ft_substr(line, start, (size_t)(i - start)), WORD);
-	// while (line[i] && ft_strchr(whitespace, line[i]))
-	// 	i++;
 	return (i);
 }
 
@@ -55,7 +35,9 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 	int j = *i;
 	
     while (line[*i] != '\0' && line[(*i) + 1] != '"')
+	{
         (*i)++;
+	}
 	if (line[j] == '"')
 	{
 		(*i)++;
@@ -94,7 +76,5 @@ t_token	*gettoken(char *line)
 			parse_symbol(&token, line[i], line, &i);
 		i++;
 	}
-	// token = 
-
 	return (token);
 }

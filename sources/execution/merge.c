@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:48:56 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/03 06:30:28 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/03 08:15:25 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,31 @@ t_ogbi	*init_ogbi(char **command, t_list *input_files, t_list *output_files)
 	ogbi->input_files = input_files;
 	ogbi->output_files = output_files;
 	return (ogbi);
+}
+
+void del_lst(void *contant)
+{
+	t_list *list;
+	t_list *tmp;
+
+	list = (t_list *)contant;
+	while (list)
+	{
+		tmp = list;
+        list = tmp->next;
+		free(tmp);
+	}
+}
+
+void	merge_free(void *contant)
+{
+	t_ogbi	*ogbi;
+
+	ogbi = (t_ogbi *)contant;
+	// del((char **)ogbi->cmd);
+	del_lst(ogbi->input_files);
+	del_lst(ogbi->output_files);
+	free(ogbi);
 }
 
 t_list *merge(t_cmd *parssin)

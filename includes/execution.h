@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/03 06:30:58 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/03 08:11:55 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,9 @@ int input_file(t_list *files);
 int output_file(t_list *files);
 
 t_list *merge(t_cmd *parssin);
+
+void  del(void *content);
+
+void	merge_free(void *contant);
 
 #endif

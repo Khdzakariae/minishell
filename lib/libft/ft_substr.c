@@ -36,3 +36,19 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	ft_strlcpy(str, s + start, len + 1);
 	return (str);
 }
+// char	*ft_substr(char const *s, unsigned int start, size_t len)
+// {
+// 	char	*ptr;
+
+// 	if (!s)
+// 		return (NULL);
+// 	if (start > ft_strlen(s))
+// 		return (ft_strdup(""));
+// 	if (len > ft_strlen(s) - start)
+// 		len = ft_strlen(s) - start;
+// 	ptr = (char *)ft_calloc(len + 1, sizeof(char));
+// 	if (!ptr)
+// 		return (NULL);
+// 	ft_strlcpy(ptr, s + start, len + 1);
+// 	return (ptr);
+// }

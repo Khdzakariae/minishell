@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/02 21:23:44 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/03 03:29:20 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,13 @@ typedef struct s_cmd
 	char			**value;
 	struct s_cmd	*next;
 }					t_cmd;
+
+typedef struct s_ogbi
+{
+    char    **cmd;
+    t_list  *output_files;
+    t_list  *input_files;
+}   t_ogbi;
 
 enum				e_types
 {

@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/01 21:08:24 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/03 10:37:23 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int count_word(t_token **tmp, t_cmd **cmd_)
             geberete_autput_input(tmp ,cmd_);
         *tmp = (*tmp)->next;
     }
+    printf("the cont is |%d|\n", count_word);
     return count_word;
 }
 
@@ -51,7 +52,7 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
             cmd_[i] = ft_strcpy(&cmd_[i], token->value);
             i++;
         }
-        if (token && (token->type == SORTIE || token->type == ENTREE))
+        else if (token && (token->type == SORTIE || token->type == ENTREE))
         {
             if (token->type == SPACE_)
                 token = token->next;
@@ -74,7 +75,9 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
     tmp1 = token;
     while (tmp)
     {
-        if (tmp->type == WORD)
+        if (tmp && (tmp->type == SORTIE || tmp->type == ENTREE))
+            geberete_autput_input(&tmp ,cmd_);
+        else if (tmp->type == WORD)
         {
             count = count_word(&tmp, cmd_);
             tab = malloc((count + 1) * sizeof(char *));

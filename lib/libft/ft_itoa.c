@@ -3,59 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/09 10:39:05 by zel-khad          #+#    #+#             */
-/*   Updated: 2023/11/15 12:52:51 by zel-khad         ###   ########.fr       */
+/*   Created: 2023/11/05 21:39:30 by aogbi             #+#    #+#             */
+/*   Updated: 2023/11/17 17:11:15 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_intlen(long n)
+static unsigned int	ft_lenofnum(int n)
 {
-	int	tmp;
+	unsigned int	i;
 
-	tmp = 0;
-	if (n == 0)
-		return (1);
-	if (n < 0)
-	{
-		tmp++;
-		n = n * -1;
-	}
+	i = 0;
+	if (n <= 0)
+		i++;
 	while (n)
 	{
-		n = n / 10;
-		tmp++;
+		n /= 10;
+		i++;
 	}
-	return (tmp);
+	return (i);
+}
+
+char	firtchar(long i)
+{
+	char	c;
+
+	if (!i)
+		c = '0';
+	else
+		c = '-';
+	return (c);
 }
 
 char	*ft_itoa(int n)
 {
-	int		len;
-	char	*ptr;
-	long	nb;
+	char			*str;
+	long			i;
+	unsigned int	slen;
 
-	nb = n;
-	len = ft_intlen(nb);
-	ptr = (char *)malloc(len + 1);
-	if (!ptr)
+	i = (long)n;
+	slen = ft_lenofnum(i);
+	str = (char *)malloc(sizeof(char) * (slen + 1));
+	if (!str)
 		return (NULL);
-	ptr[len--] = '\0';
-	if (nb == 0)
-		ptr[0] = 48;
-	else if (nb < 0)
+	if (i <= 0)
+		str[0] = firtchar(i);
+	if (i < 0)
+		i *= -1;
+	str[slen] = 0;
+	while (i)
 	{
-		ptr[0] = '-';
-		nb = nb * -1;
+		str[--slen] = '0' + (i % 10);
+		i /= 10;
 	}
-	while (nb != 0)
-	{
-		ptr[len] = (nb % 10) + '0';
-		nb = nb / 10;
-		len--;
-	}
-	return (ptr);
+	return (str);
 }

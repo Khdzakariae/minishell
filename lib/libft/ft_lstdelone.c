@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 21:03:05 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/18 13:22:50 by aogbi            ###   ########.fr       */
+/*   Created: 2023/11/17 01:01:51 by aogbi             #+#    #+#             */
+/*   Updated: 2023/11/25 15:28:49 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+void	ft_lstdelone(t_list *lst, void (*del)(void*))
 {
-	size_t			i;
-	unsigned char	*p;
+	t_list	*head;
 
-	p = (unsigned char *)s;
-	i = 0;
-	while (n - i)
-	{
-		if (*(p + i) == (unsigned char)c)
-			return ((void *)(s + i));
-		i++;
-	}
-	return (NULL);
+	if (!lst || !del)
+		return ;
+	del(lst->content);
+	head = lst;
+	lst = lst->next;
+	free(head);
 }

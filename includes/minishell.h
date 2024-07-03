@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:00 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/13 19:42:32 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/03 20:23:19 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <execution.h>
 # include <parssin.h>
 
-char	*ft_strcpy(char **dst, const char *src);
+char	*ft_strcpy_1(char **dst, const char *src);
 
 int		ft_strcmp(char *s1, char *s2);
 void	builtins(t_token *token);

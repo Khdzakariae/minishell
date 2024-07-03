@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/03 10:41:22 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/03 20:26:52 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void	minishell(void)
 {
 	t_cmd	*cmd_;
 	t_token	*token;
+	t_list	*list;
 	char	*line;
+	extern char **environ;
 
 	cmd_ = NULL;
 	while (1)
@@ -70,8 +72,11 @@ void	minishell(void)
         cmd_ = malloc(sizeof(t_cmd));
         cmd_ = NULL;
 		generet_cmd(token, &cmd_);
-        puts("=================== stract cmd ======================");
-		printlist_(cmd_);
+        // puts("=================== stract cmd ======================");
+		// printlist_(cmd_);
+		list = merge(cmd_);
+		pipex(list, environ);
+		ft_lstclear(&list, merge_free);
         freelist_(cmd_);
 	    freelist(token);
 	}

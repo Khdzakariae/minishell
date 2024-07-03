@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utility_functiom.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/03 10:48:03 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/03 20:25:10 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void geberete_autput_input(t_token **token,t_cmd **cmd_)
         (*token) = (*token)->next;
     while ((*token) && ((*token)->type == SPACE_))
         (*token) = (*token)->next;
-    tab[0] = ft_strcpy(&tab[0], (*token)->value);
+    tab[0] = ft_strcpy_1(&tab[0], (*token)->value);
     tab[1] = NULL;
     add_node_(cmd_, tab, type);
 }
@@ -49,7 +49,7 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
 
         if (token->type == WORD)
         {
-            cmd_[i] = ft_strcpy(&cmd_[i], token->value);
+            cmd_[i] = ft_strcpy_1(&cmd_[i], token->value);
             i++;
         }
         else if (token && (token->type == SORTIE || token->type == ENTREE || token->type == ENTREE || token->type == APPAND || token->type == HEREDOC))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/01 14:51:13 by zel-khad          #+#    #+#             */
-/*   Updated: 2023/11/01 15:21:30 by zel-khad         ###   ########.fr       */
+/*   Created: 2023/11/11 17:40:30 by aogbi             #+#    #+#             */
+/*   Updated: 2023/11/21 21:11:57 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,26 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	size_t	i;
 
 	i = 0;
-	if (*little == '\0')
-		return ((char *)big);
-	if (big == little)
-		return ((char *)little);
-	while (big[i] != '\0' && i < len)
+	while (*big)
 	{
-		if (big[i] == little[0])
+		if (!little[i])
+			return ((char *)(big - i));
+		else if (*big == little[i])
 		{
-			if ((i + (int)ft_strlen(little)) <= len && ft_strncmp(big + i,
-					little, ft_strlen(little)) == 0)
-				return ((char *)&big[i]);
 			i++;
+			big++;
 		}
 		else
-			i++;
+		{
+			len += i;
+			big += (-i + 1);
+			i = 0;
+		}
+		if (!len)
+			return (NULL);
+		--len;
 	}
+	if (!*big && !little[i])
+		return ((char *)big - i);
 	return (NULL);
 }

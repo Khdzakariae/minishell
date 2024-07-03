@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 21:03:05 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/18 13:22:50 by aogbi            ###   ########.fr       */
+/*   Created: 2023/11/13 17:49:41 by aogbi             #+#    #+#             */
+/*   Updated: 2023/11/15 21:32:36 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+t_list	*ft_lstnew(void *content)
 {
-	size_t			i;
-	unsigned char	*p;
+	t_list	*head;
 
-	p = (unsigned char *)s;
-	i = 0;
-	while (n - i)
-	{
-		if (*(p + i) == (unsigned char)c)
-			return ((void *)(s + i));
-		i++;
-	}
-	return (NULL);
+	head = (t_list *)malloc(sizeof(t_list));
+	if (!head)
+		return (NULL);
+	head -> next = NULL;
+	head -> content = content;
+	return (head);
 }

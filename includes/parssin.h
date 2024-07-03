@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/01 21:08:38 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/03 07:22:30 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,21 @@ typedef struct s_cmd
 	int				type;
 	char			**value;
 	struct s_cmd	*next;
-
 }					t_cmd;
+
+typedef struct s_ogbi
+{
+    char    **cmd;
+    t_list  *output_files;
+    t_list  *input_files;
+}   t_ogbi;
 
 enum				e_types
 {
 	WORD = 0,
 	SORTIE = 1, // >
 	ENTREE = 2, // <
-	PIPE = 3,   // |
+	PIPE = 3,   // 
 	SPACE_ = 4,
 	AMPERSAND = 5,
 	APPAND = 6,           // >>

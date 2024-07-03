@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*   strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/03 02:29:55 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/18 13:28:27 by aogbi            ###   ########.fr       */
+/*   Created: 2023/10/31 20:11:04 by zel-khad          #+#    #+#             */
+/*   Updated: 2023/11/01 11:23:08 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,23 @@
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	size_t	len_dest;
-	size_t	len_src;
 	size_t	i;
-	size_t	ret;
+	size_t	len;
+	size_t	j;
 
-	i = 0;
-	len_dest = ft_strlen(dst);
-	len_src = ft_strlen(src);
-	if (size == 0)
-		return (len_src);
-	if (len_dest > size)
-		return (len_src + size);
-	else
+	if (dst == NULL && size == 0)
+		return (ft_strlen(src));
+	len = ft_strlen(src) + ft_strlen(dst);
+	i = ft_strlen(dst);
+	j = 0;
+	if (size == 0 || size < i)
+		return (ft_strlen(src) + size);
+	while (i < size - 1 && src[j])
 	{
-		ret = len_dest + len_src;
-		while (src[i] && (len_dest + i) < (size - 1))
-		{
-			dst[len_dest + i] = src[i];
-			i++;
-		}
-		dst[len_dest + i] = '\0';
-		return (ret);
+		dst[i] = src[j];
+		i++;
+		j++;
 	}
+	dst[i] = '\0';
+	return (len);
 }

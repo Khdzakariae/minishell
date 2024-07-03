@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 01:47:18 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/22 16:20:57 by aogbi            ###   ########.fr       */
+/*   Created: 2023/11/03 16:12:13 by zel-khad          #+#    #+#             */
+/*   Updated: 2023/11/15 13:05:25 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,23 @@
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	char	*d;
-	char	*s;
+	unsigned char	*ptr;
+	unsigned char	*p;
 
-	d = (char *)dest;
-	s = (char *)src;
-	if (dest == src)
-		return (dest);
-	if (s < d)
+	p = (unsigned char *)src;
+	ptr = (unsigned char *)dest;
+	if (!p && !ptr)
 	{
-		while (n--)
-			*(d + n) = *(s + n);
-		return (dest);
+		return (0);
 	}
-	while (n--)
-		*d++ = *s++;
-	return (dest);
+	else if (dest > src)
+	{
+		while (n-- > 0)
+		{
+			ptr[n] = p[n];
+		}
+	}
+	else
+		ft_memcpy(dest, src, n);
+	return ((void *)dest);
 }

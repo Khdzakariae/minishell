@@ -3,38 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 17:35:44 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/25 15:28:49 by aogbi            ###   ########.fr       */
+/*   Created: 2023/11/11 21:25:53 by zel-khad          #+#    #+#             */
+/*   Updated: 2023/11/12 11:46:17 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	nbrtostr(long nb, int fd)
+void	ft_putnbr_fd(int nb, int fd)
 {
-	if (nb)
+	if (nb == -2147483648)
 	{
-		nbrtostr(nb / 10, fd);
-		ft_putchar_fd(nb % 10 + '0', fd);
+		write(fd, "-2147483648", 11);
 	}
-}
-
-void	ft_putnbr_fd(int n, int fd)
-{
-	long	nb;
-
-	if (fd < 0)
-		return ;
-	nb = (long)n;
-	if (nb < 0)
+	else if (nb < 0)
 	{
-		ft_putchar_fd('-', fd);
-		nb *= -1;
+		write(fd, "-", 1);
+		nb = -nb;
+		ft_putnbr_fd(nb, fd);
 	}
-	if (nb == 0)
-		ft_putchar_fd('0', fd);
+	else if (nb > 9)
+	{
+		ft_putnbr_fd(nb / 10, fd);
+		ft_putnbr_fd(nb % 10, fd);
+	}
 	else
-		nbrtostr(nb, fd);
+		ft_putchar_fd(nb + '0', fd);
 }

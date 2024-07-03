@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:48:56 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/03 04:36:08 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/03 06:30:28 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,16 @@ void set_to_null(t_list **input_files, t_list **output_files)
    	*input_files = NULL;
     *output_files = NULL;
 }
+t_ogbi	*init_ogbi(char **command, t_list *input_files, t_list *output_files)
+{
+	t_ogbi	*ogbi;
+
+	ogbi = malloc(sizeof(t_ogbi));
+	ogbi->cmd = command;
+	ogbi->input_files = input_files;
+	ogbi->output_files = output_files;
+	return (ogbi);
+}
 
 t_list *merge(t_cmd *parssin)
 {
@@ -34,8 +44,8 @@ t_list *merge(t_cmd *parssin)
     t_list	*input_files;
 	t_list	*output_files;
 
-	set_to_null(&input_files, &output_files);
 	node = NULL;
+	set_to_null(&input_files, &output_files);
     while(parssin)
     {
         if (parssin->type == SORTIE)
@@ -46,19 +56,13 @@ t_list *merge(t_cmd *parssin)
 			command = parssin->value;
 		else if (parssin->type == PIPE)
 		{
-			ogbi = malloc(sizeof(t_ogbi));
-			ogbi->cmd = command;
-			ogbi->input_files = input_files;
-			ogbi->output_files = output_files;
+			ogbi = init_ogbi(command, input_files, output_files);
 			ft_lstadd_back(&node, ft_lstnew(ogbi));
 			set_to_null(&input_files, &output_files);
         }
         parssin = parssin->next;
     }
-	ogbi = malloc(sizeof(t_ogbi));
-	ogbi->cmd = command;
-	ogbi->input_files = input_files;
-	ogbi->output_files = output_files;
+	ogbi = init_ogbi(command, input_files, output_files);
 	ft_lstadd_back(&node, ft_lstnew(ogbi));
     return (node);
 }

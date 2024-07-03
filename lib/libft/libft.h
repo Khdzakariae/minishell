@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 15:46:48 by aogbi             #+#    #+#             */
-/*   Updated: 2024/06/28 22:24:12 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/02 21:18:43 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }					t_list;
+
 
 int					ft_atoi(const char *nptr);
 

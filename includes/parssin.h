@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/01 21:08:38 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/02 21:23:44 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ typedef struct s_cmd
 	int				type;
 	char			**value;
 	struct s_cmd	*next;
-
 }					t_cmd;
 
 enum				e_types

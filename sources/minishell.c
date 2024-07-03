@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/02 23:46:30 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/03 04:36:36 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ void	minishell(void)
 {
 	t_cmd	*cmd_;
 	t_token	*token;
+	t_list	*list;
 	char	*line;
+	extern char **environ;
 
 	cmd_ = NULL;
 	while (1)
@@ -70,9 +72,10 @@ void	minishell(void)
         cmd_ = malloc(sizeof(t_cmd));
         cmd_ = NULL;
 		generet_cmd(token, &cmd_);
-        puts("=================== stract cmd ======================");
-		printlist_(cmd_);
-		// pipex();
+        // puts("=================== stract cmd ======================");
+		// printlist_(cmd_);
+		list = merge(cmd_);
+		pipex(list, environ);
         freelist_(cmd_);
 	    freelist(token);
 	}

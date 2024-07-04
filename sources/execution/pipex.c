@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/04 22:40:18 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/04 23:59:29 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void  del(void *content)
 	free(str);
 }
 
-int redirection(t_list *list, int in_fd, char **path, char **env)
+int redirections(t_list *list, int in_fd, char **path, char **env)
 {
 	int fd[2];
 	int in_tmp;
@@ -103,38 +103,66 @@ int redirection(t_list *list, int in_fd, char **path, char **env)
 	in_tmp = input_file((t_list *)(((t_ogbi *)(list->content))->input_files));
 	if (in_tmp != 0)
 	{
-		close(in_fd);
+		if (in_fd != 0)
+			close(in_fd);
+		if (in_tmp == -1)
+		    return (-1);
 		in_fd = in_tmp;
 	}
 	out_fd = output_file((t_list *)(((t_ogbi *)(list->content))->output_files));
-	if (out_fd == 1)
+	if (out_fd == -1)
+	    return (-1);
+	else if (out_fd == 1)
 		out_fd = fd[1];
 	execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env);
 	if (in_fd != 0)
 		close(in_fd);
+	if (out_fd != 1)
+		close(out_fd);
 	close(fd[1]);
 	return (fd[0]);
+}
+
+int last_command(t_list *list, int in_fd, char **path, char **env)
+{
+	int in_tmp;
+	int out_fd;
+
+	in_tmp = input_file((t_list *)(((t_ogbi *)(list->content))->input_files));
+	if (in_tmp != 0)
+	{
+		if (in_fd != 0)
+		    close(in_fd);
+		if (in_tmp == -1)
+		    return (0);
+		in_fd = in_tmp;
+	}
+	out_fd = output_file((t_list *)(((t_ogbi *)(list->content))->output_files));
+	if (out_fd == -1)
+	    return (-1);
+	execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env);
+	if (in_tmp != 0)
+		close(in_fd);
+	if (out_fd != 1)
+		close(out_fd);
+	return(0);
 }
 
 int	pipex(t_list *list, char **env)
 {
 	char **path;
 	int in_fd;
-	int in_tmp;
-	int out_fd;
 
 	path = ft_split(find_path_from_env(env), ':');
 	in_fd = 0;
 	while (list->next)
 	{
-		in_fd = redirection(list, in_fd, path, env);
+		in_fd = redirections(list, in_fd, path, env);
+		if (in_fd == -1)
+		return (0);
 		list = list->next;
 	}
-	in_tmp = input_file((t_list *)(((t_ogbi *)(list->content))->input_files));
-	if (in_fd != 0 && in_tmp != 0)
-		in_fd = in_tmp;
-	out_fd = output_file((t_list *)(((t_ogbi *)(list->content))->output_files));
-	execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env);
+	last_command(list, in_fd, path, env);
 	del(path);
 	while(wait(NULL) > 0);
 	return (0);

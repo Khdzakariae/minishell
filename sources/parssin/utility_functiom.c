@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/03 20:25:10 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/04 22:11:03 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int count_word(t_token **tmp, t_cmd **cmd_)
             geberete_autput_input(tmp ,cmd_);
         *tmp = (*tmp)->next;
     }
-    printf("the cont is |%d|\n", count_word);
     return count_word;
 }
 

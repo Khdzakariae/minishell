@@ -6,18 +6,20 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:17:02 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/10 19:24:32 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/05 18:36:39 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	handle_sigint()
+void handle_sigint()
 {
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_redisplay();
+    rl_replace_line("", 0);
+    rl_on_new_line();
+    write(1, "\n", 1);
+    rl_redisplay();
 }
+
 
 void	signels_handler(void)
 {

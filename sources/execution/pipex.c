@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/04 23:59:29 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/05 07:31:19 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,19 +168,54 @@ int	pipex(t_list *list, char **env)
 	return (0);
 }
 
+int ft_herdoc(int index, t_list *list)
+{
+	char *line;
+	char *tmp;
+	int fd;
+
+	tmp = ft_strdup("/tmp/herdoc_");
+	line = ft_strjoin(tmp, ft_itoa(index));
+	free(tmp);
+	fd = open(line ,O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	free(line);
+	if (fd == -1)
+		return (error((char *)list->content));
+	while(1)
+	{
+		line = readline("> ");
+		if (line == NULL)
+		    break;
+		int number = ft_strcmp(line, ((t_red *)list->content)->value);
+		if (number == 0)
+			break;
+		write(fd, line, ft_strlen(line) + 1);
+		free(line);
+	}
+	return(fd);
+}
+
 int input_file(t_list *list)
 {
 	int fd;
+	int index;
 
 	fd = 0;
+	index = 0;
 	while(list)
 	{
-		fd = open((char *)list->content, O_RDONLY);
-		if (fd == -1)
-			return (error((char *)list->content));
+		if (((t_red *)list->content)->type == ENTREE)
+		{
+			fd = open(((t_red *)list->content)->value, O_RDONLY);
+			if (fd == -1)
+				return (error((char *)list->content));
+			list = list->next;
+			if (list)
+				close(fd);
+		}
+		else
+			fd = ft_herdoc(index++, list);
 		list = list->next;
-		if (list)
-			close(fd);
 	}
     return (fd);
 }
@@ -192,18 +227,17 @@ int output_file(t_list *list)
 	fd = 1;
 	while(list)
 	{
-		if(access((char *)list->content, F_OK) < 0);
-		else if (access((char *)list->content, W_OK) < 0)
-			return (error((char *)list->content));	
-    	fd = open((char *)list->content, O_WRONLY | O_CREAT, 0666);
-    	if (fd == -1)
-    		return (error((char *)list->content));
+		if (((t_red *)list->content)->type == SORTIE)
+		{
+			fd = open(((t_red *)list->content)->value, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+    		if (fd == -1)
+				return (error(((t_red *)list->content)->value));
+		}
 		else
 		{
-			unlink((char *)list->content);
-			fd = open((char *)list->content, O_WRONLY | O_CREAT, 0666);
+			fd = open(((t_red *)list->content)->value, O_WRONLY | O_CREAT | O_APPEND, 0666);
     		if (fd == -1)
-    			return (error((char *)list->content));
+				return (error(((t_red *)list->content)->value));
 		}
 		list = list->next;
 		if (list)

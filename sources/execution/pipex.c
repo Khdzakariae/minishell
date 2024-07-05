@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/05 12:22:59 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/05 20:22:18 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,8 @@ int ft_herdoc(int index, t_list *list)
 		line = readline("> ");
 		if (line == NULL || ft_strcmp(line, ((t_red *)list->content)->value) == 0)
 			break;
-		write(fd, line, ft_strlen(line) + 1);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
 		free(line);
 	}
 	fd = open(tmp, O_RDONLY);

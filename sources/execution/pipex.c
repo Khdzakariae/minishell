@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/05 20:22:18 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/05 23:23:24 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,11 +177,11 @@ int ft_herdoc(int index, t_list *list)
 	char *tmp;
 	int fd;
 
-	tmp = ft_strdup("/tmp/.herdoc_");
+	tmp = ft_strdup("/tmp/.Her_Doc_");
 	line = ft_strjoin(tmp, ft_itoa(index));
 	free(tmp);
-	fd = open(line ,  O_CREAT | O_WRONLY | O_RDONLY | O_TRUNC, 0666);
 	tmp = line;
+	fd = open(line ,  O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1)
 		return (error((char *)list->content));
 	while(1)
@@ -194,7 +194,7 @@ int ft_herdoc(int index, t_list *list)
 		free(line);
 	}
 	fd = open(tmp, O_RDONLY);
-	free(line);
+	free(tmp);
 	return(fd);
 }
 

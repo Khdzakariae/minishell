@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:00:19 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/06/13 19:33:14 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/05 12:21:08 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@ int isCommandInPath(const char *command)
         printf("Erreur lors du fractionnement du chemin d'accès.\n");
         return -1;
     }
-
+    if (access(command, F_OK | X_OK) == 0) 
+	{
+        printf("La commande '%s' est dans le PATH: %s\n", command, token[i]);
+        return 1;
+    }
     while (token[i] != NULL) 
 	{
         fullPath = ft_strjoin(ft_strjoin(token[i], "/"), command);

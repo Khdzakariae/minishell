@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/05 12:33:05 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/05 18:34:06 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,15 @@ void	minishell(void)
 			exit(0);
 		}
 		add_history(line);
-		chech_quoting(line);
+		// chech_quoting(line);
 		token = gettoken(line);
-        puts("=================== stract token ======================");
-		printlist(token);
+        // puts("=================== stract token ======================");
+		// printlist(token);
         cmd_ = malloc(sizeof(t_cmd));
         cmd_ = NULL;
 		generet_cmd(token, &cmd_);
-        puts("=================== stract cmd ======================");
-		printlist_(cmd_);
+        // puts("=================== stract cmd ======================");
+		// printlist_(cmd_);
 		list = merge(cmd_);
 		// char *type = ((t_red *)((t_list *)((t_ogbi *)list->content)->output_files)->content)->value;
 		// printf("%s\n", type);

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/04 22:14:02 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/05 05:58:34 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	minishell(void)
         // puts("=================== stract cmd ======================");
 		// printlist_(cmd_);
 		list = merge(cmd_);
+		// char *type = ((t_red *)((t_list *)((t_ogbi *)list->content)->output_files)->content)->value;
+		// printf("%s\n", type);
 		pipex(list, environ);
 		ft_lstclear(&list, merge_free);
         freelist_(cmd_);

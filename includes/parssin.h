@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/03 07:22:30 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/05 04:52:42 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,12 @@ typedef struct s_ogbi
     t_list  *output_files;
     t_list  *input_files;
 }   t_ogbi;
+
+typedef struct s_red
+{
+    char            *value;
+	int                type;
+} t_red;
 
 enum				e_types
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/05 08:04:18 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/05 12:22:59 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char	*cmd_path(char *cmd, char **path)
 	char *cmd_name;
 	char *tmp;
 
+    if (access(cmd, F_OK) == 0)
+        return (cmd);
     while (path[i])
     {
 		tmp = ft_strjoin(path[i], "/");
@@ -155,6 +157,7 @@ int	pipex(t_list *list, char **env)
 
 	path = ft_split(find_path_from_env(env), ':');
 	in_fd = 0;
+	
 	while (list->next)
 	{
 		in_fd = redirections(list, in_fd, path, env);

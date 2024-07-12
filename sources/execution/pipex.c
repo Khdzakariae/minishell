@@ -6,11 +6,13 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/11 04:03:59 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/12 16:39:39 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+int g_stat;
 
 char	*find_path_from_env(char **env)
 {
@@ -100,16 +102,75 @@ void    ft_echo(char **cmd)
     	printf("\n");
 }
 
-int ft_execve(char **cmd)
+void	ft_env(char **env)
 {
-	if (!ft_strcmp(cmd[0], "cd"))
+	int i;
+
+    i = 0;
+    while (env[i])
+    {
+        printf("%s\n", env[i]);
+        i++;
+    }
+}
+
+void convert_variable(char **cmd)
+{
+	int i;
+	char *value;
+	
+	i = 0;
+	while(cmd[i])
+	{
+		if (cmd[i][0] == '$')
+        {
+			if (!ft_strcmp(cmd[i], "$?"))
+			{
+				free(cmd[i]);
+				cmd[i] = ft_itoa(g_stat);
+			}
+			else
+			{
+            	value = getenv(cmd[i] + 1);
+				free(cmd[i]);
+				cmd[i] = ft_strdup(value);
+			}
+        }
+        i++;
+	}
+}
+
+
+int ft_execve(char **cmd, char **env)
+{
+	convert_variable(cmd);
+	if (!cmd)
+	    return (0);
+	else if (!ft_strcmp(cmd[0], "cd"))
 	    ft_cd(cmd);
 	else if (!ft_strcmp(cmd[0], "pwd"))
 		ft_pwd();
 	else if (!ft_strcmp(cmd[0], "echo"))
 	    ft_echo(cmd);
+	// else if(!ft_strcmp(cmd[0], "export"))
+	//     ft_export(cmd);
+	// else if(!ft_strcmp(cmd[0], "unset"))
+	//     ft_unset(cmd);
+	else if(!ft_strcmp(cmd[0], "exit"))
+	    ;
+	else if (!ft_strcmp(cmd[0], "env"))
+	    ft_env(env);
 	else
 		return (0);
+	return (1);
+}
+
+int    ft_status(int *status)
+{
+	if (WIFEXITED(*status))
+		g_stat = WEXITSTATUS(*status);
+	else if (WIFSIGNALED(*status))
+		g_stat = WTERMSIG(*status) + 128;
 	return (1);
 }
 
@@ -118,7 +179,7 @@ int	execute_command(char **cmd, char **path, int in_fd, int out_fd, char **env)
 	char *cmd_name;
 	pid_t pid;
 
-    if (ft_execve(cmd))
+    if (ft_execve(cmd, env))
 		return (0);
 	pid = fork();
 	if (pid == -1)
@@ -138,10 +199,11 @@ int	execute_command(char **cmd, char **path, int in_fd, int out_fd, char **env)
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
 			execve(cmd_name, cmd, env);
-		printf("%s: command not found\n", cmd[0]);
-		exit(1);
+		write(2, cmd[0], sizeof(cmd_name));
+		ft_putstr_fd(": command not found\n", 2);
+		exit(127);
 	}
-	return (0);
+	return (1);
 }
 
 void  del(void *content)
@@ -180,7 +242,8 @@ int redirections(t_list *list, int in_fd, char **path, char **env)
 	    return (-1);
 	else if (out_fd == 1)
 		out_fd = fd[1];
-	execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env);
+	if (execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env) < 0)
+	    return (-1);
 	if (in_fd != 0)
 		close(in_fd);
 	if (out_fd != 1)
@@ -206,7 +269,8 @@ int last_command(t_list *list, int in_fd, char **path, char **env)
 	out_fd = output_file((t_list *)(((t_ogbi *)(list->content))->output_files));
 	if (out_fd == -1)
 	    return (-1);
-	execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env);
+	if (execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env) < 0)
+	    return (-1);
 	if (in_tmp != 0)
 		close(in_fd);
 	if (out_fd != 1)
@@ -217,21 +281,29 @@ int last_command(t_list *list, int in_fd, char **path, char **env)
 int	pipex(t_list *list, char **env)
 {
 	char **path;
+	int valid;
+	int status;
 	int in_fd;
 
 	path = ft_split(find_path_from_env(env), ':');
 	in_fd = 0;
+	valid = 1;
 	while (list->next)
 	{
 		in_fd = redirections(list, in_fd, path, env);
 		if (in_fd == -1)
-		return (0);
+		{
+			valid = in_fd;
+			break;
+		}
 		list = list->next;
 	}
-	last_command(list, in_fd, path, env);
+	if (valid > 0)
+		valid = last_command(list, in_fd, path, env);
 	del(path);
-	while(wait(NULL) > 0);
-	return (0);
+	while (wait(&status) > 0);
+	ft_status(&status);
+	return (valid);
 }
 
 int ft_herdoc(int index, t_list *list)

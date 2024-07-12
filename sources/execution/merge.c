@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:48:56 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/05 05:57:11 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/11 10:41:19 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ t_list *merge(t_cmd *parssin)
 	t_list	*output_files;
 
 	node = NULL;
+	command = NULL;
 	set_to_null(&input_files, &output_files);
     while(parssin)
     {
@@ -96,6 +97,7 @@ t_list *merge(t_cmd *parssin)
 		{
 			ogbi = init_ogbi(command, input_files, output_files);
 			ft_lstadd_back(&node, ft_lstnew(ogbi));
+			command = NULL;
 			set_to_null(&input_files, &output_files);
         }
         parssin = parssin->next;

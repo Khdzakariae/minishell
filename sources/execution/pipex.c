@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/12 16:39:39 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/15 16:29:21 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ void convert_variable(char **cmd)
 	char *value;
 	
 	i = 0;
+	if (!cmd)
+		return;
 	while(cmd[i])
 	{
 		if (cmd[i][0] == '$')
@@ -132,8 +134,24 @@ void convert_variable(char **cmd)
 			else
 			{
             	value = getenv(cmd[i] + 1);
-				free(cmd[i]);
-				cmd[i] = ft_strdup(value);
+				if (value)
+				{
+					free(cmd[i]);
+					cmd[i] = ft_strdup(value);
+				}
+				else
+				{
+					int j = i;
+					while(cmd[j])
+					{
+						free(cmd[j]);
+						cmd[j] = NULL;
+						if (cmd[j + 1])
+                        	cmd[j] = ft_strdup(cmd[j + 1]);
+                        j++;
+					}
+					i--;
+				}
 			}
         }
         i++;
@@ -144,8 +162,8 @@ void convert_variable(char **cmd)
 int ft_execve(char **cmd, char **env)
 {
 	convert_variable(cmd);
-	if (!cmd)
-	    return (0);
+	if (!cmd || !cmd[0])
+	    return (1);
 	else if (!ft_strcmp(cmd[0], "cd"))
 	    ft_cd(cmd);
 	else if (!ft_strcmp(cmd[0], "pwd"))

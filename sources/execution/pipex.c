@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/15 16:29:21 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/22 02:43:44 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ int ft_execve(char **cmd, char **env)
 	// else if(!ft_strcmp(cmd[0], "unset"))
 	//     ft_unset(cmd);
 	else if(!ft_strcmp(cmd[0], "exit"))
-	    ;
+	    exit(0);
 	else if (!ft_strcmp(cmd[0], "env"))
 	    ft_env(env);
 	else
@@ -192,39 +192,7 @@ int    ft_status(int *status)
 	return (1);
 }
 
-int	execute_command(char **cmd, char **path, int in_fd, int out_fd, char **env)
-{
-	char *cmd_name;
-	pid_t pid;
-
-    if (ft_execve(cmd, env))
-		return (0);
-	pid = fork();
-	if (pid == -1)
-    	return (error("fork"));
-    else if (pid == 0)
-    {
-        if (in_fd != STDIN_FILENO)
-        {
-            dup2(in_fd, STDIN_FILENO);
-            close(in_fd);
-        }
-        if (out_fd != STDOUT_FILENO)
-        {
-            dup2(out_fd, STDOUT_FILENO);
-            close(out_fd);
-        }
-		cmd_name = cmd_path(cmd[0], path);
-		if (cmd_name)
-			execve(cmd_name, cmd, env);
-		write(2, cmd[0], sizeof(cmd_name));
-		ft_putstr_fd(": command not found\n", 2);
-		exit(127);
-	}
-	return (1);
-}
-
-void  del(void *content)
+int  del(void *content)
 {
 	char **str;
 	int i = 0;
@@ -236,92 +204,109 @@ void  del(void *content)
         i++;
 	}
 	free(str);
+	return (-1);
 }
 
-int redirections(t_list *list, int in_fd, char **path, char **env)
+int redirections(t_list *list)
 {
-	int fd[2];
-	int in_tmp;
-	int out_fd;
-
-	if (pipe(fd) == -1)
-		return (error("pipe"));
-	in_tmp = input_file((t_list *)(((t_ogbi *)(list->content))->input_files));
-	if (in_tmp != 0)
-	{
-		if (in_fd != 0)
-			close(in_fd);
-		if (in_tmp == -1)
-		    return (-1);
-		in_fd = in_tmp;
-	}
-	out_fd = output_file((t_list *)(((t_ogbi *)(list->content))->output_files));
-	if (out_fd == -1)
-	    return (-1);
-	else if (out_fd == 1)
-		out_fd = fd[1];
-	if (execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env) < 0)
-	    return (-1);
-	if (in_fd != 0)
-		close(in_fd);
-	if (out_fd != 1)
-		close(out_fd);
-	close(fd[1]);
-	return (fd[0]);
-}
-
-int last_command(t_list *list, int in_fd, char **path, char **env)
-{
-	int in_tmp;
-	int out_fd;
-
-	in_tmp = input_file((t_list *)(((t_ogbi *)(list->content))->input_files));
-	if (in_tmp != 0)
-	{
-		if (in_fd != 0)
-		    close(in_fd);
-		if (in_tmp == -1)
-		    return (0);
-		in_fd = in_tmp;
-	}
-	out_fd = output_file((t_list *)(((t_ogbi *)(list->content))->output_files));
-	if (out_fd == -1)
-	    return (-1);
-	if (execute_command((((t_ogbi *)(list->content))->cmd), path, in_fd, out_fd, env) < 0)
-	    return (-1);
-	if (in_tmp != 0)
-		close(in_fd);
-	if (out_fd != 1)
-		close(out_fd);
+	if(input_file((t_list *)(((t_ogbi *)(list->content))->input_files)))
+		return(-1);
+	if(output_file((t_list *)(((t_ogbi *)(list->content))->output_files)))
+	    return(-1);
 	return(0);
 }
+
+int command_line(t_list *list, int *fd, int fd_tmp, char **path, char **env)
+{
+	char *cmd_name;
+	char **cmd;
+	pid_t pid;
+
+	cmd = ((t_ogbi *)(list->content))->cmd;
+    if (ft_execve(cmd, env))
+		return (0);
+	pid = fork();
+	if (pid == -1)
+    	return (error("fork"));
+    else if (pid == 0)
+    {
+		close(fd[0]);
+		if (redirections(list) < 0)
+		    exit (1);
+		if (fd_tmp)
+		    dup2(fd_tmp, STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+		cmd_name = cmd_path(cmd[0], path);
+		if (cmd_name)
+			execve(cmd_name, cmd, env);
+		write(2, cmd[0], ft_strlen(cmd[0]));
+		ft_putstr_fd(": command not found\n", 2);
+		exit(127);
+	}
+	return (0);
+}
+
+int last_command(t_list *list, int fd_tmp, char **path, char **env)
+{
+	char *cmd_name;
+	char **cmd;
+	pid_t pid;
+
+    cmd = ((t_ogbi *)(list->content))->cmd;
+    if (ft_execve(cmd, env))
+		return (0);
+	pid = fork();
+	if (pid == -1)
+    	return (error("fork"));
+    else if (pid == 0)
+    {
+		if (redirections(list))
+		    exit (1);
+		if (fd_tmp)
+			dup2(fd_tmp, STDIN_FILENO);
+		cmd_name = cmd_path(cmd[0], path);
+		if (cmd_name)
+			execve(cmd_name, cmd, env);
+		write(2, cmd[0], ft_strlen(cmd[0]));
+		ft_putstr_fd(": command not found\n", 2);
+		exit(127);
+	}
+	return(0);
+}
+
 
 int	pipex(t_list *list, char **env)
 {
 	char **path;
-	int valid;
 	int status;
-	int in_fd;
+	int fd_tmp;
+	int fd[2];
 
 	path = ft_split(find_path_from_env(env), ':');
-	in_fd = 0;
-	valid = 1;
+	fd_tmp = STDIN_FILENO;
 	while (list->next)
 	{
-		in_fd = redirections(list, in_fd, path, env);
-		if (in_fd == -1)
+		if(pipe(fd) == -1)
 		{
-			valid = in_fd;
-			break;
+			del(path);
+			return(error("pipe() failed"));
 		}
+		if (command_line(list, fd, fd_tmp, path, env))
+		    return (del(path));
+		close(fd[1]);
+		if (fd_tmp)
+			close(fd_tmp);
+		fd_tmp = fd[0];
 		list = list->next;
 	}
-	if (valid > 0)
-		valid = last_command(list, in_fd, path, env);
+	if (last_command(list, fd_tmp,path, env) == -1)
+		return(del(path));
+	if (fd_tmp)
+		close(fd_tmp);
 	del(path);
 	while (wait(&status) > 0);
 	ft_status(&status);
-	return (valid);
+	return (0);
 }
 
 int ft_herdoc(int index, t_list *list)
@@ -336,7 +321,10 @@ int ft_herdoc(int index, t_list *list)
 	tmp = line;
 	fd = open(line , O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1)
+	{
+		free(line);
 		return (error(line));
+	}
 	while(1)
 	{
 		line = readline("> ");
@@ -348,7 +336,10 @@ int ft_herdoc(int index, t_list *list)
 	}
 	fd = open(tmp, O_RDONLY);
 	free(tmp);
-	return(fd);
+	if (fd == -1)
+	    return (error("open"));
+	dup2(fd, STDIN_FILENO);
+	return(0);
 }
 
 int input_file(t_list *list)
@@ -356,7 +347,6 @@ int input_file(t_list *list)
 	int fd;
 	int index;
 
-	fd = 0;
 	index = 0;
 	while(list)
 	{
@@ -365,6 +355,7 @@ int input_file(t_list *list)
 			fd = open(((t_red *)list->content)->value, O_RDONLY);
 			if (fd == -1)
 				return (error(((t_red *)list->content)->value));
+			dup2(fd, STDIN_FILENO);
 		}
 		else
 			fd = ft_herdoc(index++, list);
@@ -372,14 +363,13 @@ int input_file(t_list *list)
 		if (list)
 			close(fd);
 	}
-    return (fd);
+    return (0);
 }
 
 int output_file(t_list *list)
 {
 	int fd;
 
-	fd = 1;
 	while(list)
 	{
 		if (((t_red *)list->content)->type == SORTIE)
@@ -387,16 +377,18 @@ int output_file(t_list *list)
 			fd = open(((t_red *)list->content)->value, O_CREAT | O_WRONLY | O_TRUNC, 0666);
     		if (fd == -1)
 				return (error(((t_red *)list->content)->value));
+			dup2(fd, STDOUT_FILENO);
 		}
 		else
 		{
 			fd = open(((t_red *)list->content)->value, O_WRONLY | O_CREAT | O_APPEND, 0666);
     		if (fd == -1)
 				return (error(((t_red *)list->content)->value));
+			dup2(fd, STDOUT_FILENO);
 		}
 		list = list->next;
 		if (list)
 			close(fd);
 	}
-    return (fd);
+    return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/22 05:22:28 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/22 06:19:49 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,49 +129,67 @@ void	ft_env(char **env)
         i++;
     }
 }
+void convert_variable_helper(char **cmd, int i, int j)
+{
+	char *value;
+	char *tmp;
+
+	if (!ft_strcmp(cmd[i] + j, "$?"))
+	{
+		cmd[i][j] = '\0';
+		tmp = ft_strjoin(cmd[i], ft_itoa(g_stat));
+		free(cmd[i]);
+		cmd[i] = tmp;
+	}
+	else if(!cmd[i][1])
+		return ;
+	else
+	{
+		value = getenv(cmd[i] + j + 1);
+		if (value)
+		{
+			cmd[i][j] = '\0';
+			tmp = ft_strjoin(cmd[i], ft_strdup(value));
+			free(cmd[i]);
+			cmd[i] = tmp;
+		}
+		else
+		{
+			if (j != 0)
+				cmd[i][j] = '\0';
+			else
+			{
+				j = i;
+				while(cmd[j])
+				{
+					free(cmd[j]);
+					cmd[j] = NULL;
+					if (cmd[j + 1])
+            	    	cmd[j] = ft_strdup(cmd[j + 1]);
+            	    j++;
+				}
+				i--;
+			}
+		}
+	}
+	return ;
+}
 
 void convert_variable(char **cmd)
 {
 	int i;
-	char *value;
+	int j;
 	
 	i = 0;
 	if (!cmd)
 		return;
 	while(cmd[i])
 	{
-		if (cmd[i][0] == '$')
-        {
-			if (!ft_strcmp(cmd[i], "$?"))
-			{
-				free(cmd[i]);
-				cmd[i] = ft_itoa(g_stat);
-			}
-			else if(!cmd[i][1])
-				return;
-			else
-			{
-            	value = getenv(cmd[i] + 1);
-				if (value)
-				{
-					free(cmd[i]);
-					cmd[i] = ft_strdup(value);
-				}
-				else
-				{
-					int j = i;
-					while(cmd[j])
-					{
-						free(cmd[j]);
-						cmd[j] = NULL;
-						if (cmd[j + 1])
-                        	cmd[j] = ft_strdup(cmd[j + 1]);
-                        j++;
-					}
-					i--;
-				}
-			}
-        }
+		j = 0;
+		while(cmd[i][j] != '$' && cmd[i][j])
+			j++;
+		if (cmd[i][j])
+			convert_variable_helper(cmd, i, j);
         i++;
 	}
 }

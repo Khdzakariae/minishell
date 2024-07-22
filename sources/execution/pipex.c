@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/22 04:42:13 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/22 05:22:28 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,34 +63,50 @@ void	ft_cd(char **cmd)
 	if (i == 2)
 	{
 		if(chdir(cmd[1]))
-		perror(cmd[1]);
+		{
+			perror(cmd[1]);
+			exit (1);
+		}
 	}
 	else if (i == 1)
 		chdir(getenv("HOME"));
 	else
-        printf("cd: too many arguments\n");
+	{
+        write(2, "cd: too many arguments\n", 24);
+		exit (1);
+	}
 }
 
 void    ft_pwd(void)
 {
 	char cwd[1024];
 
-    if (getcwd(cwd, sizeof(cwd))!= NULL)
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
         printf("%s\n", cwd);
     else
+	{
         perror("getcwd() error");
+		exit(1);
+	}
 }
 
 void    ft_echo(char **cmd)
 {
 	int i;
+	int j;
 	int n;
 
     i = 1;
 	n = 0;
-	if (cmd[i] && !ft_strcmp(cmd[i], "-n"))
+	while (cmd[i] && cmd[i][0] == '-')
 	{
-		n = 1;
+		j = 1;
+		while(cmd[i][j] == 'n')
+			j++;
+		if (!cmd[i][j])
+			n = 1;
+		else
+			break;
 		i++;
 	}
     while (cmd[i])
@@ -177,9 +193,16 @@ int ft_execve(char **cmd, char **env)
 	// else if(!ft_strcmp(cmd[0], "unset"))
 	//     ft_unset(cmd);
 	else if(!ft_strcmp(cmd[0], "exit"))
-	    exit(0);
+	    ;
 	else if (!ft_strcmp(cmd[0], "env"))
+	{
+		if (cmd[1])
+		{
+            write(2, "env with options or arguments\n", 31);
+            exit (1);
+        }
 	    ft_env(env);
+	}
 	else
 		return (0);
 	return (1);

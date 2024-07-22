@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/22 04:17:44 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/22 04:42:13 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,8 +225,6 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, char **env)
 	pid_t pid;
 
 	cmd = ((t_ogbi *)(list->content))->cmd;
-    if (ft_execve(cmd, env))
-		return (0);
 	pid = fork();
 	if (pid == -1)
     	return (error("fork"));
@@ -238,6 +236,8 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, char **env)
 		if (fd_tmp)
 		    dup2(fd_tmp, STDIN_FILENO);
 		dup2(fd[1], STDOUT_FILENO);
+	    if (ft_execve(cmd, env))
+			exit (0);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
 			execve(cmd_name, cmd, env);
@@ -255,8 +255,6 @@ int last_command(t_list *list, int fd_tmp, char **path, char **env)
 	pid_t pid;
 
     cmd = ((t_ogbi *)(list->content))->cmd;
-    if (ft_execve(cmd, env))
-		return (0);
 	pid = fork();
 	if (pid == -1)
     	return (error("fork"));
@@ -266,6 +264,8 @@ int last_command(t_list *list, int fd_tmp, char **path, char **env)
 		    exit (1);
 		if (fd_tmp)
 			dup2(fd_tmp, STDIN_FILENO);
+	    if (ft_execve(cmd, env))
+			exit (0);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
 			execve(cmd_name, cmd, env);

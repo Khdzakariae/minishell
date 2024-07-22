@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/22 02:43:44 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/22 04:17:44 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ void convert_variable(char **cmd)
 				free(cmd[i]);
 				cmd[i] = ft_itoa(g_stat);
 			}
+			else if(!cmd[i][1])
+				return;
 			else
 			{
             	value = getenv(cmd[i] + 1);

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/22 00:35:13 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/22 01:05:14 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,8 +234,7 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, char **env)
 		close(fd[0]);
 		if (fd_tmp)
 		    dup2(fd_tmp, STDIN_FILENO);
-		if(dup2(fd[1], STDOUT_FILENO) == -1)
-		    return (error("dup2"));
+		dup2(fd[1], STDOUT_FILENO);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
 			execve(cmd_name, cmd, env);
@@ -286,7 +285,10 @@ int	pipex(t_list *list, char **env)
 	while (list->next)
 	{
 		if(pipe(fd) == -1)
+		{
+			del(path);
 			return(error("pipe() failed"));
+		}
 		if (command_line(list, fd, fd_tmp, path, env))
 		    return (del(path));
 		close(fd[1]);
@@ -334,8 +336,7 @@ int ft_herdoc(int index, t_list *list)
 	free(tmp);
 	if (fd == -1)
 	    return (error("open"));
-	if(dup2(fd, STDIN_FILENO) < 0)
-		return(error("dup2"));
+	dup2(fd, STDIN_FILENO);
 	return(0);
 }
 
@@ -352,8 +353,7 @@ int input_file(t_list *list)
 			fd = open(((t_red *)list->content)->value, O_RDONLY);
 			if (fd == -1)
 				return (error(((t_red *)list->content)->value));
-			if(dup2(fd, STDIN_FILENO) < 0)
-				return(error("dup2"));
+			dup2(fd, STDIN_FILENO);
 		}
 		else
 			fd = ft_herdoc(index++, list);
@@ -375,16 +375,14 @@ int output_file(t_list *list)
 			fd = open(((t_red *)list->content)->value, O_CREAT | O_WRONLY | O_TRUNC, 0666);
     		if (fd == -1)
 				return (error(((t_red *)list->content)->value));
-			if(dup2(fd, STDOUT_FILENO) < 0)
-				return(error("dup2"));
+			dup2(fd, STDOUT_FILENO);
 		}
 		else
 		{
 			fd = open(((t_red *)list->content)->value, O_WRONLY | O_CREAT | O_APPEND, 0666);
     		if (fd == -1)
 				return (error(((t_red *)list->content)->value));
-			if(dup2(fd, STDOUT_FILENO) < 0)
-				return(error("dup2"));
+			dup2(fd, STDOUT_FILENO);
 		}
 		list = list->next;
 		if (list)

@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:25:15 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/19 14:15:18 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/23 11:30:30 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,22 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 	if (line[j] == '\'')
 	{
 		while ((line[*i] != '\0') && (line[(*i) + 1] != '\''))
-		{	
+		{
         	(*i)++;
 		}
 		(*i)++;
 		int length = *i - start;
 		tmp = ft_substr(line, (start), length + 1);
-		// printf("the tmp is ----------> %s", tmp);
-		add_node(token, tmp, WORD);
+		printf("the tmp is ---- ++ ------> %s\n", tmp);
+		if (tmp == NULL)
+			free(tmp);
+		else
+			add_node(token, tmp, WORD);
+		(*i)++;
 	}
 	if (line[j] == '"')
 	{
+		puts("==================");
 		while ((line[*i] != '\0') && (line[(*i) + 1] != '"'))
 		{
         	(*i)++;
@@ -57,9 +62,14 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 		(*i)++;
 		int length = *i - start;
 		tmp = ft_substr(line, (start + 1), length - 1);
-		// printf("the tmp is ----------> %s", tmp);
-
-		add_node(token, tmp, WORD);
+		printf("the tmp is ----------> %s\n", tmp);
+		if (tmp == NULL)
+			free(tmp);
+		else
+			add_node(token, tmp, WORD);
+		(*i)++;
+		
+		
 	}
 }
 

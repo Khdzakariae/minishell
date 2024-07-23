@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:25:15 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/23 11:30:30 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/23 14:09:58 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 		else
 			add_node(token, tmp, WORD);
 		(*i)++;
-		
+											
 		
 	}
 }

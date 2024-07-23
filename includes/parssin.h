@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/05 04:52:42 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/23 17:08:12 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void				add_node_(t_cmd **head, char **tab, int type);
 void				signels_handler(void);
 t_token				*gettoken(char *line);
 void				freelist(t_token *head);
-bool				chech_quoting(char *line);
+bool	chech_quoting(t_token *tokem);
 void				add_node(t_token **head, const char *value, int type);
 void				parse_symbol(t_token **token, char symbol, char *line,
 						int *i);

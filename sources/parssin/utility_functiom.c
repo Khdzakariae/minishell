@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/24 13:20:59 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:03:00 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
         {
             while (token && token->type == WORD)
             {
-                
                 assest = ft_strjoin(assest, token->value);
                 token = token->next;
                 flag = 1;
@@ -67,10 +66,11 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
             {
                 flag = 0;
                 cmd_[i] = ft_strcpy_1(&cmd_[i], assest);
+                free(assest);
+                assest = NULL;
                 i++;
                 continue;
             }
-            i++;
         }
         else if (token && (token->type == SORTIE || token->type == ENTREE || token->type == ENTREE || token->type == APPAND || token->type == HEREDOC))
         {

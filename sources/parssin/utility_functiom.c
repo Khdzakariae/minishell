@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/05 18:33:10 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:20:59 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,33 @@ int count_word(t_token **tmp, t_cmd **cmd_)
 char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
 {
     int i = 0;
+    int flag = 0;
+    char *assest;
+    
+    assest = NULL;
     while (i < count)
     {
-        if (token->type == WORD)
+        if (token && token->type == WORD)
         {
-            if ((token->type == WORD &&  token->next != NULL) && (token->next->type == WORD))
+            while (token && token->type == WORD)
             {
-                cmd_[i] = ft_strcpy_1(&cmd_[i], ft_strjoin(token->value, token->next->value));
+                
+                assest = ft_strjoin(assest, token->value);
                 token = token->next;
+                flag = 1;
             }
-            else
-                cmd_[i] = ft_strcpy_1(&cmd_[i], token->value);
+            if (flag == 1)
+            {
+                flag = 0;
+                cmd_[i] = ft_strcpy_1(&cmd_[i], assest);
+                i++;
+                continue;
+            }
             i++;
         }
         else if (token && (token->type == SORTIE || token->type == ENTREE || token->type == ENTREE || token->type == APPAND || token->type == HEREDOC))
         {
-            if (token->type == SPACE_)
+            if (token && token->type == SPACE_)
                 token = token->next;
             token = token->next;
             token = token->next;    

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/23 05:09:28 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/22 06:19:49 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ char	*find_path_from_env(char **env)
 {
 	int i = 0;
 
-	if (env == NULL)
-	    return (NULL);
     while (env[i])
     {
         if (ft_strncmp(env[i], "PATH=", 5) == 0)
@@ -35,7 +33,7 @@ char	*cmd_path(char *cmd, char **path)
 	char *cmd_name;
 	char *tmp;
 
-    if(ft_strchr(cmd, '/'))
+    if (access(cmd, F_OK) == 0)
         return (cmd);
     while (path[i])
     {
@@ -131,13 +129,11 @@ void	ft_env(char **env)
         i++;
     }
 }
-int convert_variable_helper(char **cmd, int i, int j)
+void convert_variable_helper(char **cmd, int i, int j)
 {
 	char *value;
 	char *tmp;
-	int a;
 
-	a = 0;
 	if (!ft_strcmp(cmd[i] + j, "$?"))
 	{
 		cmd[i][j] = '\0';
@@ -146,7 +142,7 @@ int convert_variable_helper(char **cmd, int i, int j)
 		cmd[i] = tmp;
 	}
 	else if(!cmd[i][1])
-		return (a);
+		return ;
 	else
 	{
 		value = getenv(cmd[i] + j + 1);
@@ -164,7 +160,6 @@ int convert_variable_helper(char **cmd, int i, int j)
 			else
 			{
 				j = i;
-				a = 1;
 				while(cmd[j])
 				{
 					free(cmd[j]);
@@ -173,10 +168,11 @@ int convert_variable_helper(char **cmd, int i, int j)
             	    	cmd[j] = ft_strdup(cmd[j + 1]);
             	    j++;
 				}
+				i--;
 			}
 		}
 	}
-	return (a);
+	return ;
 }
 
 void convert_variable(char **cmd)
@@ -193,8 +189,7 @@ void convert_variable(char **cmd)
 		while(cmd[i][j] != '$' && cmd[i][j])
 			j++;
 		if (cmd[i][j])
-			if (convert_variable_helper(cmd, i, j))
-				i--;
+			convert_variable_helper(cmd, i, j);
         i++;
 	}
 }
@@ -331,8 +326,6 @@ int	pipex(t_list *list, char **env)
 	int fd[2];
 
 	path = ft_split(find_path_from_env(env), ':');
-	if (!path)
-		return(printf("TERM environment variable not set.\n"));
 	fd_tmp = STDIN_FILENO;
 	while (list->next)
 	{
@@ -363,8 +356,6 @@ int ft_herdoc(int index, t_list *list)
 {
 	char *line;
 	char *tmp;
-	char **expand;
-	int i;
 	int fd;
 
 	tmp = ft_strdup("/tmp/.Her_Doc_");
@@ -382,15 +373,7 @@ int ft_herdoc(int index, t_list *list)
 		line = readline("> ");
 		if (line == NULL || ft_strcmp(line, ((t_red *)list->content)->value) == 0)
 			break;
-		expand = ft_split(line, ' ');
-		convert_variable(expand);
-		i = 0;
-		while(expand[i])
-		{
-			write(fd, expand[i], ft_strlen(expand[i]));
-			i++;
-		}
-		del(expand);
+		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
 	}

@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:25:15 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/24 13:28:10 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:58:54 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 	char *tmp;
 	start = *i;
 	int j = *i;
-	puts("==============================================");
+
 
 	if (line[j] == '\'')
 	{
@@ -45,7 +45,6 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 		(*i)++;
 		int length = *i - start;
 		tmp = ft_substr(line, (start), length + 1);
-		printf("the tmp is ---- ++ ------> %s\n", tmp);
 		if (tmp == NULL)
 			free(tmp);
 		else
@@ -60,11 +59,8 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 		(*i)++;
 		int length = *i - start;
 		tmp = ft_substr(line, (start + 1), length - 1);
-		printf("the tmp is ands ----------> %s\n", tmp);
 		if (tmp == NULL)
-		{
 			free(tmp);
-		}
 		else
 			add_node(token, tmp, WORD);
 	}

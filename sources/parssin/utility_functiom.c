@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 15:48:12 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/24 13:20:59 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:44:10 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,17 @@ int count_word(t_token **tmp, t_cmd **cmd_)
     {
         if ((*tmp)->type == WORD)
         {
-            count_word++;
-            while ((*tmp)->next != NULL && (*tmp)->next->type != SPACE_)
-                *tmp = (*tmp)->next;
+            // while ((*tmp)->next != NULL && (*tmp)->next->type != SPACE_)
+            if ((*tmp)->type == WORD && (*tmp)->type != SPACE_)
+            {
+                while ((*tmp)->next != NULL && (*tmp)->type == WORD)
+                {
+                    if((*tmp)->type == SPACE_)
+                        break;
+                    *tmp = (*tmp)->next;
+                }
+                count_word++;
+            }
         }
         if ((*tmp) && ((*tmp)->type == SORTIE || (*tmp)->type == ENTREE || (*tmp)->type == APPAND || (*tmp)->type == HEREDOC))
             geberete_autput_input(tmp, cmd_);
@@ -68,6 +76,8 @@ char  **generate_tab_cmd(char **cmd_, t_token *token, int count)
                 flag = 0;
                 cmd_[i] = ft_strcpy_1(&cmd_[i], assest);
                 i++;
+                free(assest);
+                assest = NULL;
                 continue;
             }
             i++;
@@ -96,7 +106,9 @@ void generet_cmd(t_token *token, t_cmd **cmd_)
     while (tmp)
     {
         if (tmp && (tmp->type == SORTIE || tmp->type == ENTREE || tmp->type == APPAND || tmp->type == HEREDOC ))
+        {
             geberete_autput_input(&tmp ,cmd_);
+        }
         else if (tmp->type == WORD)
         {
             count = count_word(&tmp, cmd_);

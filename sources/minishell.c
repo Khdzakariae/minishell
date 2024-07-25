@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/24 11:27:03 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:48:33 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ void	minishell(void)
 		}
 		add_history(line);
 		token = gettoken(line);
-		if(chech_quoting(token) == false)
-		{
-			ft_putstr_fd("zash: syntax error near unexpected token\n", 2);
-			continue;
-		}
-        puts("=================== stract token ======================");
-		printlist(token);
+		// if(chech_quoting(token) == false)
+		// {
+		// 	ft_putstr_fd("zash: syntax error near unexpected token\n", 2);
+		// 	continue;
+		// }
+        // puts("=================== stract token ======================");
+		// printlist(token);
         cmd_ = malloc(sizeof(t_cmd));
         cmd_ = NULL;
 		generet_cmd(token, &cmd_);

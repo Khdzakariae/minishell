@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/22 06:19:49 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/26 00:33:06 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	ft_cd(char **cmd)
 		if(chdir(cmd[1]))
 		{
 			perror(cmd[1]);
-			exit (1);
+			return ;
 		}
 	}
 	else if (i == 1)
@@ -73,7 +73,7 @@ void	ft_cd(char **cmd)
 	else
 	{
         write(2, "cd: too many arguments\n", 24);
-		exit (1);
+		return ;
 	}
 }
 
@@ -86,7 +86,7 @@ void    ft_pwd(void)
     else
 	{
         perror("getcwd() error");
-		exit(1);
+		return ;
 	}
 }
 
@@ -111,8 +111,10 @@ void    ft_echo(char **cmd)
 	}
     while (cmd[i])
     {
-        printf("%s ", cmd[i]);
+        printf("%s", cmd[i]);
         i++;
+		if (cmd[i])
+			printf(" ");
     }
 	if (!n)
     	printf("\n");
@@ -175,6 +177,11 @@ void convert_variable_helper(char **cmd, int i, int j)
 	return ;
 }
 
+void rm_single_quote(char **cmd, int i)
+{
+	
+}
+
 void convert_variable(char **cmd)
 {
 	int i;
@@ -187,7 +194,11 @@ void convert_variable(char **cmd)
 	{
 		j = 0;
 		while(cmd[i][j] != '$' && cmd[i][j])
+		{
+			if (cmd[i][j] == '\'')
+				return(rm_single_quote(cmd, i));
 			j++;
+		}
 		if (cmd[i][j])
 			convert_variable_helper(cmd, i, j);
         i++;
@@ -211,7 +222,7 @@ int ft_execve(char **cmd, char **env)
 	// else if(!ft_strcmp(cmd[0], "unset"))
 	//     ft_unset(cmd);
 	else if(!ft_strcmp(cmd[0], "exit"))
-	    ;
+	    exit(0);
 	else if (!ft_strcmp(cmd[0], "env"))
 	{
 		if (cmd[1])
@@ -272,11 +283,11 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, char **env)
     else if (pid == 0)
     {
 		close(fd[0]);
-		if (redirections(list) < 0)
-		    exit (1);
 		if (fd_tmp)
 		    dup2(fd_tmp, STDIN_FILENO);
 		dup2(fd[1], STDOUT_FILENO);
+		if (redirections(list) < 0)
+		    exit (1);
 	    if (ft_execve(cmd, env))
 			exit (0);
 		cmd_name = cmd_path(cmd[0], path);
@@ -301,10 +312,10 @@ int last_command(t_list *list, int fd_tmp, char **path, char **env)
     	return (error("fork"));
     else if (pid == 0)
     {
-		if (redirections(list))
-		    exit (1);
 		if (fd_tmp)
 			dup2(fd_tmp, STDIN_FILENO);
+		if (redirections(list))
+		    exit (1);
 	    if (ft_execve(cmd, env))
 			exit (0);
 		cmd_name = cmd_path(cmd[0], path);
@@ -323,10 +334,12 @@ int	pipex(t_list *list, char **env)
 	char **path;
 	int status;
 	int fd_tmp;
+	int i;
 	int fd[2];
 
 	path = ft_split(find_path_from_env(env), ':');
 	fd_tmp = STDIN_FILENO;
+	i = 0;
 	while (list->next)
 	{
 		if(pipe(fd) == -1)
@@ -341,8 +354,9 @@ int	pipex(t_list *list, char **env)
 			close(fd_tmp);
 		fd_tmp = fd[0];
 		list = list->next;
+		i = 1;
 	}
-	if (last_command(list, fd_tmp,path, env) == -1)
+	if ((!i && ft_execve(((t_ogbi *)(list->content))->cmd, env)) || last_command(list, fd_tmp,path, env) == -1)
 		return(del(path));
 	if (fd_tmp)
 		close(fd_tmp);

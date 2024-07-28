@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/28 10:08:34 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/28 17:38:33 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,10 @@ int  del(void *content);
 void	merge_free(void *contant);
 
 void convert_variable(char **cmd);
+
+char *handle_quoting(char *cmd);
+
+int is_quote(char *cmd);
+
 
 #endif

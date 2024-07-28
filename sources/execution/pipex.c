@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/26 00:33:06 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/28 09:34:37 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,11 +177,6 @@ void convert_variable_helper(char **cmd, int i, int j)
 	return ;
 }
 
-void rm_single_quote(char **cmd, int i)
-{
-	
-}
-
 void convert_variable(char **cmd)
 {
 	int i;
@@ -196,7 +191,7 @@ void convert_variable(char **cmd)
 		while(cmd[i][j] != '$' && cmd[i][j])
 		{
 			if (cmd[i][j] == '\'')
-				return(rm_single_quote(cmd, i));
+				return ;
 			j++;
 		}
 		if (cmd[i][j])

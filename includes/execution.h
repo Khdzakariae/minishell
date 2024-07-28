@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/22 03:56:27 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/28 10:08:34 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <errno.h>
 #include "../lib/libft/libft.h"
 
+extern int g_stat;
+
 int	pipex(t_list *list, char **env);
 
 int input_file(t_list *files);
@@ -30,5 +32,7 @@ t_list *merge(t_cmd *parssin);
 int  del(void *content);
 
 void	merge_free(void *contant);
+
+void convert_variable(char **cmd);
 
 #endif

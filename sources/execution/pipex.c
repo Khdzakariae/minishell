@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/28 10:09:42 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/28 12:17:34 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,7 @@ int last_command(t_list *list, int fd_tmp, char **path, char **env)
 			dup2(fd_tmp, STDIN_FILENO);
 		if (redirections(list))
 		    exit (1);
-	    if (ft_execve(cmd, env))
+	    if (((t_ogbi *)(list->content))->i && ft_execve(cmd, env))
 			exit (0);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
@@ -266,6 +266,7 @@ int	pipex(t_list *list, char **env)
 	path = ft_split(find_path_from_env(env), ':');
 	fd_tmp = STDIN_FILENO;
 	i = 0;
+	((t_ogbi *)(list->content))->i = i;
 	while (list->next)
 	{
 		if(pipe(fd) == -1)
@@ -280,9 +281,9 @@ int	pipex(t_list *list, char **env)
 			close(fd_tmp);
 		fd_tmp = fd[0];
 		list = list->next;
-		i = 1;
+		((t_ogbi *)(list->content))->i = ++i;
 	}
-	if ((!i && ft_execve(((t_ogbi *)(list->content))->cmd, env)) || last_command(list, fd_tmp,path, env) == -1)
+	if ((!((t_ogbi *)(list->content))->i && ft_execve(((t_ogbi *)(list->content))->cmd, env)) || last_command(list, fd_tmp,path, env) == -1)
 		return(del(path));
 	if (fd_tmp)
 		close(fd_tmp);

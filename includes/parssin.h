@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:39:07 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/28 10:05:41 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/28 12:11:34 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_ogbi
     char    **cmd;
     t_list  *output_files;
     t_list  *input_files;
+	int		i;
 }   t_ogbi;
 
 typedef struct s_red

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:48:56 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/28 12:17:34 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/28 17:39:20 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void *alloc_in_out(char *value, int type)
 	contant = malloc(sizeof(t_red));
 	if(!contant)
 	    return (NULL);
-	contant->value = value;
+	if (is_quote(value))
+		contant->value = handle_quoting(value);
+	else
+		contant->value = value;
 	contant->type = type;
 	return (contant);
 }

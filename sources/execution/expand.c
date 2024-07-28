@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/28 14:48:17 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/28 15:51:59 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,72 @@
 	
 // }
 
-char *quote_join(char *cmd, char *str, int start, int j)
-{
-	char *tmp = NULL;
-	char *tmp1 = NULL;
+// char *quote_join(char *cmd, char *str, int start, int j)
+// {
+// 	char *tmp = NULL;
+// 	char *tmp1 = NULL;
 
-	start++;
-	tmp = ft_substr(cmd, start, j - start);
-	printf("cmd : %s, start : %d, j : %d\n", cmd, start, j);
-	if (str)
-	{
-		tmp1 = ft_strjoin(str, tmp);
-		free(str);
-		free(tmp);
-		str = tmp1;
-	}
-	else
-		str = tmp;
-	return (str);
-}
+// 	start++;
+// 	tmp = ft_substr(cmd, start, j - start);
+// 	printf("cmd : %s, start : %d, j : %d\n", cmd, start, j);
+// 	if (str)
+// 	{
+// 		tmp1 = ft_strjoin(str, tmp);
+// 		free(str);
+// 		free(tmp);
+// 		str = tmp1;
+// 	}
+// 	else
+// 		str = tmp;
+// 	return (str);
+// }
+
+// void handle_quoting(char **cmd)
+// {
+// 	int i = 0, j;
+// 	int singl_q = 0;
+// 	int double_q = 0;
+// 	int start = 0;
+// 	char *str = NULL;
+	
+// 	while(cmd[i])
+// 	{
+// 		j = 0;
+// 		while(cmd[i][j])
+// 		{
+// 			if (!singl_q && cmd[i][j] == '\"')
+// 			{
+// 				double_q++;
+// 				if (double_q == 2)
+// 				{
+// 					puts("---------------------");
+// 					str = quote_join(cmd[i], str, start, j);
+// 					double_q = 0;
+// 					printf("double : %s\n", str);
+// 				}
+// 				start = j;
+// 			}
+// 			else if (!double_q && cmd[i][j])
+// 			{
+// 				singl_q++;
+// 				if (singl_q == 2)
+// 				{
+// 					puts("+++++++++++++++++++++++");
+// 					str = quote_join(cmd[i], str, start, j);
+// 					singl_q = 0;
+// 					printf("singl : %s\n", str);
+// 				}
+// 				start = j;
+// 			}
+// 			printf("j : %d\n", j);
+// 			j++;
+// 		}
+// 		free(cmd[i]);
+// 		cmd[i] = str;
+// 		i++;	
+// 	}
+// }
+
 
 void handle_quoting(char **cmd)
 {
@@ -61,38 +108,80 @@ void handle_quoting(char **cmd)
 	int singl_q = 0;
 	int double_q = 0;
 	int start = 0;
-	char *str = NULL;
+	char *str;
+	char *tmp = NULL;
+	char *tmp1 = NULL;
+	int flag = 0;
 	
 	while(cmd[i])
 	{
+		str = NULL;
 		j = 0;
 		while(cmd[i][j])
 		{
 			if (!singl_q && cmd[i][j] == '\"')
-			{
+			{		
 				double_q++;
 				if (double_q == 2)
 				{
-					puts("---------------------");
-					str = quote_join(cmd[i], str, start, j);
+					tmp = ft_substr(cmd[i], start, j - start);
+					if (str != NULL)
+					{
+						tmp1 = ft_strjoin(str, tmp);
+						free(str);
+						free(tmp);
+						tmp = NULL;
+						str = tmp1;
+					}
+					else
+						str = tmp;
 					double_q = 0;
-					printf("double : %s\n", str);
 				}
-				start = j;
+				start = j + 1;
 			}
-			else if (!double_q && cmd[i][j])
+			else if (!double_q && cmd[i][j] == '\'')
 			{
-				singl_q++;
+				singl_q++; 
 				if (singl_q == 2)
 				{
-					puts("+++++++++++++++++++++++");
-					str = quote_join(cmd[i], str, start, j);
+					tmp = ft_substr(cmd[i], start, j - start);
+					if (str != NULL)
+					{
+						tmp1 = ft_strjoin(str, tmp);
+						free(str);
+						free(tmp);
+						tmp = NULL;
+						str = tmp1;
+					}
+					else
+						str = tmp;
 					singl_q = 0;
-					printf("singl : %s\n", str);
 				}
-				start = j;
+				start = j + 1;
 			}
-			printf("j : %d\n", j);
+			else if (!double_q && !singl_q)
+			{
+				if (flag == 0)
+				{
+					start = j;
+					flag = 1;
+				}
+				if (cmd[i][j + 1] == '\"' || cmd[i][j + 1] == '\'' || !cmd[i][j + 1])
+				{
+					tmp = ft_substr(cmd[i], start, j - start + 1);
+					if (str != NULL)
+					{
+						tmp1 = ft_strjoin(str, tmp);
+						free(str);
+						free(tmp);
+						tmp = NULL;
+						str = tmp1;
+					}
+					else
+						str = tmp;
+					flag = 0;
+				}
+			}
 			j++;
 		}
 		free(cmd[i]);
@@ -100,8 +189,6 @@ void handle_quoting(char **cmd)
 		i++;	
 	}
 }
-
-
 
 
 

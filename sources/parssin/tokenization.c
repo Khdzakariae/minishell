@@ -6,7 +6,7 @@
 /*   By: zel-khad <zel-khad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:25:15 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/25 14:58:54 by zel-khad         ###   ########.fr       */
+/*   Updated: 2024/07/28 09:25:45 by zel-khad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void lexer_collect_string(t_token **token, char *line, int *i)
 		}
 		(*i)++;
 		int length = *i - start;
-		tmp = ft_substr(line, (start + 1), length - 1);
+		tmp = ft_substr(line, (start), length + 1);
 		if (tmp == NULL)
 			free(tmp);
 		else

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/28 17:20:05 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/28 21:03:48 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,25 @@
 
 int g_stat;
 
-char	*find_path_from_env(char **env)
+char	*find_str_from_env(char **env, char *str)
 {
-	int i = 0;
+	int i;
+	int len;
+	char *tmp;
 
+	tmp = ft_strjoin(str, "=");
+	i = 0;
+	len = ft_strlen(tmp);
     while (env[i])
     {
-        if (ft_strncmp(env[i], "PATH=", 5) == 0)
-            return (env[i] + 5);
+        if (ft_strncmp(env[i], tmp, len) == 0)
+		{
+			free(tmp);
+            return (env[i] + len);
+		}
         i++;
     }
+	free(tmp);
     return (NULL);
 }
 
@@ -134,7 +143,7 @@ void	ft_env(char **env)
 
 int ft_execve(char **cmd, char **env)
 {
-	convert_variable(cmd);
+	cmd_quote_handler(cmd, env);
 	if (!cmd || !cmd[0])
 	    return (1);
 	else if (!ft_strcmp(cmd[0], "cd"))
@@ -263,7 +272,7 @@ int	pipex(t_list *list, char **env)
 	int i;
 	int fd[2];
 
-	path = ft_split(find_path_from_env(env), ':');
+	path = ft_split(find_str_from_env(env, "PATH"), ':');
 	fd_tmp = STDIN_FILENO;
 	i = 0;
 	((t_ogbi *)(list->content))->i = i;

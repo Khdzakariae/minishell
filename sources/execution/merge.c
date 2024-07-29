@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:48:56 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/28 17:39:20 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/29 09:59:17 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,22 +62,19 @@ void	merge_free(void *contant)
 	free(ogbi);
 }
 
-void *alloc_in_out(char *value, int type)
+void *alloc_in_out(char *value, int type, char **env)
 {
 	t_red	*contant;
 
 	contant = malloc(sizeof(t_red));
 	if(!contant)
 	    return (NULL);
-	if (is_quote(value))
-		contant->value = handle_quoting(value);
-	else
-		contant->value = value;
+	contant->value = handle_quoting(value, env);
 	contant->type = type;
 	return (contant);
 }
 
-t_list *merge(t_cmd *parssin)
+t_list *merge(t_cmd *parssin, char **env)
 {
 	t_list	*node;
 	t_ogbi	*ogbi;
@@ -91,9 +88,9 @@ t_list *merge(t_cmd *parssin)
     while(parssin)
     {
         if (parssin->type == SORTIE || parssin->type == APPAND)
-			add_to_list(alloc_in_out(*(parssin->value), parssin->type), &output_files);
+			add_to_list(alloc_in_out(*(parssin->value), parssin->type, env), &output_files);
 		else if (parssin->type == ENTREE || parssin->type == HEREDOC)
-			add_to_list(alloc_in_out(*(parssin->value), parssin->type), &input_files);
+			add_to_list(alloc_in_out(*(parssin->value), parssin->type, env), &input_files);
 		else if (parssin->type == WORD)
 			command = parssin->value;
 		else if (parssin->type == PIPE)

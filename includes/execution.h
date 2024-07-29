@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/28 17:38:33 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/29 09:58:46 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ int input_file(t_list *files);
 
 int output_file(t_list *files);
 
-t_list *merge(t_cmd *parssin);
+t_list *merge(t_cmd *parssin, char **env);
 
 int  del(void *content);
 
 void	merge_free(void *contant);
 
-void convert_variable(char **cmd);
+void cmd_quote_handler(char **cmd, char **env);
 
-char *handle_quoting(char *cmd);
+char *handle_quoting(char *cmd, char **env);
 
-int is_quote(char *cmd);
+char	*find_str_from_env(char **env, char *str);
 
 
 #endif

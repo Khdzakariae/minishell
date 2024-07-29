@@ -1,8 +1,0 @@
-tester hado fi bash ra aykono machakil bi dak parsing li khdam bih aykhass wa9ila dwz lia hta double quote
-
-EXPANDER
-* TEST: echo "'$USER' "$USER" "'$USER'""   
-* TEST: echo '$USER"' ' "$USER" ''""'     
-* TEST: echo "'$USER"""'$USER' "$USER'"       
-* TEST: echo '$'"---$?'$?'$?"?                
-* TEST: echo $'USER'                        

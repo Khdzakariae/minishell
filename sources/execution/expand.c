@@ -6,21 +6,50 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/29 12:32:31 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/30 09:27:27 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
+char *split_word_expand(char **env, char *cmd)
+{
+	int i;
+	char *str;
+	char *tmp;
+
+	i = 0;
+	str = NULL;
+	tmp = NULL;
+	while(cmd[i] && (ft_isalnum(cmd[i]) || cmd[i] == '_'))
+		i++;
+	if(cmd[i])
+	{
+		tmp = ft_strdup(cmd + i);
+		cmd[i] = '\0';
+		i++;
+	}
+	str = find_str_from_env(env, cmd);
+	if(tmp)
+	{
+		str = ft_strjoin(str, tmp);
+		free(tmp);
+	}
+	else if (str)
+		str = ft_strdup(str);
+	return(str);
+}
 
 char *expand_help(char *cmd, char **env)
 {
 	int i;
-	char *str = NULL;
+	char *str;
 	char *tmp;
+	char *tmp1 = NULL;
 
 	i = 0;
 	tmp = NULL;
+	str = NULL;
 	if (!cmd)
 		return (NULL);
 	while(cmd[i] && cmd[i] != '$')
@@ -30,7 +59,10 @@ char *expand_help(char *cmd, char **env)
 		tmp = expand_help(cmd + i + 1, env);
 		cmd[i] = '\0';
 	}
-	str = ft_strjoin(find_str_from_env(env, cmd), tmp);
+	tmp1 = split_word_expand(env, cmd);
+	str = ft_strjoin(tmp1, tmp);
+	if (tmp1)
+		free(tmp1);
 	return(str);
 }
 

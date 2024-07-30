@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/30 18:49:34 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/30 22:13:19 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,8 @@ char *handle_quoting(char *cmd, char **env)
 
 	i = 0;
 	str = NULL;
+	if (!cmd)
+		return(NULL);
 	while(cmd[i])
 	{
 		if (!singl_q && cmd[i] == '\"')

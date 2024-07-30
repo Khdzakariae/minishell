@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/30 09:27:27 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/30 16:38:12 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,26 +168,30 @@ char *handle_quoting(char *cmd, char **env)
 		}
 		i++;
 	}
+	if (double_q || singl_q)
+	{
+		write(2, "unexpected while looking for matching `\"'\"\n", 44);
+		free(str);
+		str = NULL;
+	}
 	return(str);
 }
 
-void cmd_quote_handler(char **cmd, char **env)
+int cmd_quote_handler(char **cmd, char **env)
 {
 	int i = 0;
 	char *str;
 	
 	if (!cmd)
-		return ;
+		return (1);
 	while(cmd[i])
 	{
 		str = handle_quoting(cmd[i], env);
 		if (!str)
-			i--;
-		else
-		{
-			free(cmd[i]);
-			cmd[i] = str;
-		}
+			return (1);
+		free(cmd[i]);
+		cmd[i] = str;
 		i++;
 	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/30 20:06:36 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/30 21:42:27 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,11 +291,32 @@ int last_command(t_list *list, int fd_tmp, char **path, char **env)
 	return(0);
 }
 
+int is_buldin(char *cmd)
+{
+	if (!ft_strcmp(cmd, "cd"))
+	    return(1);
+	else if (!ft_strcmp(cmd, "pwd"))
+		return(1);
+	else if (!ft_strcmp(cmd, "echo"))
+	    return(1);
+	else if(!ft_strcmp(cmd, "export"))
+	    return(1);
+	else if(!ft_strcmp(cmd, "unset"))
+	    return(1);
+	else if(!ft_strcmp(cmd, "exit"))
+	    return(1);
+	else if (!ft_strcmp(cmd, "env"))
+		return(1);
+	return (0);
+}
+
 int last_execve(t_list *list, char **env)
 {
 	int fd1;
 	int fd2;
 
+	if (!is_buldin(((t_ogbi *)(list->content))->cmd[0]))
+		return (0);
 	if (!((t_ogbi *)(list->content))->i)
 	{
 		fd1 = dup(STDIN_FILENO);

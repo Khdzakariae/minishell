@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/28 21:03:48 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/30 16:35:53 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,15 @@ void	ft_env(char **env)
     }
 }
 
+void ft_export(char **cmd, char **env)
+{
+	printf("hello world!\n");
+}
+
 int ft_execve(char **cmd, char **env)
 {
-	cmd_quote_handler(cmd, env);
+	if (cmd_quote_handler(cmd, env))
+		return (1);
 	if (!cmd || !cmd[0])
 	    return (1);
 	else if (!ft_strcmp(cmd[0], "cd"))
@@ -152,8 +158,8 @@ int ft_execve(char **cmd, char **env)
 		ft_pwd();
 	else if (!ft_strcmp(cmd[0], "echo"))
 	    ft_echo(cmd);
-	// else if(!ft_strcmp(cmd[0], "export"))
-	//     ft_export(cmd);
+	else if(!ft_strcmp(cmd[0], "export"))
+	    ft_export(cmd, env);
 	// else if(!ft_strcmp(cmd[0], "unset"))
 	//     ft_unset(cmd);
 	else if(!ft_strcmp(cmd[0], "exit"))

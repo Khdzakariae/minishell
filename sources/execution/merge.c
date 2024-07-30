@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:48:56 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/29 09:59:17 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/30 22:13:43 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void *alloc_in_out(char *value, int type, char **env)
 	contant = malloc(sizeof(t_red));
 	if(!contant)
 	    return (NULL);
-	contant->value = handle_quoting(value, env);
+	if (type != HEREDOC)
+		contant->value = handle_quoting(value, env);
+	else
+		contant->value = value;
 	contant->type = type;
 	return (contant);
 }

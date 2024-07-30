@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/30 16:35:53 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/30 18:06:34 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,10 +140,32 @@ void	ft_env(char **env)
         i++;
     }
 }
-
-void ft_export(char **cmd, char **env)
+int count_array_of_str(char **env)
 {
+	int i;
+
+	i = 0;
+	if (!env)
+		return (0);
+	while (env[i])
+		i++;
+	return (i);
+}
+
+
+char **ft_export(char **cmd, char **env)
+{
+	char **tmp;
+
+	tmp = NULL;
+	if (count_array_of_str(cmd) == 1)
+		;
 	printf("hello world!\n");
+}
+
+void ft_unset(char **cmd, char **env)
+{
+	printf("fuck off\n");
 }
 
 int ft_execve(char **cmd, char **env)
@@ -159,9 +181,9 @@ int ft_execve(char **cmd, char **env)
 	else if (!ft_strcmp(cmd[0], "echo"))
 	    ft_echo(cmd);
 	else if(!ft_strcmp(cmd[0], "export"))
-	    ft_export(cmd, env);
-	// else if(!ft_strcmp(cmd[0], "unset"))
-	//     ft_unset(cmd);
+	    env = ft_export(cmd, env);
+	else if(!ft_strcmp(cmd[0], "unset"))
+	    ft_unset(cmd, env);
 	else if(!ft_strcmp(cmd[0], "exit"))
 	    exit(0);
 	else if (!ft_strcmp(cmd[0], "env"))

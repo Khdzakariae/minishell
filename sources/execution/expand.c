@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/30 16:38:12 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/30 17:06:41 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ char *split_word_expand(char **env, char *cmd)
 	}
 	else if (str)
 		str = ft_strdup(str);
+	if(str && str[0] == '?')
+	{
+		tmp = ft_strjoin(ft_itoa(g_stat), str + 1);
+		free(str);
+		str = tmp;
+	}
 	return(str);
 }
 

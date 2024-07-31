@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/30 22:13:19 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/31 09:13:04 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char *expand_help(char *cmd, char **env)
 	str = NULL;
 	if (!cmd)
 		return (NULL);
-	while(cmd[i] && cmd[i] != '$')
+	while(cmd[i] && (cmd[i] != '$' || !(ft_isalnum(cmd[i + 1]) || cmd[i + 1] == '_')))
 		i++;
 	if (cmd[i])
 	{

@@ -9,3 +9,6 @@
             *https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
 
         -
+
+
+        > f1 > f2 < f>f1>f2<f2 ls>f3 -l -a | echo hi

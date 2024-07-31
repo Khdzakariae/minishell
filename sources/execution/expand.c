@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/31 09:13:04 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/31 19:35:28 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,25 @@ char *expand(char *cmd, char **env)
 	return(str);
 }
 
-char *quote_join(char *cmd, char *str, int start, int j)
+char *quote_expand(char *cmd, int start, int j, char **env)
 {
 	char *tmp;
 	char *tmp1;
 
 	tmp = ft_substr(cmd, start, j - start);
+	tmp1 = expand(tmp, env);
+	if (tmp1)
+	{
+		free(tmp);
+		tmp = tmp1;
+	}
+	return(tmp);
+}
+
+char *quote_join(char *tmp, char *str)
+{
+	char *tmp1;
+
 	if (str != NULL)
 	{
 		tmp1 = ft_strjoin(str, tmp);
@@ -134,13 +147,8 @@ char *handle_quoting(char *cmd, char **env)
 			double_q++;
 			if (double_q == 2)
 			{
-				str = quote_join(cmd, str, start, i);
-				tmp = expand(str, env);
-				if (tmp)
-				{
-					free(str);
-					str = tmp;
-				}
+				tmp = quote_expand(cmd, start, i, env);
+				str = quote_join(tmp, str);
 				double_q = 0;
 			}
 			start = i + 1;
@@ -150,7 +158,8 @@ char *handle_quoting(char *cmd, char **env)
 			singl_q++; 
 			if (singl_q == 2)
 			{
-				str = quote_join(cmd, str, start, i);
+				tmp = ft_substr(cmd, start, i - start);
+				str = quote_join(tmp, str);
 				singl_q = 0;
 			}
 			start = i + 1;
@@ -164,13 +173,8 @@ char *handle_quoting(char *cmd, char **env)
 			}
 			if (cmd[i + 1] == '\"' || cmd[i + 1] == '\'' || !cmd[i + 1])
 			{
-				str = quote_join(cmd, str, start, i + 1);
-				tmp = expand(str, env);
-				if (tmp)
-				{
-					free(str);
-					str = tmp;
-				}
+				tmp = quote_expand(cmd, start, i + 1, env);
+				str = quote_join(tmp, str);
 				flag = 0;
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/31 16:33:25 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/31 19:51:46 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -456,8 +456,10 @@ int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 			dup2(fd_tmp, STDIN_FILENO);
 		if (redirections(list))
 		    exit (1);
-	    if (((t_ogbi *)(list->content))->i && ft_execve(cmd, env_list))
+	    if (((t_ogbi *)(list->content))->i && (ft_execve(cmd, env_list)))
 			exit (0);
+		if (!((t_ogbi *)(list->content))->i)
+			cmd_quote_handler(cmd, env_list->env);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
 			execve(cmd_name, cmd, env_list->env);
@@ -503,7 +505,7 @@ int last_execve(t_list *list, t_export *env_list)
 		if (fd2 < 0)
 			return(error("dup"));
 		redirections(list);
-		((t_ogbi *)(list->content))->i = ft_execve(((t_ogbi *)(list->content))->cmd, env_list);
+		((t_ogbi *)list->content)->i += ft_execve(((t_ogbi *)(list->content))->cmd, env_list);
 		fd1 = dup2(fd1, STDIN_FILENO);
 		if (fd1 < 0)
 			return(error("dup2"));
@@ -511,7 +513,7 @@ int last_execve(t_list *list, t_export *env_list)
 		if (fd2 < 0)
 			return(error("dup"));
 	}
-	return (0);
+	return (1);
 }
 
 int	pipex(t_list *list, t_export *env_list)
@@ -529,10 +531,7 @@ int	pipex(t_list *list, t_export *env_list)
 	while (list->next)
 	{
 		if(pipe(fd) == -1)
-		{
-			del(path);
-			return(error("pipe() failed"));
-		}
+			return(del(path), error("pipe() failed"));
 		if (command_line(list, fd, fd_tmp, path, env_list))
 		    return (del(path));
 		close(fd[1]);
@@ -542,7 +541,9 @@ int	pipex(t_list *list, t_export *env_list)
 		list = list->next;
 		((t_ogbi *)(list->content))->i = ++i;
 	}
-	if (last_execve(list, env_list) || (!((t_ogbi *)(list->content))->i && last_command(list, fd_tmp,path, env_list) == -1))
+	if (!((t_ogbi *)(list->content))->i && last_execve(list, env_list))
+		return (del(path));
+	else if (last_command(list, fd_tmp,path, env_list) == -1)
 		return(del(path));
 	if (fd_tmp)
 		close(fd_tmp);

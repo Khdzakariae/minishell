@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/28 18:23:04 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/31 11:54:37 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,14 @@ void	minishell(void)
 	t_cmd	*cmd_;
 	t_token	*token;
 	t_list	*list;
+	t_export	*env_list;
 	char	*line;
 	extern char **environ;
 
 	cmd_ = NULL;
+	env_list = malloc(sizeof(t_export));
+	env_list->env = array_dup(environ, 0);
+	env_list->export = NULL;
 	while (1)
 	{
 		line = readline(COLOR_BOLD GRN"➜ minishell__v1 ✗ "RESET);
@@ -81,7 +85,8 @@ void	minishell(void)
 		list = merge(cmd_, environ);
 		// char *type = ((t_red *)((t_list *)((t_ogbi *)list->content)->output_files)->content)->value;
 		// printf("%s\n", type);
-		pipex(list, environ);
+		if (env_list->env)
+			pipex(list, env_list);
 		ft_lstclear(&list, merge_free);
         freelist_(cmd_);
 	    freelist(token);

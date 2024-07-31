@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:20:07 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/31 16:09:34 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/31 20:37:31 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ char **array_remove(char **str, int index)
     {
 		if (index != i)
         	array[j++] = str[i];
+        else
+			free(str[i]);
         i++;
     }
     array[j] = NULL;

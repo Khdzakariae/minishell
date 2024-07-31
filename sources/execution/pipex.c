@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/30 21:42:27 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/07/31 09:15:14 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,11 +155,11 @@ int count_array_of_str(char **env)
 
 char **ft_export(char **cmd, char **env)
 {
-	// char **tmp;
+	char **tmp;
 
-	// tmp = NULL;
-	// if (count_array_of_str(cmd) == 1)
-	// 	;
+	tmp = NULL;
+	if (count_array_of_str(cmd) == 1)
+		;
 	printf("hello world!\n");
 }
 
@@ -315,7 +315,7 @@ int last_execve(t_list *list, char **env)
 	int fd1;
 	int fd2;
 
-	if (!is_buldin(((t_ogbi *)(list->content))->cmd[0]))
+	if (((t_ogbi *)(list->content))->cmd && !is_buldin(((t_ogbi *)(list->content))->cmd[0]))
 		return (0);
 	if (!((t_ogbi *)(list->content))->i)
 	{

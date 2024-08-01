@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/01 19:08:17 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/01 21:45:28 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ char	*cmd_path(char *cmd, char **path)
 	char *cmd_name;
 	char *tmp;
 
-    if (access(cmd, F_OK) == 0)
-        return (cmd);
-	else if (!path)
+	if (ft_strchr(cmd, '/'))
+		return(cmd);
+	if (!path)
 		return (NULL);	
     while (path[i])
     {
@@ -490,6 +490,11 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, t_export *env_l
 		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
+	else
+	{
+		if (!((t_ogbi *)(list->content))->i)
+			cmd_quote_handler(cmd, env_list->env);
+	}
 	return (0);
 }
 int cmd_name_is_valid(char *cmd_name, t_export *env_list)
@@ -546,14 +551,19 @@ int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
+	else
+	{
+		if (!((t_ogbi *)(list->content))->i)
+			cmd_quote_handler(cmd, env_list->env);
+	}
 	return(0);
 }
 
-int is_buldin(char *cmd, t_export *env_list)
+int is_buldin(char *cmd)
 {
 	if (!ft_strcmp(cmd, "echo"))
 	    return(1);
-	else if (cmd_name_is_valid(cmd, env_list) && !ft_strcmp(cmd, "cd"))
+	else if (!ft_strcmp(cmd, "cd"))
 	    return(1);
 	else if (!ft_strcmp(cmd, "pwd"))
 		return(1);
@@ -573,7 +583,7 @@ int last_execve(t_list *list, t_export *env_list)
 	int fd1;
 	int fd2;
 
-	if (((t_ogbi *)(list->content))->cmd && !is_buldin(((t_ogbi *)(list->content))->cmd[0], env_list))
+	if (((t_ogbi *)(list->content))->cmd && !is_buldin(((t_ogbi *)(list->content))->cmd[0]))
 		return (0);
 	if (!((t_ogbi *)(list->content))->i)
 	{
@@ -624,6 +634,7 @@ int	pipex(t_list *list, t_export *env_list)
 		return (del(path));
 	else if (last_command(list, fd_tmp,path, env_list) == -1)
 		return(del(path));
+	cmd_name_is_valid(((t_ogbi *)(list->content))->cmd[0], env_list);
 	if (fd_tmp)
 		close(fd_tmp);
 	del(path);

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/31 12:39:54 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/01 19:08:17 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,15 @@ char **array_dup(char **str, int add);
 
 int count_array_of_str(char **env);
 
-void	ft_env(char **env);
+void	ft_env(char **env, int is_not);
 
 char **array_remove(char **str, int index);
+
+char **array_alloc(char **str);
+
+int	find_index_from_env(char **env, char *str, int type);
+
+int cmd_name_is_valid(char *cmd_name, t_export *env_list);
 
 
 #endif

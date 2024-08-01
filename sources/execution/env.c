@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:20:07 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/31 20:37:31 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/01 18:34:46 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,26 @@ char **array_remove(char **str, int index)
         i++;
     }
     array[j] = NULL;
+    return(array);
+}
+
+char **array_alloc(char **str)
+{
+    char **array;
+    int     i;
+
+    i = count_array_of_str(str);
+    if (!str)
+        return(NULL);
+    array = malloc(sizeof(char *) * (i + 1));
+    if (!array)
+        return (NULL);
+    i = 0;
+    while(str && str[i])
+    {
+        array[i] = ft_strdup(str[i]);
+        i++;
+    }
+    array[i] = NULL;
     return(array);
 }

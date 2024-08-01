@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/07/31 11:54:37 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/01 18:34:46 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,16 @@ void	minishell(void)
 
 	cmd_ = NULL;
 	env_list = malloc(sizeof(t_export));
-	env_list->env = array_dup(environ, 0);
+	env_list->env = array_alloc(environ);
 	env_list->export = NULL;
+	int i;
+	i = find_index_from_env(env_list->env, "SHLVL", 1);
+	if (i > 0)
+	{
+		line = ft_strjoin("SHLVL=", ft_itoa(ft_atoi(env_list->env[i] + 6) + 1));
+		free(env_list->env[i]);
+		env_list->env[i] = line;
+	}
 	while (1)
 	{
 		line = readline(COLOR_BOLD GRN"➜ minishell__v1 ✗ "RESET);

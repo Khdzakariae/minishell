@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/31 20:57:11 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/01 19:08:17 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ char	*cmd_path(char *cmd, char **path)
 
     if (access(cmd, F_OK) == 0)
         return (cmd);
+	else if (!path)
+		return (NULL);	
     while (path[i])
     {
 		tmp = ft_strjoin(path[i], "/");
@@ -56,13 +58,54 @@ char	*cmd_path(char *cmd, char **path)
     }
     return (NULL);
 }
+
 int	error(char *message)
 {
 	printf("%s: %s\n", strerror(errno), message);
 	return (-1);
 }
 
-void	ft_cd(char **cmd)
+void set_pwd(t_export *env_list)
+{
+	char *tmp;
+	char **envt;
+	int i;
+	int j;
+
+	i = find_index_from_env(env_list->env, "PWD", 1);
+	j = find_index_from_env(env_list->env, "OLDPWD", 1);
+	tmp = getcwd(NULL, 0);
+    if (tmp == NULL)
+        return(perror("getcwd() error"));
+	else if (j < 0)
+	{
+		envt = array_dup(env_list->env, 1);
+		j = count_array_of_str(env_list->env);
+		free(env_list->env);
+		env_list->env = envt;
+	}
+	else
+		free(env_list->env[j]);
+	if (i < 0)
+	{
+		env_list->env[j] = ft_strjoin("OLDPWD=", tmp);
+		envt = array_dup(env_list->env, 1);
+		i = count_array_of_str(env_list->env);
+		free(env_list->env);
+		env_list->env = envt;
+		env_list->env[i] = ft_strjoin("PWD=", tmp);
+		free(tmp);
+	}
+	else
+	{
+		env_list->env[j] = ft_strjoin("OLD", env_list->env[i]);
+		free(env_list->env[i]);
+		env_list->env[i] = ft_strjoin("PWD=", tmp);
+		free(tmp);
+	}
+}
+
+void	ft_cd(char **cmd, t_export *env_list)
 {
 	int i;
 
@@ -72,30 +115,33 @@ void	ft_cd(char **cmd)
 	if (i == 2)
 	{
 		if(chdir(cmd[1]))
-		{
 			perror(cmd[1]);
-			return ;
-		}
+		else
+			set_pwd(env_list);
 	}
 	else if (i == 1)
-		chdir(getenv("HOME"));
-	else
 	{
-        write(2, "cd: too many arguments\n", 24);
-		return ;
+		if (chdir(find_str_from_env(env_list->env, "HOME")))
+			write (2, "cd: HOME not set\n", 17);
 	}
+	else
+        write(2, "cd: too many arguments\n", 24);
 }
 
-void    ft_pwd(void)
+void    ft_pwd(char **env)
 {
 	char cwd[1024];
+	char *tmp;
 
     if (getcwd(cwd, sizeof(cwd)) != NULL)
         printf("%s\n", cwd);
     else
 	{
-        perror("getcwd() error");
-		return ;
+		tmp = find_str_from_env(env, "PWD");
+		if (tmp)
+			printf("%s\n", tmp);
+		else
+			write(2, "PWD not found\n", 15);
 	}
 }
 
@@ -156,16 +202,21 @@ int	find_index_from_env(char **env, char *str, int type)
     return (-1);
 }
 
-void	ft_env(char **env)
+void	ft_env(char **env, int is_not)
 {
 	int i;
 
     i = 0;
 	if (!env)
 		return ;
+	if (is_not == 1)
+		is_not = find_index_from_env(env, "_", 1);
+	else if (is_not == 2)
+		is_not = find_index_from_env(env, "_", 2);
     while (env[i])
     {
-        printf("%s\n", env[i]);
+		if (is_not < 0 || is_not != i)
+        	printf("%s\n", env[i]);
         i++;
     }
 }
@@ -303,7 +354,7 @@ int find_variable(char *cmd, t_export *env_list)
 	j = 0;
 	while(cmd[j])
 	{
-		if (!((!j && ft_isalpha(cmd[j])) || (j && ft_isalnum(cmd[j]))))
+		if (!((!j && ft_isalpha(cmd[j])) || (j && ft_isalnum(cmd[j])) || cmd[j] == '_'))
 		{
 			if (cmd[j] == '=')
 				add_in_env(cmd, env_list, j);
@@ -331,8 +382,8 @@ void ft_export(char **cmd, t_export *env_list)
 	tmp = NULL;
 	if (count_array_of_str(cmd) == 1)
 	{
-		ft_env(env_list->env);
-		ft_env(env_list->export);
+		ft_env(env_list->env, 1);
+		ft_env(env_list->export, 2);
 	}
 	else
 	{
@@ -354,9 +405,9 @@ int ft_execve(char **cmd, t_export *env_list)
 	if (!cmd || !cmd[0])
 	    return (1);
 	else if (!ft_strcmp(cmd[0], "cd"))
-	    ft_cd(cmd);
+	    ft_cd(cmd, env_list);
 	else if (!ft_strcmp(cmd[0], "pwd"))
-		ft_pwd();
+		ft_pwd(env_list->env);
 	else if (!ft_strcmp(cmd[0], "echo"))
 	    ft_echo(cmd);
 	else if(!ft_strcmp(cmd[0], "export"))
@@ -370,7 +421,7 @@ int ft_execve(char **cmd, t_export *env_list)
 		if (cmd[1])
             write(2, "env with options or arguments\n", 31);
 		else
-	    	ft_env(env_list->env);
+	    	ft_env(env_list->env, -1);
 	}
 	else
 		return (0);
@@ -391,6 +442,8 @@ int  del(void *content)
 	char **str;
 	int i = 0;
 
+	if (!content)
+		return -1;
 	str = (char **)content;
 	while(str[i])
 	{
@@ -439,6 +492,32 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, t_export *env_l
 	}
 	return (0);
 }
+int cmd_name_is_valid(char *cmd_name, t_export *env_list)
+{
+	int index;
+	char *tmp;
+	char **tmp1;
+
+	if (cmd_name)
+	{
+		index = find_index_from_env(env_list->env, "_", 1);
+		if (index > 0)
+		{
+			tmp = ft_strjoin("_=", cmd_name);
+			free(env_list->env[index]);
+			env_list->env[index] = tmp;
+		}
+		else
+		{
+			tmp1 = array_dup(env_list->env, 1);
+			index = count_array_of_str(env_list->env);
+			free(env_list->env);
+			env_list->env = tmp1;
+			env_list->env[index] = ft_strjoin("_=", cmd_name);
+		}
+	}
+	return (1);
+}
 
 int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 {
@@ -470,14 +549,14 @@ int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 	return(0);
 }
 
-int is_buldin(char *cmd)
+int is_buldin(char *cmd, t_export *env_list)
 {
-	if (!ft_strcmp(cmd, "cd"))
+	if (!ft_strcmp(cmd, "echo"))
+	    return(1);
+	else if (cmd_name_is_valid(cmd, env_list) && !ft_strcmp(cmd, "cd"))
 	    return(1);
 	else if (!ft_strcmp(cmd, "pwd"))
 		return(1);
-	else if (!ft_strcmp(cmd, "echo"))
-	    return(1);
 	else if(!ft_strcmp(cmd, "export"))
 	    return(1);
 	else if(!ft_strcmp(cmd, "unset"))
@@ -494,7 +573,7 @@ int last_execve(t_list *list, t_export *env_list)
 	int fd1;
 	int fd2;
 
-	if (((t_ogbi *)(list->content))->cmd && !is_buldin(((t_ogbi *)(list->content))->cmd[0]))
+	if (((t_ogbi *)(list->content))->cmd && !is_buldin(((t_ogbi *)(list->content))->cmd[0], env_list))
 		return (0);
 	if (!((t_ogbi *)(list->content))->i)
 	{

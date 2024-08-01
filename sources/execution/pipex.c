@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/01 21:45:28 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/01 23:30:54 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -605,6 +605,56 @@ int last_execve(t_list *list, t_export *env_list)
 	return (1);
 }
 
+int ft_herdoc_2(int index, t_list *list)
+{
+	char *line;
+	char *tmp;
+	int fd;
+
+	tmp = ft_strdup("/tmp/.Her_Doc_");
+	line = ft_strjoin(tmp, ft_itoa(index));
+	free(tmp);
+	tmp = line;
+	fd = open(line , O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (fd == -1)
+	{
+		free(line);
+		return (error(line));
+	}
+	while(1)
+	{
+		line = readline("> ");
+		if (line == NULL || ft_strcmp(line, ((t_red *)list->content)->value) == 0)
+			break;
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
+	((t_red *)list->content)->value = tmp;
+	return(0);
+}
+
+int ft_herdoc(t_list *list)
+{
+	t_list *tmp;
+	int index;
+
+	index = 0;
+	while(list)
+	{
+		tmp = ((t_ogbi *)(list->content))->input_files;
+		while(tmp)
+		{
+			if (((t_red *)tmp->content)->type == HEREDOC)
+				if (ft_herdoc_2(index++, tmp))
+					return (-1);
+			tmp = tmp->next;
+		}
+		list = list->next;
+	}
+	return (0);
+}
+
 int	pipex(t_list *list, t_export *env_list)
 {
 	char **path;
@@ -617,6 +667,7 @@ int	pipex(t_list *list, t_export *env_list)
 	fd_tmp = STDIN_FILENO;
 	i = 0;
 	((t_ogbi *)(list->content))->i = i;
+	ft_herdoc(list);
 	while (list->next)
 	{
 		if(pipe(fd) == -1)
@@ -643,38 +694,6 @@ int	pipex(t_list *list, t_export *env_list)
 	return (0);
 }
 
-int ft_herdoc(int index, t_list *list)
-{
-	char *line;
-	char *tmp;
-	int fd;
-
-	tmp = ft_strdup("/tmp/.Her_Doc_");
-	line = ft_strjoin(tmp, ft_itoa(index));
-	free(tmp);
-	tmp = line;
-	fd = open(line , O_CREAT | O_WRONLY | O_TRUNC, 0666);
-	if (fd == -1)
-	{
-		free(line);
-		return (error(line));
-	}
-	while(1)
-	{
-		line = readline("> ");
-		if (line == NULL || ft_strcmp(line, ((t_red *)list->content)->value) == 0)
-			break;
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-	}
-	fd = open(tmp, O_RDONLY);
-	free(tmp);
-	if (fd == -1)
-	    return (error("open"));
-	dup2(fd, STDIN_FILENO);
-	return(0);
-}
 
 int input_file(t_list *list)
 {
@@ -684,15 +703,10 @@ int input_file(t_list *list)
 	index = 0;
 	while(list)
 	{
-		if (((t_red *)list->content)->type == ENTREE)
-		{
-			fd = open(((t_red *)list->content)->value, O_RDONLY);
-			if (fd == -1)
-				return (error(((t_red *)list->content)->value));
-			dup2(fd, STDIN_FILENO);
-		}
-		else
-			fd = ft_herdoc(index++, list);
+		fd = open(((t_red *)list->content)->value, O_RDONLY);
+		if (fd == -1)
+			return (error(((t_red *)list->content)->value));
+		dup2(fd, STDIN_FILENO);
 		list = list->next;
 		if (list)
 			close(fd);

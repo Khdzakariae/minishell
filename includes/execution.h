@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/08/01 19:08:17 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/01 23:56:23 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ char **array_alloc(char **str);
 int	find_index_from_env(char **env, char *str, int type);
 
 int cmd_name_is_valid(char *cmd_name, t_export *env_list);
+
+int ft_free_herdoc(t_list *list);
 
 
 #endif

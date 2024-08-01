@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/31 21:47:21 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/01 20:07:19 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int cmd_quote_handler(char **cmd, char **env)
 {
 	int i = 0;
 	char *str;
-	
+
 	if (!cmd)
 		return (1);
 	while(cmd[i])

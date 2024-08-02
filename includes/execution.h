@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/08/01 23:56:23 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/02 17:53:22 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,15 @@ typedef struct s_export
     char    **env;
     char    **export;
 }   t_export;
+
+typedef struct s_quote
+{
+	int index;
+	int singl_q;
+	int double_q;
+	int start;
+	int flag;
+}	t_quote;
 
 int	pipex(t_list *list, t_export *env_list);
 

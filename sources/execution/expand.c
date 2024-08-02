@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/01 20:07:19 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/02 20:00:54 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,67 +125,81 @@ char *quote_join(char *tmp, char *str)
 	return(str);
 }
 
+char *double_quote(char *str, t_quote *quote, char *cmd, char **env)
+{
+	char *tmp;
+
+	quote->double_q++;
+	if (quote->double_q == 2)
+	{
+		tmp = quote_expand(cmd, quote->start, quote->index, env);
+		str = quote_join(tmp, str);
+		quote->double_q = 0;
+	}
+	quote->start = quote->index + 1;
+	return(str);
+}
+
+char *single_quote(char *str, t_quote *quote, char *cmd)
+{
+	char *tmp;
+	quote->singl_q++;
+	if (quote->singl_q == 2)
+	{
+		tmp = ft_substr(cmd, quote->start, quote->index - quote->start);
+		str = quote_join(tmp, str);
+		quote->singl_q = 0;
+	}
+	quote->start = quote->index + 1;
+	return (str);
+}
+
+char *whitout_quote(char *str, t_quote *quote, char *cmd, char **env)
+{
+	char *tmp;
+
+	if (quote->flag == 0)
+	{
+		quote->start = quote->index;
+		quote->flag = 1;
+	}
+	if (cmd[quote->index + 1] == '\"' || cmd[quote->index + 1] == '\'' || !cmd[quote->index + 1])
+	{
+		tmp = quote_expand(cmd, quote->start, quote->index + 1, env);
+		str = quote_join(tmp, str);
+		quote->flag = 0;
+	}
+	return (str);
+}
+
+char *quote_error(char *str)
+{
+	write(2, "unexpected while looking for matching `\"'\"\n", 44);
+	free(str);
+	return (NULL);
+}
 
 char *handle_quoting(char *cmd, char **env)
 {
-	int i;
-	int singl_q = 0;
-	int double_q = 0;
-	int start = 0;
-	int flag = 0;
-	char *tmp;
+	t_quote quote;
 	char *str;
 
-	i = 0;
+	quote = (t_quote){0, 0, 0, 0, 0};
 	str = NULL;
 	if (!cmd)
 		return(NULL);
-	while(cmd[i])
+	while(cmd[quote.index])
 	{
-		if (!singl_q && cmd[i] == '\"')
-		{	
-			double_q++;
-			if (double_q == 2)
-			{
-				tmp = quote_expand(cmd, start, i, env);
-				str = quote_join(tmp, str);
-				double_q = 0;
-			}
-			start = i + 1;
-		}
-		else if (!double_q && cmd[i] == '\'')
-		{
-			singl_q++;
-			if (singl_q == 2)
-			{
-				tmp = ft_substr(cmd, start, i - start);
-				str = quote_join(tmp, str);
-				singl_q = 0;
-			}
-			start = i + 1;
-		}
-		else if (!double_q && !singl_q)
-		{
-			if (flag == 0)
-			{
-				start = i;
-				flag = 1;
-			}
-			if (cmd[i + 1] == '\"' || cmd[i + 1] == '\'' || !cmd[i + 1])
-			{
-				tmp = quote_expand(cmd, start, i + 1, env);
-				str = quote_join(tmp, str);
-				flag = 0;
-			}
-		}
-		i++;
+		if (!quote.singl_q && cmd[quote.index] == '\"')
+			str = double_quote(str, &quote, cmd, env);
+		else if (!quote.double_q && cmd[quote.index] == '\'')
+			str = single_quote(str, &quote, cmd);
+		else if (!quote.double_q && !quote.singl_q)
+			str = whitout_quote(str, &quote, cmd, env);
+		quote.index++;
 	}
-	if (double_q || singl_q)
-	{
-		write(2, "unexpected while looking for matching `\"'\"\n", 44);
-		free(str);
-		str = NULL;
-	}
+	if (quote.double_q || quote.singl_q)
+		str = quote_error(str);
 	return(str);
 }
 
@@ -199,10 +213,10 @@ int cmd_quote_handler(char **cmd, char **env)
 	while(cmd[i])
 	{
 		str = handle_quoting(cmd[i], env);
-		if (!str)
-			return (1);
 		free(cmd[i]);
 		cmd[i] = str;
+		if (!str)
+			return (1);
 		i++;
 	}
 	return (0);

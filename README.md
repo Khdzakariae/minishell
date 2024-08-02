@@ -17,5 +17,3 @@
         expand in herdoc
         signals
         free export and env values
-        execve Permission
-        exit status 

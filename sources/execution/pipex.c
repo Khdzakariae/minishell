@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/02 21:15:26 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/02 23:24:11 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,28 @@ char	*find_str_from_env(char **env, char *str)
 
 char	*cmd_path(char *cmd, char **path)
 {
-	int i = 0;
+	int i;
 	char *cmd_name;
 	char *tmp;
+	struct stat st;
 
 	if (ft_strchr(cmd, '/'))
-		return(cmd);
+	{
+    	if (stat(cmd, &st) == 0) 
+		{
+    	    if (S_ISDIR(st.st_mode)) {
+    	        write(2, "Is a directory\n", 16);
+    	        exit(126);
+    	    }
+    	}
+		if (access(cmd, X_OK) == 0)
+            return (cmd);
+		perror(NULL);
+		exit(126);
+	}
 	if (!path)
 		return (NULL);	
+	i = 0;
     while (path[i])
     {
 		tmp = ft_strjoin(path[i], "/");
@@ -118,6 +132,7 @@ void	ft_cd(char **cmd, t_export *env_list)
 			perror(cmd[1]);
 		else
 			set_pwd(env_list);
+		return ;
 	}
 	else if (i == 1)
 	{
@@ -126,6 +141,7 @@ void	ft_cd(char **cmd, t_export *env_list)
 	}
 	else
         write(2, "cd: too many arguments\n", 24);
+	g_stat = 1;
 }
 
 void    ft_pwd(char **env)
@@ -140,8 +156,9 @@ void    ft_pwd(char **env)
 		tmp = find_str_from_env(env, "PWD");
 		if (tmp)
 			printf("%s\n", tmp);
-		else
-			write(2, "PWD not found\n", 15);
+		return ;
+		write(2, "PWD not found\n", 15);
+		g_stat = 1;
 	}
 }
 
@@ -363,7 +380,8 @@ int find_variable(char *cmd, t_export *env_list)
 			else
 			{
 				printf("export: `%s': not a valid identifier\n", cmd);
-				return(-1);
+				g_stat = 1;
+				return(1);
 			}
 			break;
 		}
@@ -371,7 +389,7 @@ int find_variable(char *cmd, t_export *env_list)
 		if (!cmd[j])
 			add_in_export(cmd, env_list);
 	}
-	return (1);
+	return (0);
 }
 
 void ft_export(char **cmd, t_export *env_list)
@@ -390,7 +408,7 @@ void ft_export(char **cmd, t_export *env_list)
 		i = 1;
 		while(cmd[i])
 		{
-			if (find_variable(cmd[i], env_list) < 0)
+			if (find_variable(cmd[i], env_list))
 				break;
 			i++;
 		}
@@ -400,8 +418,6 @@ void ft_export(char **cmd, t_export *env_list)
 
 int ft_execve(char **cmd, t_export *env_list)
 {
-	if (cmd_quote_handler(cmd, env_list->env))
-		return (1);
 	if (!cmd || !cmd[0])
 	    return (1);
 	else if (!ft_strcmp(cmd[0], "cd"))
@@ -470,9 +486,6 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, t_export *env_l
 	pid_t pid;
 
 	cmd = ((t_ogbi *)(list->content))->cmd;
-	if (!((t_ogbi *)(list->content))->i)
-		if (cmd_quote_handler(cmd, env_list->env))
-			return (2);
 	pid = fork();
 	if (pid == -1)
     	return (error("fork"));
@@ -527,11 +540,9 @@ int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 	char *cmd_name;
 	char **cmd;
 	pid_t pid;
+	int status;
 
     cmd = ((t_ogbi *)(list->content))->cmd;
-	if (!((t_ogbi *)(list->content))->i)
-			if (cmd_quote_handler(cmd, env_list->env))
-				return(2);
 	pid = fork();
 	if (pid == -1)
     	return (error("fork"));
@@ -550,6 +561,8 @@ int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
+	waitpid(pid, &status, 0);
+	ft_status(&status);
 	return(0);
 }
 
@@ -599,7 +612,7 @@ int last_execve(t_list *list, t_export *env_list)
 	return (1);
 }
 
-int ft_herdoc_2(int index, t_list *list)
+int ft_herdoc_2(int index, t_list *list, char **env)
 {
 	char *line;
 	char *tmp;
@@ -620,6 +633,12 @@ int ft_herdoc_2(int index, t_list *list)
 		line = readline("> ");
 		if (line == NULL || ft_strcmp(line, ((t_red *)list->content)->value) == 0)
 			break;
+		tmp = expand(line, env);
+		if (tmp)
+		{
+			free(line);
+			line = tmp;
+		}
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
@@ -628,7 +647,7 @@ int ft_herdoc_2(int index, t_list *list)
 	return(0);
 }
 
-int ft_herdoc(t_list *list)
+int ft_herdoc(t_list *list, char **env)
 {
 	t_list *tmp;
 	int index;
@@ -640,7 +659,7 @@ int ft_herdoc(t_list *list)
 		while(tmp)
 		{
 			if (((t_red *)tmp->content)->type == HEREDOC)
-				if (ft_herdoc_2(index++, tmp))
+				if (ft_herdoc_2(index++, tmp, env))
 					return (-1);
 			tmp = tmp->next;
 		}
@@ -652,16 +671,20 @@ int ft_herdoc(t_list *list)
 int	pipex(t_list *list, t_export *env_list)
 {
 	char **path;
-	int status;
 	int fd_tmp;
 	int i;
 	int fd[2];
 
+	ft_herdoc(list, env_list->env);
+	if (cmd_quote_handler((t_ogbi *)(list->content), env_list->env))
+	{
+		g_stat = 2;
+		return (2);
+	}
 	path = ft_split(find_str_from_env((char **)(env_list->env), "PATH"), ':');
 	fd_tmp = STDIN_FILENO;
 	i = 0;
 	((t_ogbi *)(list->content))->i = i;
-	ft_herdoc(list);
 	while (list->next)
 	{
 		if(pipe(fd) == -1)
@@ -683,8 +706,7 @@ int	pipex(t_list *list, t_export *env_list)
 	if (fd_tmp)
 		close(fd_tmp);
 	del(path);
-	while (wait(&status) > 0);
-	ft_status(&status);
+	while (wait(NULL) > 0);
 	return (0);
 }
 

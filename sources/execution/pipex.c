@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/01 23:30:54 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/02 21:15:26 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,9 +356,9 @@ int find_variable(char *cmd, t_export *env_list)
 	{
 		if (!((!j && ft_isalpha(cmd[j])) || (j && ft_isalnum(cmd[j])) || cmd[j] == '_'))
 		{
-			if (cmd[j] == '=')
+			if (j && cmd[j] == '=')
 				add_in_env(cmd, env_list, j);
-			else if (cmd[j] == '+' && !ft_strncmp(cmd + j, "+=", 2))
+			else if (j && cmd[j] == '+' && !ft_strncmp(cmd + j, "+=", 2))
 				add_in_variable(cmd, j, env_list);
 			else
 			{
@@ -470,6 +470,9 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, t_export *env_l
 	pid_t pid;
 
 	cmd = ((t_ogbi *)(list->content))->cmd;
+	if (!((t_ogbi *)(list->content))->i)
+		if (cmd_quote_handler(cmd, env_list->env))
+			return (2);
 	pid = fork();
 	if (pid == -1)
     	return (error("fork"));
@@ -481,7 +484,7 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, t_export *env_l
 		dup2(fd[1], STDOUT_FILENO);
 		if (redirections(list) < 0)
 		    exit (1);
-	    if (ft_execve(cmd, env_list))
+	    if (((t_ogbi *)(list->content))->i && ft_execve(cmd, env_list))
 			exit (0);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
@@ -489,11 +492,6 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, t_export *env_l
 		write(2, cmd[0], ft_strlen(cmd[0]));
 		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
-	}
-	else
-	{
-		if (!((t_ogbi *)(list->content))->i)
-			cmd_quote_handler(cmd, env_list->env);
 	}
 	return (0);
 }
@@ -531,6 +529,9 @@ int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 	pid_t pid;
 
     cmd = ((t_ogbi *)(list->content))->cmd;
+	if (!((t_ogbi *)(list->content))->i)
+			if (cmd_quote_handler(cmd, env_list->env))
+				return(2);
 	pid = fork();
 	if (pid == -1)
     	return (error("fork"));
@@ -540,21 +541,14 @@ int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 			dup2(fd_tmp, STDIN_FILENO);
 		if (redirections(list))
 		    exit (1);
-	    if (((t_ogbi *)(list->content))->i && (ft_execve(cmd, env_list)))
-			exit (0);
-		if (!((t_ogbi *)(list->content))->i)
-			cmd_quote_handler(cmd, env_list->env);
+	    if (((t_ogbi *)(list->content))->i && ft_execve(cmd, env_list))
+			exit (2);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
 			execve(cmd_name, cmd, env_list->env);
 		write(2, cmd[0], ft_strlen(cmd[0]));
 		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
-	}
-	else
-	{
-		if (!((t_ogbi *)(list->content))->i)
-			cmd_quote_handler(cmd, env_list->env);
 	}
 	return(0);
 }

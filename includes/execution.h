@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/08/02 17:53:22 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/02 23:36:57 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <parssin.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #include "../lib/libft/libft.h"
 
 extern int g_stat;
@@ -34,6 +36,7 @@ typedef struct s_quote
 	int double_q;
 	int start;
 	int flag;
+	t_ogbi *ogbi;
 }	t_quote;
 
 int	pipex(t_list *list, t_export *env_list);
@@ -48,9 +51,9 @@ int  del(void *content);
 
 void	merge_free(void *contant);
 
-int cmd_quote_handler(char **cmd, char **env);
+int cmd_quote_handler(t_ogbi *ogbi, char **env);
 
-char *handle_quoting(char *cmd, char **env);
+char *handle_quoting(char *cmd, char **env, t_ogbi *ogbi);
 
 char	*find_str_from_env(char **env, char *str);
 
@@ -69,6 +72,8 @@ int	find_index_from_env(char **env, char *str, int type);
 int cmd_name_is_valid(char *cmd_name, t_export *env_list);
 
 int ft_free_herdoc(t_list *list);
+
+char *expand(char *cmd, char **env);
 
 
 #endif

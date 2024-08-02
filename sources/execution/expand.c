@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/02 20:00:54 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/02 23:36:57 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ char *split_word_expand(char **env, char *cmd)
 	}
 	else if (str)
 		str = ft_strdup(str);
-	if(str && str[0] == '?')
+	if(str && str[1] == '?')
 	{
-		tmp = ft_strjoin(ft_itoa(g_stat), str + 1);
+		tmp = ft_strjoin(ft_itoa(g_stat), str + 2);
 		free(str);
 		str = tmp;
 	}
@@ -179,12 +179,12 @@ char *quote_error(char *str)
 	return (NULL);
 }
 
-char *handle_quoting(char *cmd, char **env)
+char *handle_quoting(char *cmd, char **env, t_ogbi *ogbi)
 {
 	t_quote quote;
 	char *str;
 
-	quote = (t_quote){0, 0, 0, 0, 0};
+	quote = (t_quote){0, 0, 0, 0, 0, ogbi};
 	str = NULL;
 	if (!cmd)
 		return(NULL);
@@ -203,18 +203,18 @@ char *handle_quoting(char *cmd, char **env)
 	return(str);
 }
 
-int cmd_quote_handler(char **cmd, char **env)
+int cmd_quote_handler(t_ogbi *ogbi, char **env)
 {
 	int i = 0;
 	char *str;
 
-	if (!cmd)
+	if (!ogbi->cmd)
 		return (1);
-	while(cmd[i])
+	while(ogbi->cmd[i])
 	{
-		str = handle_quoting(cmd[i], env);
-		free(cmd[i]);
-		cmd[i] = str;
+		str = handle_quoting(ogbi->cmd[i], env, ogbi);
+		free(ogbi->cmd[i]);
+		ogbi->cmd[i] = str;
 		if (!str)
 			return (1);
 		i++;

@@ -13,7 +13,6 @@
 
         > f1 > f2 < f>f1>f2<f2 ls>f3 -l -a | echo hi
 
-        export =
         split export value in expand
         expand in herdoc
         signals

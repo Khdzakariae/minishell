@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   merge.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:48:56 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/04 17:37:44 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/04 20:30:53 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void del_lst(void *contant)
 	{
 		tmp = list;
         list = tmp->next;
+		free(((t_red *)tmp->content)->value);
 		free(((t_red *)tmp->content));
 		free(tmp);
 	}
@@ -57,6 +58,7 @@ void	merge_free(void *contant)
 
 	ogbi = (t_ogbi *)contant;
 	// del((char **)ogbi->cmd);
+	del(ogbi->cmd);
 	del_lst(ogbi->input_files);
 	del_lst(ogbi->output_files);
 	free(ogbi);
@@ -70,7 +72,7 @@ void *alloc_in_out(char *value, int type, char **env)
 	if(!contant)
 	    return (NULL);
 	if (type != HEREDOC)
-		contant->value = handle_quoting(value, env, NULL);
+		contant->value = handle_quoting_redirections(env, value);
 	else
 		contant->value = value;
 	contant->type = type;

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 19:41:25 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/08/02 23:36:57 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/04 19:36:51 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	merge_free(void *contant);
 
 int cmd_quote_handler(t_ogbi *ogbi, char **env);
 
-char *handle_quoting(char *cmd, char **env, t_ogbi *ogbi);
+// char *handle_quoting(char *cmd, char **env, t_ogbi *ogbi);
+char *handle_quoting(int *index, char **env, t_ogbi *ogbi);
 
 char	*find_str_from_env(char **env, char *str);
 
@@ -74,6 +75,10 @@ int cmd_name_is_valid(char *cmd_name, t_export *env_list);
 int ft_free_herdoc(t_list *list);
 
 char *expand(char *cmd, char **env);
+
+char **put_strs_in_array_index(char **str, int index, int add);
+
+char *handle_quoting_redirections(char **env, char *cmd);
 
 
 #endif

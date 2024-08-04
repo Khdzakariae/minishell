@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 10:33:51 by zel-khad          #+#    #+#             */
-/*   Updated: 2024/08/02 22:36:28 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/04 20:35:01 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	minishell(void)
 			pipex(list, env_list);
 		ft_lstclear(&list, merge_free);
 		ft_free_herdoc(list);
-        freelist_(cmd_);
+        // freelist_(cmd_);
 	    freelist(token);
 	}
 	clear_history();

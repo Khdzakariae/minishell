@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/04 17:36:51 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/04 20:42:21 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,8 +394,10 @@ int find_variable(char *cmd, t_export *env_list)
 
 void ft_export(char **cmd, t_export *env_list)
 {
+	char **tmp;
 	int i;
 
+	tmp = NULL;
 	if (count_array_of_str(cmd) == 1)
 	{
 		ft_env(env_list->env, 1);
@@ -614,12 +616,13 @@ int ft_herdoc_2(int index, t_list *list, char **env)
 {
 	char *line;
 	char *tmp;
+	char *tmp1;
 	int fd;
 
 	tmp = ft_strdup("/tmp/.Her_Doc_");
 	line = ft_strjoin(tmp, ft_itoa(index));
 	free(tmp);
-	tmp = line;
+	tmp1 = line;
 	fd = open(line , O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (fd == -1)
 	{
@@ -641,7 +644,7 @@ int ft_herdoc_2(int index, t_list *list, char **env)
 		write(fd, "\n", 1);
 		free(line);
 	}
-	((t_red *)list->content)->value = tmp;
+	((t_red *)list->content)->value = tmp1;
 	return(0);
 }
 
@@ -712,7 +715,9 @@ int	pipex(t_list *list, t_export *env_list)
 int input_file(t_list *list)
 {
 	int fd;
+	int index;
 
+	index = 0;
 	while(list)
 	{
 		fd = open(((t_red *)list->content)->value, O_RDONLY);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:20:07 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/04 17:38:07 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/03 18:26:39 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,30 @@ char **array_dup(char **str, int add)
         array[i] = NULL;
         i++;
     }
+    return(array);
+}
+
+char **put_strs_in_array_index(char **str, int index, int add)
+{
+    char **array;
+    int     i;
+    int     j;
+
+    i = count_array_of_str(str);
+    array = malloc(sizeof(char *) * (i + add + 1));
+    if (!array)
+        return (NULL);
+    i = 0;
+    j = 0;
+    while(str && str[j])
+    {
+        if(index < i || index >= i + add)
+            array[i] = str[j++];
+        else
+            array[i] = NULL;
+        i++;
+    }
+    array[i] = NULL;
     return(array);
 }
 
@@ -90,7 +114,9 @@ char **array_alloc(char **str)
 int ft_free_herdoc(t_list *list)
 {
 	t_list *tmp;
+	int index;
 
+	index = 0;
 	while(list)
 	{
 		tmp = ((t_ogbi *)(list->content))->input_files;

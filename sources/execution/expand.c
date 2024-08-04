@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 10:00:51 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/02 23:36:57 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/04 20:33:29 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,80 @@ char *single_quote(char *str, t_quote *quote, char *cmd)
 	return (str);
 }
 
-char *whitout_quote(char *str, t_quote *quote, char *cmd, char **env)
+char *whitout_quote(char *str, t_quote *quote, char **env, int *index)
+{
+	char *tmp;
+
+	if (quote->flag == 0)
+	{
+		quote->start = quote->index;
+		quote->flag = 1;
+	}
+	if (quote->ogbi->cmd[*index][quote->index + 1] == '\"' || quote->ogbi->cmd[*index][quote->index + 1] == '\'' || !quote->ogbi->cmd[*index][quote->index + 1])
+	{
+		tmp = quote_expand(quote->ogbi->cmd[*index], quote->start, quote->index + 1, env);
+		str = quote_join(tmp, str);
+		quote->flag = 0;
+		if (!strchr(str, ' '))
+			return (str);
+		if (quote->ogbi)
+		{
+			char **split;
+			char **tmp1;
+			int count;
+
+			split = ft_split(str, ' ');
+			free(str);
+			count = count_array_of_str(split);
+			tmp1 = put_strs_in_array_index(quote->ogbi->cmd, *index, count - 1);
+			free(quote->ogbi->cmd);
+			quote->ogbi->cmd = tmp1;
+			int i = 0;
+			while(i < count)
+			{
+				quote->ogbi->cmd[*index + i] = split[i];
+				str = ft_strdup(quote->ogbi->cmd[*index + i]);
+				i++;
+			}
+			*index += i - 1;
+			i = 0;
+		}
+	}
+	return (str);
+}
+
+char *quote_error(char *str)
+{
+	write(2, "unexpected while looking for matching `\"'\"\n", 44);
+	free(str);
+	return (NULL);
+}
+
+char *handle_quoting(int *index, char **env, t_ogbi *ogbi)
+{
+	t_quote quote;
+	char *str;
+
+	quote = (t_quote){0, 0, 0, 0, 0, ogbi};
+	str = NULL;
+	if (!ogbi->cmd[*index])
+		return(NULL);
+	while(ogbi->cmd[*index][quote.index])
+	{
+		if (!quote.singl_q && ogbi->cmd[*index][quote.index] == '\"')
+			str = double_quote(str, &quote, ogbi->cmd[*index], env);
+		else if (!quote.double_q && ogbi->cmd[*index][quote.index] == '\'')
+			str = single_quote(str, &quote, ogbi->cmd[*index]);
+		else if (!quote.double_q && !quote.singl_q)
+			str = whitout_quote(str, &quote, env, index);
+		quote.index++;
+	}
+	if (quote.double_q || quote.singl_q)
+		str = quote_error(str);
+	return(str);
+}
+
+char *whitout_quote_redirections(char *str, t_quote *quote, char **env, char *cmd)
 {
 	char *tmp;
 
@@ -172,19 +245,12 @@ char *whitout_quote(char *str, t_quote *quote, char *cmd, char **env)
 	return (str);
 }
 
-char *quote_error(char *str)
-{
-	write(2, "unexpected while looking for matching `\"'\"\n", 44);
-	free(str);
-	return (NULL);
-}
-
-char *handle_quoting(char *cmd, char **env, t_ogbi *ogbi)
+char *handle_quoting_redirections(char **env, char *cmd)
 {
 	t_quote quote;
 	char *str;
 
-	quote = (t_quote){0, 0, 0, 0, 0, ogbi};
+	quote = (t_quote){0, 0, 0, 0, 0, NULL};
 	str = NULL;
 	if (!cmd)
 		return(NULL);
@@ -195,7 +261,7 @@ char *handle_quoting(char *cmd, char **env, t_ogbi *ogbi)
 		else if (!quote.double_q && cmd[quote.index] == '\'')
 			str = single_quote(str, &quote, cmd);
 		else if (!quote.double_q && !quote.singl_q)
-			str = whitout_quote(str, &quote, cmd, env);
+			str = whitout_quote_redirections(str, &quote, env, cmd);
 		quote.index++;
 	}
 	if (quote.double_q || quote.singl_q)
@@ -212,8 +278,7 @@ int cmd_quote_handler(t_ogbi *ogbi, char **env)
 		return (1);
 	while(ogbi->cmd[i])
 	{
-		str = handle_quoting(ogbi->cmd[i], env, ogbi);
-		free(ogbi->cmd[i]);
+		str = handle_quoting(&i, env, ogbi);
 		ogbi->cmd[i] = str;
 		if (!str)
 			return (1);

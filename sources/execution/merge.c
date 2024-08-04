@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   merge.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 23:48:56 by aogbi             #+#    #+#             */
-/*   Updated: 2024/07/30 22:13:43 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/04 17:37:44 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void *alloc_in_out(char *value, int type, char **env)
 	if(!contant)
 	    return (NULL);
 	if (type != HEREDOC)
-		contant->value = handle_quoting(value, env);
+		contant->value = handle_quoting(value, env, NULL);
 	else
 		contant->value = value;
 	contant->type = type;

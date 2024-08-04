@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/02 23:24:11 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/04 17:36:51 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,10 +394,8 @@ int find_variable(char *cmd, t_export *env_list)
 
 void ft_export(char **cmd, t_export *env_list)
 {
-	char **tmp;
 	int i;
 
-	tmp = NULL;
 	if (count_array_of_str(cmd) == 1)
 	{
 		ft_env(env_list->env, 1);
@@ -714,9 +712,7 @@ int	pipex(t_list *list, t_export *env_list)
 int input_file(t_list *list)
 {
 	int fd;
-	int index;
 
-	index = 0;
 	while(list)
 	{
 		fd = open(((t_red *)list->content)->value, O_RDONLY);

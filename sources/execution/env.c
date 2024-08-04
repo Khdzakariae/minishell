@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 09:20:07 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/01 23:55:52 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/04 17:38:07 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,7 @@ char **array_alloc(char **str)
 int ft_free_herdoc(t_list *list)
 {
 	t_list *tmp;
-	int index;
 
-	index = 0;
 	while(list)
 	{
 		tmp = ((t_ogbi *)(list->content))->input_files;

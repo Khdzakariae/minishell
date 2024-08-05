@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/04 20:42:21 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/05 02:28:05 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -669,6 +669,20 @@ int ft_herdoc(t_list *list, char **env)
 	return (0);
 }
 
+int quotes_in_list(t_list *list, char **env)
+{
+	while(list)
+	{
+		if (cmd_quote_handler((t_ogbi *)(list->content), env))
+		{
+			g_stat = 2;
+			return (1);
+		}
+		list = list->next;
+	}
+	return (0);
+}
+
 int	pipex(t_list *list, t_export *env_list)
 {
 	char **path;
@@ -677,11 +691,8 @@ int	pipex(t_list *list, t_export *env_list)
 	int fd[2];
 
 	ft_herdoc(list, env_list->env);
-	if (cmd_quote_handler((t_ogbi *)(list->content), env_list->env))
-	{
-		g_stat = 2;
-		return (2);
-	}
+	if (quotes_in_list(list, env_list->env))
+		return 2;
 	path = ft_split(find_str_from_env((char **)(env_list->env), "PATH"), ':');
 	fd_tmp = STDIN_FILENO;
 	i = 0;

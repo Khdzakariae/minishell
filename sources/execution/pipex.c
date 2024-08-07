@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/05 02:28:05 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/07 06:43:18 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -517,7 +517,7 @@ int cmd_name_is_valid(char *cmd_name, t_export *env_list)
 	if (cmd_name)
 	{
 		index = find_index_from_env(env_list->env, "_", 1);
-		if (index > 0)
+		if (index >= 0)
 		{
 			tmp = ft_strjoin("_=", cmd_name);
 			free(env_list->env[index]);
@@ -710,11 +710,11 @@ int	pipex(t_list *list, t_export *env_list)
 		list = list->next;
 		((t_ogbi *)(list->content))->i = ++i;
 	}
+	cmd_name_is_valid(((t_ogbi *)(list->content))->cmd[0], env_list);
 	if (!((t_ogbi *)(list->content))->i && last_execve(list, env_list))
 		return (del(path));
 	else if (last_command(list, fd_tmp,path, env_list) == -1)
 		return(del(path));
-	cmd_name_is_valid(((t_ogbi *)(list->content))->cmd[0], env_list);
 	if (fd_tmp)
 		close(fd_tmp);
 	del(path);

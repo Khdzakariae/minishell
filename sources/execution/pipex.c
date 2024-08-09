@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 16:53:37 by aogbi             #+#    #+#             */
-/*   Updated: 2024/08/07 06:43:18 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/08/09 05:07:37 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -497,7 +497,7 @@ int command_line(t_list *list, int *fd, int fd_tmp, char **path, t_export *env_l
 		dup2(fd[1], STDOUT_FILENO);
 		if (redirections(list) < 0)
 		    exit (1);
-	    if (((t_ogbi *)(list->content))->i && ft_execve(cmd, env_list))
+	    if (ft_execve(cmd, env_list))
 			exit (0);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
@@ -552,7 +552,7 @@ int last_command(t_list *list, int fd_tmp, char **path, t_export *env_list)
 			dup2(fd_tmp, STDIN_FILENO);
 		if (redirections(list))
 		    exit (1);
-	    if (((t_ogbi *)(list->content))->i && ft_execve(cmd, env_list))
+	    if (ft_execve(cmd, env_list))
 			exit (2);
 		cmd_name = cmd_path(cmd[0], path);
 		if (cmd_name)
